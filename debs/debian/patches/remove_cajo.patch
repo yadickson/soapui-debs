@@ -1,0 +1,33 @@
+--- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
++++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
+@@ -50,7 +50,6 @@ import com.eviware.soapui.impl.wsdl.pane
+ import com.eviware.soapui.impl.wsdl.submit.transports.jms.util.HermesUtils;
+ import com.eviware.soapui.impl.wsdl.support.HelpUrls;
+ import com.eviware.soapui.impl.wsdl.support.http.ProxyUtils;
+-import com.eviware.soapui.integration.impl.CajoServer;
+ import com.eviware.soapui.model.ModelItem;
+ import com.eviware.soapui.model.PanelBuilder;
+ import com.eviware.soapui.model.TestPropertyHolder;
+@@ -707,7 +706,6 @@ public class SoapUI {
+                     });
+                 }
+ 
+-                startCajoServerIfNotOverriddenBySetting();
+                 if (isFirstLaunch) {
+                     Tools.openURL(HelpUrls.SOAPUI_WELCOME_PAGE);
+                 }
+@@ -719,14 +717,6 @@ public class SoapUI {
+                 System.exit(1);
+             }
+         }
+-
+-        private void startCajoServerIfNotOverriddenBySetting() {
+-            if (!getSettings().isSet(LoadUISettings.START_CAJO_SERVER_AT_STARTUP) || getSettings().getBoolean(LoadUISettings.START_CAJO_SERVER_AT_STARTUP)) {
+-                CajoServer.getInstance().start();
+-            } else {
+-                log.info("Cajo server not started because setting '" + LoadUISettings.START_CAJO_SERVER_AT_STARTUP + "' is false.");
+-            }
+-        }
+     }
+ 
+     private static final class WsdlProjectCreator implements Runnable {

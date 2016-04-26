@@ -1,0 +1,51 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/OutgoingWss.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/OutgoingWss.java
+@@ -28,7 +28,6 @@ import org.w3c.dom.Element;
+ import com.eviware.soapui.SoapUI;
+ import com.eviware.soapui.config.OutgoingWssConfig;
+ import com.eviware.soapui.config.WSSEntryConfig;
+-import com.eviware.soapui.impl.wsdl.support.wss.entries.ManualSAMLEntry;
+ import com.eviware.soapui.model.propertyexpansion.PropertyExpansion;
+ import com.eviware.soapui.model.propertyexpansion.PropertyExpansionContainer;
+ import com.eviware.soapui.model.propertyexpansion.PropertyExpansionContext;
+@@ -54,8 +53,6 @@ public class OutgoingWss implements Prop
+ 
+         for (WSSEntryConfig entryConfig : config.getEntryList()) {
+ 
+-            convertOldManualSAMLEntry(entryConfig);
+-
+             WssEntry entry = WssEntryRegistry.get().build(entryConfig, this);
+             if (entry != null) {
+                 entries.add(entry);
+@@ -214,11 +211,4 @@ public class OutgoingWss implements Prop
+ 
+     public void resolve(ResolveContext<?> context) {
+     }
+-
+-    // Used to support backwards compatibility (< 4.5 - 4.5)
+-    private void convertOldManualSAMLEntry(WSSEntryConfig entryConfig) {
+-        if (entryConfig.getType().equals(OLD_MANUAL_SAML_ENTRY_TYPE)) {
+-            entryConfig.setType(ManualSAMLEntry.TYPE);
+-        }
+-    }
+ }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/WssEntryRegistry.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/WssEntryRegistry.java
+@@ -18,8 +18,6 @@ package com.eviware.soapui.impl.wsdl.sup
+ 
+ import com.eviware.soapui.config.WSSEntryConfig;
+ import com.eviware.soapui.impl.wsdl.support.wss.entries.EncryptionEntry;
+-import com.eviware.soapui.impl.wsdl.support.wss.entries.AutomaticSAMLEntry;
+-import com.eviware.soapui.impl.wsdl.support.wss.entries.ManualSAMLEntry;
+ import com.eviware.soapui.impl.wsdl.support.wss.entries.SignatureEntry;
+ import com.eviware.soapui.impl.wsdl.support.wss.entries.TimestampEntry;
+ import com.eviware.soapui.impl.wsdl.support.wss.entries.UsernameEntry;
+@@ -31,8 +29,6 @@ public class WssEntryRegistry extends Ab
+     public WssEntryRegistry() {
+         mapType(UsernameEntry.TYPE, UsernameEntry.class);
+         mapType(TimestampEntry.TYPE, TimestampEntry.class);
+-        mapType(ManualSAMLEntry.TYPE, ManualSAMLEntry.class);
+-        mapType(AutomaticSAMLEntry.TYPE, AutomaticSAMLEntry.class);
+         mapType(SignatureEntry.TYPE, SignatureEntry.class);
+         mapType(EncryptionEntry.TYPE, EncryptionEntry.class);
+     }

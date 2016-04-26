@@ -1,0 +1,14 @@
+#! /bin/sh
+
+# Include the wrappers utility script
+. /usr/lib/java-wrappers/java-wrappers.sh
+
+# We prefer to use openjdk or Sun's java if available
+find_java_runtime openjdk sun  || find_java_runtime 
+
+find_jars soapui
+find_jars xalan2 commons-collections3 geronimo-jms_1.1_spec jsr305
+find_jars wsdl4j binding json-lib jcifs FontChooser swingx
+
+run_java -Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=/usr/share/soapui com.eviware.soapui.SoapUI "$@"
+

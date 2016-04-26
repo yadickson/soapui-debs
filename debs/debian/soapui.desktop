@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=SoapUI
+GenericName=SoapUI Open Source
+Comment=Functional testing solution for APIs and web services
+Exec=/usr/bin/soapui %U
+Icon=soapui
+Terminal=false
+Type=Application
+Categories=Network;
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
+X-Ubuntu-Gettext-Domain=soapui
+X-AppInstall-Keywords=torrent
+Keywords=SOAP,ws,WebServices;

@@ -1,0 +1,4 @@
+debian/binaries/soapui /usr/bin
+debian/soapui.desktop /usr/share/applications
+debian/soapui.xpm /usr/share/icons
+

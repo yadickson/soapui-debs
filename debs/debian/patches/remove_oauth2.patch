@@ -1,0 +1,213 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/panels/AbstractHttpRequestDesktopPanel.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/panels/AbstractHttpRequestDesktopPanel.java
+@@ -43,7 +43,6 @@ import com.eviware.soapui.support.compon
+ import com.eviware.soapui.support.components.JEditorStatusBarWithProgress;
+ import com.eviware.soapui.support.components.JXToolBar;
+ import com.eviware.soapui.support.editor.inspectors.AbstractXmlInspector;
+-import com.eviware.soapui.support.editor.inspectors.auth.AuthInspectorFactory;
+ import com.eviware.soapui.support.editor.views.xml.source.XmlSourceEditorView;
+ import com.eviware.soapui.support.editor.views.xml.source.XmlSourceEditorView.JEditorStatusBarTargetProxy;
+ import com.eviware.soapui.support.editor.xml.XmlDocument;
+@@ -364,7 +363,7 @@ public abstract class AbstractHttpReques
+         lockIcon.addMouseListener(new MouseAdapter() {
+                                       @Override
+                                       public void mouseClicked(MouseEvent e) {
+-                                          Inspector inspector = getRequestEditor().getInspector(AuthInspectorFactory.INSPECTOR_ID);
++                                          Inspector inspector = getRequestEditor().getInspector("Auth");
+                                           if (inspector != null) {
+                                               ((AbstractXmlInspector) inspector).showInPanel();
+                                           }
+--- a/soapui/src/main/java/com/eviware/soapui/model/project/Project.java
++++ b/soapui/src/main/java/com/eviware/soapui/model/project/Project.java
+@@ -16,7 +16,6 @@
+ 
+ package com.eviware.soapui.model.project;
+ 
+-import com.eviware.soapui.impl.rest.OAuth2ProfileContainer;
+ import com.eviware.soapui.impl.rest.mock.RestMockService;
+ import com.eviware.soapui.impl.wsdl.mock.WsdlMockService;
+ import com.eviware.soapui.model.TestModelItem;
+@@ -117,6 +116,4 @@ public interface Project extends TestMod
+     public void inspect();
+ 
+     public int getIndexOfTestSuite(TestSuite testSuite);
+-
+-    OAuth2ProfileContainer getOAuth2ProfileContainer();
+ }
+--- a/soapui/src/main/java/com/eviware/soapui/model/propertyexpansion/resolvers/ModelItemPropertyResolver.java
++++ b/soapui/src/main/java/com/eviware/soapui/model/propertyexpansion/resolvers/ModelItemPropertyResolver.java
+@@ -16,7 +16,6 @@
+ 
+ package com.eviware.soapui.model.propertyexpansion.resolvers;
+ 
+-import com.eviware.soapui.impl.rest.OAuth2Profile;
+ import com.eviware.soapui.impl.rest.RestResource;
+ import com.eviware.soapui.impl.support.AbstractHttpRequest;
+ import com.eviware.soapui.impl.support.AbstractHttpRequestInterface;
+@@ -163,8 +162,6 @@ public class ModelItemPropertyResolver i
+             testCase = ((SecurityTest) modelItem).getTestCase();
+             testSuite = testCase.getTestSuite();
+             project = testSuite.getProject();
+-        } else if (modelItem instanceof OAuth2Profile) {
+-            project = ((WsdlProject) modelItem.getParent());
+         }
+ 
+         // no project -> nothing
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/DisabledWebViewBasedBrowserComponent.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/DisabledWebViewBasedBrowserComponent.java
+@@ -15,8 +15,6 @@
+ */
+ package com.eviware.soapui.support.components;
+ 
+-import com.eviware.soapui.impl.rest.actions.oauth.BrowserListener;
+-
+ import javax.swing.*;
+ import java.awt.*;
+ 
+@@ -56,14 +54,6 @@ class DisabledWebViewBasedBrowserCompone
+     }
+ 
+     @Override
+-    public void addBrowserStateListener(BrowserListener listener) {
+-    }
+-
+-    @Override
+-    public void removeBrowserStateListener(BrowserListener listener) {
+-    }
+-
+-    @Override
+     public void executeJavaScript(String script) {
+     }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/WebViewBasedBrowserComponent.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/WebViewBasedBrowserComponent.java
+@@ -15,8 +15,6 @@
+ */
+ package com.eviware.soapui.support.components;
+ 
+-import com.eviware.soapui.impl.rest.actions.oauth.BrowserListener;
+-
+ import java.awt.*;
+ 
+ /**
+@@ -37,10 +35,6 @@ public interface WebViewBasedBrowserComp
+ 
+     void close(boolean cascade);
+ 
+-    void addBrowserStateListener(BrowserListener listener);
+-
+-    void removeBrowserStateListener(BrowserListener listener);
+-
+     void executeJavaScript(String script);
+ 
+     /**
+--- a/soapui/src/main/java/com/eviware/soapui/SwingSoapUICore.java
++++ b/soapui/src/main/java/com/eviware/soapui/SwingSoapUICore.java
+@@ -25,7 +25,6 @@ import com.eviware.soapui.model.workspac
+ import com.eviware.soapui.support.UISupport;
+ import com.eviware.soapui.support.editor.inspectors.amfheader.AMFHeadersInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.attachments.AttachmentsInspectorFactory;
+-import com.eviware.soapui.support.editor.inspectors.auth.AuthInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.httpheaders.HttpHeadersInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.script.ScriptInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.ssl.SSLInspectorFactory;
+@@ -64,7 +63,6 @@ public class SwingSoapUICore extends Def
+ 
+         InspectorRegistry inspectorRegistry = InspectorRegistry.getInstance();
+         inspectorRegistry.addFactory(new ScriptInspectorFactory());
+-        inspectorRegistry.addFactory(new AuthInspectorFactory());
+         inspectorRegistry.addFactory(new HttpHeadersInspectorFactory());
+         inspectorRegistry.addFactory(new AttachmentsInspectorFactory());
+         inspectorRegistry.addFactory(new SSLInspectorFactory());
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
+@@ -33,8 +33,6 @@ import com.eviware.soapui.config.TestSui
+ import com.eviware.soapui.config.TestSuiteRunTypesConfig.Enum;
+ import com.eviware.soapui.impl.WorkspaceImpl;
+ import com.eviware.soapui.impl.WsdlInterfaceFactory;
+-import com.eviware.soapui.impl.rest.DefaultOAuth2ProfileContainer;
+-import com.eviware.soapui.impl.rest.OAuth2ProfileContainer;
+ import com.eviware.soapui.impl.rest.mock.RestMockService;
+ import com.eviware.soapui.impl.rest.support.RestRequestConverter.RestConversionException;
+ import com.eviware.soapui.impl.settings.XmlBeansSettingsImpl;
+@@ -157,7 +155,6 @@ public class WsdlProject extends Abstrac
+     private SoapUIScriptEngine beforeSaveScriptEngine;
+     private PropertyExpansionContext context = new DefaultPropertyExpansionContext(this);
+     protected DefaultWssContainer wssContainer;
+-    protected OAuth2ProfileContainer oAuth2ProfileContainer;
+     private String projectPassword = null;
+     private String hermesConfig;
+     private boolean wrongPasswordSupplied;
+@@ -394,12 +391,6 @@ public class WsdlProject extends Abstrac
+ 
+         wssContainer = new DefaultWssContainer(this, getConfig().getWssContainer());
+ 
+-        if (!getConfig().isSetOAuth2ProfileContainer()) {
+-            getConfig().addNewOAuth2ProfileContainer();
+-        }
+-        oAuth2ProfileContainer = new DefaultOAuth2ProfileContainer(this, getConfig().getOAuth2ProfileContainer());
+-
+-
+         endpointStrategy.init(this);
+ 
+         setActiveEnvironment(DefaultEnvironment.getInstance());
+@@ -569,7 +560,6 @@ public class WsdlProject extends Abstrac
+ 
+         setPropertiesConfig(getConfig().addNewProperties());
+         wssContainer = new DefaultWssContainer(this, getConfig().addNewWssContainer());
+-        oAuth2ProfileContainer = new DefaultOAuth2ProfileContainer(this, getConfig().addNewOAuth2ProfileContainer());
+     }
+ 
+     private void finalizeProjectLoading(boolean open) {
+@@ -1188,11 +1178,6 @@ public class WsdlProject extends Abstrac
+                 wssContainer = null;
+             }
+ 
+-            if (oAuth2ProfileContainer != null) {
+-                oAuth2ProfileContainer.release();
+-                oAuth2ProfileContainer = null;
+-            }
+-
+         }
+ 
+         projectListeners.clear();
+@@ -1543,10 +1528,6 @@ public class WsdlProject extends Abstrac
+         return wssContainer;
+     }
+ 
+-    public OAuth2ProfileContainer getOAuth2ProfileContainer() {
+-        return oAuth2ProfileContainer;
+-    }
+-
+     @Override
+     public void resolve(ResolveContext<?> context) {
+         super.resolve(context);
+@@ -1558,7 +1539,6 @@ public class WsdlProject extends Abstrac
+         List<PropertyExpansion> result = new ArrayList<PropertyExpansion>();
+ 
+         result.addAll(Arrays.asList(wssContainer.getPropertyExpansions()));
+-        result.addAll(Arrays.asList(oAuth2ProfileContainer.getPropertyExpansions()));
+ 
+         return result.toArray(new PropertyExpansion[result.size()]);
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/submit/RequestTransportRegistry.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/submit/RequestTransportRegistry.java
+@@ -62,7 +62,6 @@ public class RequestTransportRegistry {
+         httpTransport.addRequestFilter(new WsaRequestFilter());
+         httpTransport.addRequestFilter(new WsrmRequestFilter());
+         httpTransport.addRequestFilter(new WssRequestFilter());
+-        httpTransport.addRequestFilter(new OAuth2RequestFilter());
+         httpTransport.addRequestFilter(new GlobalHttpHeadersRequestFilter());
+ 
+         addListenerRequestFilters(httpTransport);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/RestRequestPanelBuilder.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/RestRequestPanelBuilder.java
+@@ -18,8 +18,6 @@ package com.eviware.soapui.impl.rest.pan
+ 
+ import java.awt.Component;
+ 
+-import org.opensaml.ws.wstrust.impl.AuthenticationTypeBuilder;
+-
+ import com.eviware.soapui.config.CredentialsConfig;
+ import com.eviware.soapui.config.CredentialsConfig.AuthType;
+ import com.eviware.soapui.impl.EmptyPanelBuilder;

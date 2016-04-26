@@ -1,0 +1,71 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/resource/RestParamsTable.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/resource/RestParamsTable.java
+@@ -238,7 +238,7 @@ public class RestParamsTable extends JPa
+     }
+ 
+     private JComponent buildDetails() {
+-        paramDetailsModel = new PresentationModel<RestParamProperty>(null);
++        paramDetailsModel = new PresentationModel<RestParamProperty>(getSelectedParameter());
+         detailsForm = new SimpleBindingForm(paramDetailsModel);
+ 
+         detailsForm.addSpace(5);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/dispatch/QueryMatchMockOperationDispatcher.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/dispatch/QueryMatchMockOperationDispatcher.java
+@@ -160,7 +160,7 @@ public class QueryMatchMockOperationDisp
+     }
+ 
+     protected Component buildQueryDetailComponent() {
+-        queryDetailFormPresentationModel = new PresentationModel<Query>(null);
++        queryDetailFormPresentationModel = new PresentationModel<Query>(getSelectedQuery());
+         detailForm = new SimpleBindingForm(queryDetailFormPresentationModel);
+ 
+         detailForm.setDefaultTextAreaRows(5);
+--- a/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsa/AbstractWsaInspector.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsa/AbstractWsaInspector.java
+@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
+ 
+ import com.eviware.soapui.impl.support.AbstractHttpRequest;
+ import com.eviware.soapui.impl.wsdl.support.wsa.WsaContainer;
++import com.eviware.soapui.impl.wsdl.support.wsa.WsaConfig;
+ import com.eviware.soapui.support.components.SimpleBindingForm;
+ import com.eviware.soapui.support.editor.EditorView;
+ import com.eviware.soapui.support.editor.inspectors.AbstractXmlInspector;
+@@ -44,7 +45,7 @@ public abstract class AbstractWsaInspect
+     public JComponent getComponent() {
+         if (mainPanel == null) {
+             mainPanel = new JPanel(new BorderLayout());
+-            form = new SimpleBindingForm(new PresentationModel<AbstractHttpRequest<?>>(wsaContainer.getWsaConfig()));
++            form = new SimpleBindingForm(new PresentationModel<WsaConfig>(wsaContainer.getWsaConfig()));
+             buildContent(form);
+             mainPanel.add(new JScrollPane(form.getPanel()), BorderLayout.CENTER);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsrm/AbstractWsrmInspector.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsrm/AbstractWsrmInspector.java
+@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
+ 
+ import com.eviware.soapui.impl.support.AbstractHttpRequest;
+ import com.eviware.soapui.impl.wsdl.support.wsrm.WsrmContainer;
++import com.eviware.soapui.impl.wsdl.support.wsrm.WsrmConfig;
+ import com.eviware.soapui.support.components.SimpleBindingForm;
+ import com.eviware.soapui.support.editor.EditorView;
+ import com.eviware.soapui.support.editor.inspectors.AbstractXmlInspector;
+@@ -45,7 +46,7 @@ public abstract class AbstractWsrmInspec
+     public JComponent getComponent() {
+         if (mainPanel == null) {
+             mainPanel = new JPanel(new BorderLayout());
+-            form = new SimpleBindingForm(new PresentationModel<AbstractHttpRequest<?>>(wsrmContainer.getWsrmConfig()));
++            form = new SimpleBindingForm(new PresentationModel<WsrmConfig>(wsrmContainer.getWsrmConfig()));
+             buildContent(form);
+             mainPanel.add(new JScrollPane(form.getPanel()), BorderLayout.CENTER);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/entries/EncryptionEntry.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/entries/EncryptionEntry.java
+@@ -73,7 +73,7 @@ public class EncryptionEntry extends Wss
+ 
+     @Override
+     protected JComponent buildUI() {
+-        SimpleBindingForm form = new SimpleBindingForm(new PresentationModel<SignatureEntry>(this));
++        SimpleBindingForm form = new SimpleBindingForm(new PresentationModel<SignatureEntry>((SignatureEntry)null));
+ 
+         form.addSpace(5);
+         wssContainerListener = new InternalWssContainerListener();

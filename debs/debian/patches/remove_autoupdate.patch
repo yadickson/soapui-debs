@@ -1,0 +1,40 @@
+--- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
++++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
+@@ -22,11 +22,8 @@ import com.eviware.soapui.actions.SoapUI
+ import com.eviware.soapui.actions.StartHermesJMSButtonAction;
+ import com.eviware.soapui.actions.SumbitUserInfoAction;
+ import com.eviware.soapui.actions.SwitchDesktopPanelAction;
+-import com.eviware.soapui.actions.VersionUpdateAction;
+ import com.eviware.soapui.analytics.Analytics;
+ import com.eviware.soapui.analytics.AnalyticsHelper;
+-import com.eviware.soapui.autoupdate.SoapUIAutoUpdaterUtils;
+-import com.eviware.soapui.autoupdate.SoapUIUpdateProvider;
+ import com.eviware.soapui.impl.WorkspaceImpl;
+ import com.eviware.soapui.impl.actions.ImportWsdlProjectAction;
+ import com.eviware.soapui.impl.actions.NewEmptyProjectAction;
+@@ -497,12 +494,6 @@ public class SoapUI {
+         helpMenu.addSeparator();
+         helpMenu.add(new ShowSystemPropertiesAction());
+         helpMenu.addSeparator();
+-        helpMenu.add(new VersionUpdateAction());
+-        helpMenu.addSeparator();
+-        helpMenu.add(new ShowOnlineHelpAction("SoapUI NG Pro Trial", HelpUrls.TRIAL_URL,
+-                "Apply for SoapUI NG Pro Trial License", "/SoapUI-OS-5.2_16-16.png"));
+-        helpMenu.add(new OpenUrlAction("Privacy Policy", "http://www.soapui.org"+HelpUrls.SMARTBEAR_PRIVACY_POLICY_URL));
+-        helpMenu.addSeparator();
+         helpMenu.add(new OpenUrlAction("soapui.org", "http://www.soapui.org"));
+         helpMenu.add(new OpenUrlAction("smartbear.com", HelpUrls.SMARTBEAR_WEB_SITE_START_PAGE));
+         helpMenu.addSeparator();
+@@ -699,12 +690,6 @@ public class SoapUI {
+ 
+     private static final class SoapUIRunner implements Runnable {
+         public void run() {
+-            boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().
+-                    getInputArguments().toString().indexOf("-agentlib:jdwp") > 0;
+-            SoapUIUpdateProvider updateProvider = SoapUIAutoUpdaterUtils.getProvider();
+-            if (!isDebug && SoapUI.getSettings().getBoolean(VersionUpdateSettings.AUTO_CHECK_VERSION_UPDATE)) {
+-                updateProvider.start();
+-            }
+ 
+             addStandardPreferencesShortcutOnMac();
+             boolean isFirstLaunch = !DefaultSoapUICore.settingsFileExists();

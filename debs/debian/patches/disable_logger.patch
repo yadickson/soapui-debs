@@ -1,0 +1,47 @@
+--- a/soapui/src/main/resources/com/eviware/soapui/resources/conf/soapui-log4j.xml
++++ b/soapui/src/main/resources/com/eviware/soapui/resources/conf/soapui-log4j.xml
+@@ -63,43 +63,9 @@
+         </layout>
+     </appender>
+ 
+-    <logger name="groovy.log">
+-        <level value="INFO"/>
+-        <appender-ref ref="GLOBAL_GROOVY_LOG"/>
+-    </logger>
+-    <!-- =============== -->
+-    <!-- Loggers         -->
+-    <!-- =============== -->
+-
+-    <logger name="com.eviware.soapui">
+-        <level value="DEBUG"/>
+-        <appender-ref ref="SOAPUI"/>
+-        <appender-ref ref="CONSOLE"/>
+-    </logger>
+-
+-    <logger name="soapui.errorlog">
+-        <level value="DEBUG"/>
+-        <appender-ref ref="ERRORFILE"/>
+-    </logger>
+-
+-    <logger name="org.apache.commons.httpclient">
+-        <level value="ERROR"/>
+-        <appender-ref ref="CONSOLE"/>
+-    </logger>
+-
+-    <logger name="com.eviware.soapui.impl.wsdl.support.http.SoapUIMultiThreadedHttpConnectionManager">
+-        <level value="ERROR"/>
+-        <appender-ref ref="ERRORFILE"/>
+-    </logger>
+-
+-    <logger name="com.eviware.soapui.impl.wsdl.WsdlSubmit">
+-        <level value="ERROR"/>
+-        <appender-ref ref="ERRORFILE"/>
+-    </logger>
+-
+     <root>
+         <priority value="INFO"/>
+-        <appender-ref ref="FILE"/>
++        <appender-ref ref="CONSOLE"/>
+     </root>
+ 
+ </log4j:configuration>

@@ -1,0 +1,35 @@
+--- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
++++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
+@@ -117,7 +117,6 @@ import com.eviware.x.impl.swing.SwingDia
+ import com.google.common.base.Objects;
+ import com.jgoodies.looks.HeaderStyle;
+ import com.jgoodies.looks.Options;
+-import javafx.application.Platform;
+ import org.apache.commons.cli.CommandLine;
+ import org.apache.commons.cli.CommandLineParser;
+ import org.apache.commons.cli.PosixParser;
+@@ -260,12 +259,7 @@ public class SoapUI {
+     private static CmdLineRunner soapUIRunner;
+ 
+     static {
+-        try {
+-            Platform.setImplicitExit(false);
+-        } catch (NoClassDefFoundError e) {
+-            log.warn("Could not find jfxrt.jar. Internal browser will be disabled.");
+-            System.setProperty(BROWSER_DISABLED_SYSTEM_PROPERTY, Boolean.TRUE.toString());
+-        }
++        System.setProperty(BROWSER_DISABLED_SYSTEM_PROPERTY, Boolean.TRUE.toString());
+     }
+ 
+     // --------------------------- CONSTRUCTORS ---------------------------
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/WebViewBasedBrowserComponentFactory.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/WebViewBasedBrowserComponentFactory.java
+@@ -33,7 +33,7 @@ public class WebViewBasedBrowserComponen
+         if (SoapUI.isBrowserDisabled()) {
+             return new DisabledWebViewBasedBrowserComponent();
+         } else {
+-            return new EnabledWebViewBasedBrowserComponent(addNavigationBar, popupStrategy);
++            return null;
+         }
+     }
+ }
