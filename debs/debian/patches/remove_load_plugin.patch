@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/DefaultSoapUICore.java
 +++ b/soapui/src/main/java/com/eviware/soapui/DefaultSoapUICore.java
-@@ -24,7 +24,6 @@ import com.eviware.soapui.model.property
+@@ -24,7 +24,6 @@
  import com.eviware.soapui.model.settings.Settings;
  import com.eviware.soapui.monitor.JettyMockEngine;
  import com.eviware.soapui.monitor.MockEngine;
@@ -8,7 +8,7 @@
  import com.eviware.soapui.security.registry.SecurityScanRegistry;
  import com.eviware.soapui.settings.*;
  import com.eviware.soapui.support.SecurityScanUtil;
-@@ -75,8 +74,6 @@ public class DefaultSoapUICore implement
+@@ -75,8 +74,6 @@
      private TimerTask settingsWatcher;
      private SoapUIExtensionClassLoader extClassLoader;
  
@@ -17,7 +17,7 @@
      public boolean isSavingSettings;
  
      protected SecurityScanRegistry securityScanRegistry;
-@@ -130,33 +127,12 @@ public class DefaultSoapUICore implement
+@@ -130,33 +127,12 @@
  
          initExtensions(getExtensionClassLoader());
          initCoreComponents();
@@ -53,7 +53,7 @@
          try {
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/tools/wsi/WSIAnalyzeAction.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/tools/wsi/WSIAnalyzeAction.java
-@@ -26,7 +26,6 @@ import com.eviware.soapui.impl.wsdl.acti
+@@ -26,7 +26,6 @@
  import com.eviware.soapui.impl.wsdl.actions.iface.tools.support.ToolHost;
  import com.eviware.soapui.model.iface.Interface;
  import com.eviware.soapui.model.settings.Settings;
@@ -61,7 +61,7 @@
  import com.eviware.soapui.settings.WSISettings;
  import com.eviware.soapui.support.StringUtils;
  import com.eviware.soapui.support.UISupport;
-@@ -61,7 +60,6 @@ import java.util.List;
+@@ -61,7 +60,6 @@
   * @author Ole.Matzura
   */
  
@@ -71,7 +71,7 @@
      public final static Logger log = Logger.getLogger(WSIAnalyzeAction.class);
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/AbstractTestAssertionFactory.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/AbstractTestAssertionFactory.java
-@@ -22,7 +22,6 @@ import com.eviware.soapui.model.ModelIte
+@@ -22,7 +22,6 @@
  import com.eviware.soapui.model.TestPropertyHolder;
  import com.eviware.soapui.model.testsuite.Assertable;
  import com.eviware.soapui.model.testsuite.TestAssertion;
@@ -79,7 +79,7 @@
  import com.eviware.soapui.support.ClassUtils;
  
  import java.lang.reflect.Constructor;
-@@ -31,7 +30,7 @@ import java.util.Arrays;
+@@ -31,7 +30,7 @@
  import java.util.Collections;
  import java.util.List;
  
@@ -88,7 +88,7 @@
      private final String id;
      private final String label;
      private final Class<? extends TestAssertion> assertionClass;
-@@ -109,9 +108,4 @@ public abstract class AbstractTestAssert
+@@ -109,9 +108,4 @@
              return null;
          }
      }
@@ -100,7 +100,7 @@
  }
 --- a/soapui/src/main/java/com/eviware/soapui/model/propertyexpansion/resolvers/DynamicPropertyResolver.java
 +++ b/soapui/src/main/java/com/eviware/soapui/model/propertyexpansion/resolvers/DynamicPropertyResolver.java
-@@ -23,7 +23,6 @@ import com.eviware.soapui.model.property
+@@ -23,7 +23,6 @@
  import com.eviware.soapui.model.propertyexpansion.resolvers.providers.CurrentStepRunIndexProvider;
  import com.eviware.soapui.model.propertyexpansion.resolvers.providers.ProjectDirProvider;
  import com.eviware.soapui.model.propertyexpansion.resolvers.providers.WorkspaceDirProvider;
@@ -108,7 +108,7 @@
  import com.eviware.soapui.support.factory.SoapUIFactoryRegistryListener;
  
  import java.util.HashMap;
-@@ -86,7 +85,7 @@ public class DynamicPropertyResolver imp
+@@ -86,7 +85,7 @@
          String getValue(PropertyExpansionContext context);
      }
  
@@ -133,7 +133,7 @@
      public final ReportTypeConfig.Enum[] levels;
      private final String description;
      private final String name;
-@@ -56,9 +55,4 @@ public abstract class AbstractSubReportF
+@@ -56,9 +55,4 @@
      public String getId() {
          return id;
      }

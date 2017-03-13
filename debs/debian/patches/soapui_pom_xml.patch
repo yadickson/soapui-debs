@@ -12,6 +12,15 @@
                          </manifest>
                      </archive>
                  </configuration>
+@@ -82,7 +85,7 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-surefire-plugin</artifactId>
+-                <version>2.12.1</version>
++                <version>2.17</version>
+                 <configuration>
+                     <systemProperties>
+                         <!-- Only log errors and only log to the console to decrease the log verbosity -->
 @@ -107,6 +110,30 @@
  
      <dependencies>
@@ -26,7 +35,7 @@
 +        <dependency>
 +            <groupId>org.opensaml</groupId>
 +            <artifactId>opensaml</artifactId>
-+            <version>2.6.2</version>
++            <version>2.6.1</version>
 +            <exclusions>
 +                <exclusion>
 +                    <groupId>org.slf4j</groupId>
@@ -35,16 +44,30 @@
 +            </exclusions>
 +        </dependency>
 +        <dependency>
-+            <groupId>com.github.sarxos</groupId>
++            <groupId>com.l2fprod.common</groupId>
 +            <artifactId>l2fprod-common-shared</artifactId>
-+            <version>10.0</version>
++            <version>6.9.1</version>
 +        </dependency>
 +
          <!-- Testing -->
  
          <dependency>
-@@ -139,6 +166,12 @@
-             <artifactId>xbean_xpath</artifactId>
+@@ -130,19 +157,25 @@
+         <!-- XML Beans -->
+ 
+         <dependency>
+-            <groupId>xmlbeans</groupId>
+-            <artifactId>xbean</artifactId>
+-            <version>fixed-2.4.0</version>
++            <groupId>org.apache.xmlbeans</groupId>
++            <artifactId>xmlbeans</artifactId>
++            <version>2.4.0</version>
+         </dependency>
+         <dependency>
+-            <groupId>xmlbeans</groupId>
+-            <artifactId>xbean_xpath</artifactId>
++            <groupId>org.apache.xmlbeans</groupId>
++            <artifactId>xmlbeans-xpath</artifactId>
              <version>2.4.0</version>
              <type>jar</type>
 +            <exclusions>
@@ -55,32 +78,110 @@
 +            </exclusions>
          </dependency>
          <dependency>
-             <groupId>xmlbeans</groupId>
-@@ -229,11 +262,6 @@
-             <version>2.2.0</version>
+-            <groupId>xmlbeans</groupId>
+-            <artifactId>xmlpublic</artifactId>
++            <groupId>org.apache.xmlbeans</groupId>
++            <artifactId>xmlbeans-qname</artifactId>
+             <version>2.4.0</version>
          </dependency>
          <dependency>
--            <groupId>com.jgoodies</groupId>
+@@ -203,35 +236,27 @@
+             <version>1.1.1</version>
+         </dependency>
+ 
+-        <!-- In-app analytics -->
+-        <dependency>
+-            <groupId>com.smartbear.utils.analytics</groupId>
+-            <artifactId>analytics-core</artifactId>
+-            <version>5.2.1</version>
+-        </dependency>
+-
+-        <dependency>
+-            <groupId>com.smartbear.utils.analytics</groupId>
+-            <artifactId>out-app-analytics-provider</artifactId>
+-            <version>5.2.1</version>
+-        </dependency>
+-
+         <!-- JGoodies -->
+ 
+         <dependency>
+             <groupId>com.jgoodies</groupId>
+-            <artifactId>forms</artifactId>
+-            <version>1.0.7</version>
++            <artifactId>jgoodies-forms</artifactId>
++            <version>1.9.0</version>
+         </dependency>
+-        <dependency>
++         <dependency>
++            <groupId>com.jgoodies</groupId>
++            <artifactId>jgoodies-common</artifactId>
++            <version>1.8.1</version>
++        </dependency>
++       <dependency>
+             <groupId>com.jgoodies</groupId>
+-            <artifactId>looks</artifactId>
+-            <version>2.2.0</version>
++            <artifactId>jgoodies-looks</artifactId>
++            <version>2.7.0</version>
+         </dependency>
+         <dependency>
+             <groupId>com.jgoodies</groupId>
 -            <artifactId>binding</artifactId>
 -            <version>2.0.1</version>
--        </dependency>
--        <dependency>
-             <groupId>com.fifesoft</groupId>
-             <artifactId>rsyntaxtextarea</artifactId>
-             <version>2.5.0</version>
-@@ -347,11 +375,6 @@
-             <version>1.4</version>
++            <artifactId>jgoodies-binding</artifactId>
++            <version>2.13.0</version>
          </dependency>
          <dependency>
--            <groupId>wsdl4j</groupId>
--            <artifactId>wsdl4j</artifactId>
+             <groupId>com.fifesoft</groupId>
+@@ -240,21 +265,26 @@
+         </dependency>
+ 
+         <!-- Jetty -->
++        <dependency>
++            <groupId>org.eclipse.jetty</groupId>
++            <artifactId>jetty-io</artifactId>
++            <version>8.2.0.v20160908</version>
++        </dependency>
+ 
+         <dependency>
+-            <groupId>jetty</groupId>
+-            <artifactId>jetty</artifactId>
+-            <version>6.1.26</version>
++            <groupId>org.eclipse.jetty</groupId>
++            <artifactId>jetty-http</artifactId>
++            <version>8.2.0.v20160908</version>
+         </dependency>
+         <dependency>
+-            <groupId>jetty</groupId>
++            <groupId>org.eclipse.jetty</groupId>
+             <artifactId>jetty-util</artifactId>
+-            <version>6.1.26</version>
++            <version>8.2.0.v20160908</version>
+         </dependency>
+         <dependency>
+-            <groupId>jetty</groupId>
+-            <artifactId>servlet-api</artifactId>
+-            <version>2.5-20081211</version>
++            <groupId>org.eclipse.jetty</groupId>
++            <artifactId>jetty-servlet</artifactId>
++            <version>8.2.0.v20160908</version>
+         </dependency>
+ 
+ 
+@@ -349,10 +379,10 @@
+         <dependency>
+             <groupId>wsdl4j</groupId>
+             <artifactId>wsdl4j</artifactId>
 -            <version>1.6.2-fixed</version>
--        </dependency>
--        <dependency>
-             <groupId>commons-ssl</groupId>
++            <version>1.6.2</version>
+         </dependency>
+         <dependency>
+-            <groupId>commons-ssl</groupId>
++            <groupId>ca.juliusdavies</groupId>
              <artifactId>not-yet-commons-ssl</artifactId>
              <version>0.3.11</version>
-@@ -367,11 +390,6 @@
+         </dependency>
+@@ -367,12 +397,7 @@
              <version>1.7.0</version>
          </dependency>
          <dependency>
@@ -89,10 +190,12 @@
 -            <version>2.2.2-jdk15</version>
 -        </dependency>
 -        <dependency>
-             <groupId>ezmorph</groupId>
+-            <groupId>ezmorph</groupId>
++            <groupId>net.sf.ezmorph</groupId>
              <artifactId>ezmorph</artifactId>
              <version>1.0.5</version>
-@@ -388,11 +406,6 @@
+         </dependency>
+@@ -388,11 +413,6 @@
              </exclusions>
          </dependency>
          <dependency>
@@ -104,20 +207,190 @@
              <groupId>commons-codec</groupId>
              <artifactId>commons-codec</artifactId>
              <version>1.3</version>
-@@ -491,12 +504,6 @@
+@@ -408,14 +428,9 @@
+             <version>1.7R2</version>
+         </dependency>
+         <dependency>
+-            <groupId>saxon</groupId>
+-            <artifactId>saxon</artifactId>
+-            <version>9.1.0.8j</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>saxon</groupId>
+-            <artifactId>saxon-dom</artifactId>
+-            <version>9.1.0.8j</version>
++            <groupId>net.sf.saxon</groupId>
++            <artifactId>Saxon-B</artifactId>
++            <version>9.0</version>
+         </dependency>
+         <dependency>
+             <groupId>xmlunit</groupId>
+@@ -428,52 +443,37 @@
+             <version>2.7.1</version>
+         </dependency>
+         <dependency>
+-            <groupId>bouncycastle</groupId>
++            <groupId>org.bouncycastle</groupId>
+             <artifactId>bcprov-jdk15</artifactId>
+-            <version>144</version>
++            <version>1.44</version>
+         </dependency>
+         <dependency>
+-            <groupId>jtidy</groupId>
++            <groupId>net.sf.jtidy</groupId>
+             <artifactId>jtidy</artifactId>
+-            <version>r872-jdk15</version>
++            <version>r938</version>
+         </dependency>
+         <dependency>
+-            <groupId>javax.jms</groupId>
+-            <artifactId>jms</artifactId>
+-            <version>1.1</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>hermesjms</groupId>
+-            <artifactId>hermes</artifactId>
+-            <version>1.14</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>amf</groupId>
++            <groupId>org.apache.flex.blazeds</groupId>
+             <artifactId>flex-messaging-common</artifactId>
+-            <version>1.0</version>
++            <version>4.7.0</version>
+         </dependency>
+         <dependency>
+-            <groupId>amf</groupId>
++            <groupId>org.apache.flex.blazeds</groupId>
+             <artifactId>flex-messaging-core</artifactId>
+-            <version>1.0</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>amf</groupId>
+-            <artifactId>flex-messaging-opt</artifactId>
+-            <version>1.0</version>
++            <version>4.7.0</version>
+         </dependency>
+         <dependency>
+-            <groupId>amf</groupId>
++            <groupId>org.apache.flex.blazeds</groupId>
+             <artifactId>flex-messaging-proxy</artifactId>
+-            <version>1.0</version>
++            <version>4.7.0</version>
+         </dependency>
+         <dependency>
+-            <groupId>amf</groupId>
++            <groupId>org.apache.flex.blazeds</groupId>
+             <artifactId>flex-messaging-remoting</artifactId>
+-            <version>1.0</version>
++            <version>4.7.0</version>
+         </dependency>
+         <dependency>
+-            <groupId>thoughtworks</groupId>
++            <groupId>com.thoughtworks.xstream</groupId>
+             <artifactId>xstream</artifactId>
+             <version>1.3.1</version>
+         </dependency>
+@@ -491,30 +491,19 @@
          <!--- Added -->
  
          <dependency>
 -            <groupId>org.samba.jcifs</groupId>
--            <artifactId>jcifs</artifactId>
++            <groupId>jcifs</groupId>
+             <artifactId>jcifs</artifactId>
 -            <version>1.2.9</version>
--            <type>jar</type>
++            <version>1.3.17</version>
+             <type>jar</type>
+         </dependency>
+         <dependency>
+-            <groupId>l2fprod</groupId>
+-            <artifactId>l2fprod-common-directorychooser
+-            </artifactId>
+-            <version>7.3</version>
 -        </dependency>
 -        <dependency>
-             <groupId>l2fprod</groupId>
-             <artifactId>l2fprod-common-directorychooser
-             </artifactId>
-@@ -581,18 +583,53 @@
+-            <groupId>l2fprod</groupId>
+-            <artifactId>l2fprod-common-fontchooser</artifactId>
+-            <version>7.3</version>
+-        </dependency>
+-        <dependency>
+             <groupId>org.apache.santuario</groupId>
+             <artifactId>xmlsec</artifactId>
+             <version>1.4.5</version>
+         </dependency>
+         <dependency>
+-            <groupId>org.apache.xerces</groupId>
+-            <artifactId>xml-apis</artifactId>
++            <groupId>xerces</groupId>
++            <artifactId>xercesImpl</artifactId>
+             <version>2.9.1</version>
+         </dependency>
+         <dependency>
+@@ -524,24 +513,36 @@
+             <type>jar</type>
+         </dependency>
+         <dependency>
+-            <groupId>gnu.cajo</groupId>
+-            <artifactId>cajo</artifactId>
+-            <version>1.142</version>
+-        </dependency>
+-        <dependency>
+             <groupId>org.apache.ws.commons.util</groupId>
+             <artifactId>ws-commons-util</artifactId>
+             <version>1.0.2</version>
+         </dependency>
+         <dependency>
+-            <groupId>com.btr</groupId>
++            <groupId>com.github.markusbernhardt</groupId>
+             <artifactId>proxy-vole</artifactId>
+-            <version>20131209</version>
++            <version>1.0.1</version>
+         </dependency>
+         <dependency>
+             <groupId>com.jayway.jsonpath</groupId>
+             <artifactId>json-path</artifactId>
+-            <version>0.9.1</version>
++            <version>2.0.0</version>
++            <exclusions>
++                <exclusion>
++                    <groupId>net.minidev</groupId>
++                    <artifactId>json-smart</artifactId>
++                </exclusion>
++            </exclusions>
++        </dependency>
++        <dependency>
++            <groupId>net.minidev</groupId>
++            <artifactId>json-smart</artifactId>
++            <version>2.2</version>
++            <exclusions>
++                <exclusion>
++                    <groupId>net.minidev</groupId>
++                    <artifactId>accessors-smart</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+ 
+         <!--  old http client needed by some 3rd party components -->
+@@ -553,18 +554,6 @@
+         </dependency>
+ 
+         <dependency>
+-            <groupId>org.sonatype.install4j</groupId>
+-            <artifactId>i4jruntime</artifactId>
+-            <version>5.1.14</version>
+-        </dependency>
+-
+-        <dependency>
+-            <groupId>org.sonatype.install4j</groupId>
+-            <artifactId>i4jruntime</artifactId>
+-            <version>5.1.14</version>
+-        </dependency>
+-
+-        <dependency>
+             <groupId>org.codehaus.mojo</groupId>
+             <artifactId>animal-sniffer-annotations</artifactId>
+             <version>1.11</version>
+@@ -581,18 +570,32 @@
  
      <profiles>
          <profile>
@@ -136,25 +409,11 @@
 -                    <systemPath>${javafx.runtime.lib.jar}</systemPath>
 -                </dependency>
 +		<dependency>
-+			<groupId>wsdl4j</groupId>
-+			<artifactId>wsdl4j</artifactId>
-+			<version>debian</version>
-+			<scope>system</scope>
-+			<systemPath>/usr/share/java/wsdl4j.jar</systemPath>
-+		</dependency>
-+		<dependency>
 +			<groupId>com.connectina.swing</groupId>
 +			<artifactId>fontchooser</artifactId>
 +			<version>debian</version>
 +			<scope>system</scope>
 +			<systemPath>/usr/share/java/FontChooser.jar</systemPath>
-+		</dependency>
-+		<dependency>
-+			<groupId>com.jgoodies</groupId>
-+			<artifactId>binding</artifactId>
-+			<version>debian</version>
-+			<scope>system</scope>
-+			<systemPath>/usr/share/java/binding.jar</systemPath>
 +		</dependency>
 +		<dependency>
 +			<groupId>json</groupId>
@@ -170,13 +429,94 @@
 +			<scope>system</scope>
 +			<systemPath>/usr/share/java/swingx1.jar</systemPath>
 +		</dependency>
-+		<dependency>
-+			<groupId>org.samba.jcifs</groupId>
-+			<artifactId>jcifs</artifactId>
-+			<version>debian</version>
-+			<scope>system</scope>
-+			<systemPath>/usr/share/java/jcifs.jar</systemPath>
-+		</dependency>
              </dependencies>
          </profile>
      </profiles>
+--- a/pom.xml
++++ b/pom.xml
+@@ -10,13 +10,6 @@
+     <version>5.2.1</version>
+     <packaging>pom</packaging>
+ 
+-    <repositories>
+-        <repository>
+-            <id>smartbear-sweden-repository</id>
+-            <url>http://www.soapui.org/repository/maven2</url>
+-        </repository>
+-    </repositories>
+-
+     <properties>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+@@ -70,71 +63,6 @@
+                     <target>1.7</target>
+                 </configuration>
+             </plugin>
+-            <plugin>
+-                <groupId>org.apache.maven.plugins</groupId>
+-                <artifactId>maven-enforcer-plugin</artifactId>
+-                <version>1.3.1</version>
+-                <executions>
+-                    <execution>
+-                        <id>enforce-versions</id>
+-                        <goals>
+-                            <goal>enforce</goal>
+-                        </goals>
+-                        <configuration>
+-                            <rules>
+-                                <requireMavenVersion>
+-                                    <version>3.0.0</version>
+-                                </requireMavenVersion>
+-                            </rules>
+-                        </configuration>
+-                    </execution>
+-                    <execution>
+-                        <id>enforce-bytecode-version</id>
+-                        <goals>
+-                            <goal>enforce</goal>
+-                        </goals>
+-                        <configuration>
+-                            <rules>
+-                                <!-- http://mojo.codehaus.org/extra-enforcer-rules/enforceBytecodeVersion.html -->
+-                                <enforceBytecodeVersion>
+-                                    <maxJdkVersion>1.7</maxJdkVersion>
+-                                </enforceBytecodeVersion>
+-                            </rules>
+-                            <fail>true</fail>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-                <dependencies>
+-                    <dependency>
+-                        <groupId>org.codehaus.mojo</groupId>
+-                        <artifactId>extra-enforcer-rules</artifactId>
+-                        <version>1.0-beta-2</version>
+-                    </dependency>
+-                </dependencies>
+-            </plugin>
+-            <plugin>
+-                <groupId>org.codehaus.mojo</groupId>
+-                <artifactId>animal-sniffer-maven-plugin</artifactId>
+-                <version>1.9</version>
+-                <configuration>
+-                    <signature>
+-                        <groupId>org.codehaus.mojo.signature</groupId>
+-                        <!-- currently, we cannot use java16 1.1 because some classes depends on the sun specific
+-                        implementation (com.sun.java.swing.plaf.windows) -->
+-                        <artifactId>java17</artifactId>
+-                        <version>1.0</version>
+-                    </signature>
+-                </configuration>
+-                <executions>
+-                    <execution>
+-                        <id>animal-sniffer-check</id>
+-                        <phase>process-classes</phase>
+-                        <goals>
+-                            <goal>check</goal>
+-                        </goals>
+-                    </execution>
+-                </executions>
+-            </plugin>
+         </plugins>
+     </build>
+ </project>

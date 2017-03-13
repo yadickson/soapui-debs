@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
 +++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
-@@ -706,10 +706,6 @@ public class SoapUI {
+@@ -706,10 +706,6 @@
                      });
                  }
  

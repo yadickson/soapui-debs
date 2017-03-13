@@ -12,11 +12,11 @@ info.cukes cucumber-junit * * * *
 javax.activation activation * * * *
 javax.jms jms * * * *
 javax.xml.bind jsr173_api * * * *
-jetty servlet-api * * * *
 l2fprod l2fprod-common-directorychooser * * * *
 l2fprod l2fprod-common-fontchooser * * * *
 net.ju-n.maven.plugins maven-checksum-plugin * * * *
 org.apache.flex flex-messaging-opt * * * *
+org.apache.httpcomponents httpclient-cache * * * *
 org.apache.maven maven-plugin-api * * * *
 org.apache.maven.plugins maven-assembly-plugin * * * *
 org.apache.maven.plugins maven-enforcer-plugin * * * *
@@ -32,8 +32,10 @@ org.easytesting fest-swing * * * *
 org.hamcrest hamcrest-all * * * *
 org.hamcrest hamcrest-core * * * *
 org.mockito mockito-all * * * *
+org.opensaml opensaml * * * *
 org.reflections reflections * * * *
 org.sonatype.install4j i4jruntime * * * *
+saxon saxon-dom * * * *
 teamdev MozillaInterfaces * * * *
 teamdev comfyj * * * *
 teamdev engine-gecko15 * * * *
@@ -50,4 +52,3 @@ teamdev xulrunner15-mac * * * *
 teamdev xulrunner15-windows * * * *
 com.sun.mail * * * * *
 org.apache.oltu.oauth2 * * * * *
-org.opensaml opensaml * * * *

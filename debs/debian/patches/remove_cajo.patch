@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
 +++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
-@@ -50,7 +50,6 @@ import com.eviware.soapui.impl.wsdl.pane
+@@ -50,7 +50,6 @@
  import com.eviware.soapui.impl.wsdl.submit.transports.jms.util.HermesUtils;
  import com.eviware.soapui.impl.wsdl.support.HelpUrls;
  import com.eviware.soapui.impl.wsdl.support.http.ProxyUtils;
@@ -8,7 +8,7 @@
  import com.eviware.soapui.model.ModelItem;
  import com.eviware.soapui.model.PanelBuilder;
  import com.eviware.soapui.model.TestPropertyHolder;
-@@ -707,7 +706,6 @@ public class SoapUI {
+@@ -707,7 +706,6 @@
                      });
                  }
  
@@ -16,7 +16,7 @@
                  if (isFirstLaunch) {
                      Tools.openURL(HelpUrls.SOAPUI_WELCOME_PAGE);
                  }
-@@ -719,14 +717,6 @@ public class SoapUI {
+@@ -719,14 +717,6 @@
                  System.exit(1);
              }
          }

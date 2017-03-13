@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/impl/support/panels/AbstractHttpRequestDesktopPanel.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/support/panels/AbstractHttpRequestDesktopPanel.java
-@@ -43,7 +43,6 @@ import com.eviware.soapui.support.compon
+@@ -43,7 +43,6 @@
  import com.eviware.soapui.support.components.JEditorStatusBarWithProgress;
  import com.eviware.soapui.support.components.JXToolBar;
  import com.eviware.soapui.support.editor.inspectors.AbstractXmlInspector;
@@ -8,7 +8,7 @@
  import com.eviware.soapui.support.editor.views.xml.source.XmlSourceEditorView;
  import com.eviware.soapui.support.editor.views.xml.source.XmlSourceEditorView.JEditorStatusBarTargetProxy;
  import com.eviware.soapui.support.editor.xml.XmlDocument;
-@@ -364,7 +363,7 @@ public abstract class AbstractHttpReques
+@@ -364,7 +363,7 @@
          lockIcon.addMouseListener(new MouseAdapter() {
                                        @Override
                                        public void mouseClicked(MouseEvent e) {
@@ -27,7 +27,7 @@
  import com.eviware.soapui.impl.rest.mock.RestMockService;
  import com.eviware.soapui.impl.wsdl.mock.WsdlMockService;
  import com.eviware.soapui.model.TestModelItem;
-@@ -117,6 +116,4 @@ public interface Project extends TestMod
+@@ -117,6 +116,4 @@
      public void inspect();
  
      public int getIndexOfTestSuite(TestSuite testSuite);
@@ -44,7 +44,7 @@
  import com.eviware.soapui.impl.rest.RestResource;
  import com.eviware.soapui.impl.support.AbstractHttpRequest;
  import com.eviware.soapui.impl.support.AbstractHttpRequestInterface;
-@@ -163,8 +162,6 @@ public class ModelItemPropertyResolver i
+@@ -163,8 +162,6 @@
              testCase = ((SecurityTest) modelItem).getTestCase();
              testSuite = testCase.getTestSuite();
              project = testSuite.getProject();
@@ -64,7 +64,7 @@
  import javax.swing.*;
  import java.awt.*;
  
-@@ -56,14 +54,6 @@ class DisabledWebViewBasedBrowserCompone
+@@ -56,14 +54,6 @@
      }
  
      @Override
@@ -90,7 +90,7 @@
  import java.awt.*;
  
  /**
-@@ -37,10 +35,6 @@ public interface WebViewBasedBrowserComp
+@@ -37,10 +35,6 @@
  
      void close(boolean cascade);
  
@@ -103,7 +103,7 @@
      /**
 --- a/soapui/src/main/java/com/eviware/soapui/SwingSoapUICore.java
 +++ b/soapui/src/main/java/com/eviware/soapui/SwingSoapUICore.java
-@@ -25,7 +25,6 @@ import com.eviware.soapui.model.workspac
+@@ -25,7 +25,6 @@
  import com.eviware.soapui.support.UISupport;
  import com.eviware.soapui.support.editor.inspectors.amfheader.AMFHeadersInspectorFactory;
  import com.eviware.soapui.support.editor.inspectors.attachments.AttachmentsInspectorFactory;
@@ -111,7 +111,7 @@
  import com.eviware.soapui.support.editor.inspectors.httpheaders.HttpHeadersInspectorFactory;
  import com.eviware.soapui.support.editor.inspectors.script.ScriptInspectorFactory;
  import com.eviware.soapui.support.editor.inspectors.ssl.SSLInspectorFactory;
-@@ -64,7 +63,6 @@ public class SwingSoapUICore extends Def
+@@ -64,7 +63,6 @@
  
          InspectorRegistry inspectorRegistry = InspectorRegistry.getInstance();
          inspectorRegistry.addFactory(new ScriptInspectorFactory());
@@ -121,7 +121,7 @@
          inspectorRegistry.addFactory(new SSLInspectorFactory());
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
-@@ -33,8 +33,6 @@ import com.eviware.soapui.config.TestSui
+@@ -33,8 +33,6 @@
  import com.eviware.soapui.config.TestSuiteRunTypesConfig.Enum;
  import com.eviware.soapui.impl.WorkspaceImpl;
  import com.eviware.soapui.impl.WsdlInterfaceFactory;
@@ -130,7 +130,7 @@
  import com.eviware.soapui.impl.rest.mock.RestMockService;
  import com.eviware.soapui.impl.rest.support.RestRequestConverter.RestConversionException;
  import com.eviware.soapui.impl.settings.XmlBeansSettingsImpl;
-@@ -157,7 +155,6 @@ public class WsdlProject extends Abstrac
+@@ -157,7 +155,6 @@
      private SoapUIScriptEngine beforeSaveScriptEngine;
      private PropertyExpansionContext context = new DefaultPropertyExpansionContext(this);
      protected DefaultWssContainer wssContainer;
@@ -138,7 +138,7 @@
      private String projectPassword = null;
      private String hermesConfig;
      private boolean wrongPasswordSupplied;
-@@ -394,12 +391,6 @@ public class WsdlProject extends Abstrac
+@@ -394,12 +391,6 @@
  
          wssContainer = new DefaultWssContainer(this, getConfig().getWssContainer());
  
@@ -151,7 +151,7 @@
          endpointStrategy.init(this);
  
          setActiveEnvironment(DefaultEnvironment.getInstance());
-@@ -569,7 +560,6 @@ public class WsdlProject extends Abstrac
+@@ -569,7 +560,6 @@
  
          setPropertiesConfig(getConfig().addNewProperties());
          wssContainer = new DefaultWssContainer(this, getConfig().addNewWssContainer());
@@ -159,7 +159,7 @@
      }
  
      private void finalizeProjectLoading(boolean open) {
-@@ -1188,11 +1178,6 @@ public class WsdlProject extends Abstrac
+@@ -1188,11 +1178,6 @@
                  wssContainer = null;
              }
  
@@ -171,7 +171,7 @@
          }
  
          projectListeners.clear();
-@@ -1543,10 +1528,6 @@ public class WsdlProject extends Abstrac
+@@ -1545,10 +1530,6 @@
          return wssContainer;
      }
  
@@ -182,7 +182,7 @@
      @Override
      public void resolve(ResolveContext<?> context) {
          super.resolve(context);
-@@ -1558,7 +1539,6 @@ public class WsdlProject extends Abstrac
+@@ -1560,7 +1541,6 @@
          List<PropertyExpansion> result = new ArrayList<PropertyExpansion>();
  
          result.addAll(Arrays.asList(wssContainer.getPropertyExpansions()));
@@ -192,7 +192,7 @@
  
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/submit/RequestTransportRegistry.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/submit/RequestTransportRegistry.java
-@@ -62,7 +62,6 @@ public class RequestTransportRegistry {
+@@ -62,7 +62,6 @@
          httpTransport.addRequestFilter(new WsaRequestFilter());
          httpTransport.addRequestFilter(new WsrmRequestFilter());
          httpTransport.addRequestFilter(new WssRequestFilter());
@@ -202,7 +202,7 @@
          addListenerRequestFilters(httpTransport);
 --- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/RestRequestPanelBuilder.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/RestRequestPanelBuilder.java
-@@ -18,8 +18,6 @@ package com.eviware.soapui.impl.rest.pan
+@@ -18,8 +18,6 @@
  
  import java.awt.Component;
  

@@ -1,0 +1,144 @@
+--- a/soapui/src/main/java/com/eviware/soapui/support/JsonPathFacade.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/JsonPathFacade.java
+@@ -13,9 +13,8 @@
+ 
+ import com.jayway.jsonpath.Configuration;
+ import com.jayway.jsonpath.JsonPath;
+-import com.jayway.jsonpath.internal.PathToken;
+-import com.jayway.jsonpath.internal.PathTokenizer;
+-import com.jayway.jsonpath.internal.filter.PathTokenFilter;
++import com.jayway.jsonpath.internal.token.PathToken;
++import com.jayway.jsonpath.internal.token.ScanPathToken;
+ import net.sf.json.JSON;
+ import net.sf.json.JSONArray;
+ import net.sf.json.JSONObject;
+@@ -53,8 +52,7 @@
+         LinkedList<PathToken> pathTokens = getPathTokensFrom(path);
+         PathToken endToken = pathTokens.removeLast();
+         int index = pathTokens.size();
+-        JsonWriteDecorator writeDecorator = new JsonWriteDecorator(provider, index, endToken, value);
+-        pathTokens.addLast(writeDecorator);
++        pathTokens.addLast(endToken);
+         path.read(jsonObject, configuration);
+         jsonObject = MutableValue.FROM_MUTABLE_VALUE.apply(jsonObject);
+         currentJson = buildJsonStringFrom(jsonObject);
+@@ -111,8 +109,8 @@
+         try {
+             Field tokenizerField = JsonPath.class.getDeclaredField("tokenizer");
+             tokenizerField.setAccessible(true);
+-            PathTokenizer tokenizer = (PathTokenizer) tokenizerField.get(jsonPathObject);
+-            Field pathTokensField = PathTokenizer.class.getDeclaredField("pathTokens");
++            ScanPathToken tokenizer = (ScanPathToken) tokenizerField.get(jsonPathObject);
++            Field pathTokensField = ScanPathToken.class.getDeclaredField("pathTokens");
+             pathTokensField.setAccessible(true);
+             return (LinkedList<PathToken>) pathTokensField.get(tokenizer);
+         } catch (Exception e) {
+@@ -135,24 +133,4 @@
+         JsonPath jsonPath = JsonPath.compile(jsonPathExpression);
+         return jsonPath.read(jsonObject, configuration);
+     }
+-
+-    private class JsonWriteDecorator extends PathToken {
+-        private final PlainJavaJsonProvider provider;
+-        private final Object value;
+-
+-        public JsonWriteDecorator(PlainJavaJsonProvider provider, int index, PathToken endToken, Object value) {
+-            super(endToken.getFragment(), index, true);
+-            this.provider = provider;
+-            this.value = value;
+-        }
+-
+-        @Override
+-        public PathTokenFilter getFilter() {
+-            // WORKAROUND: ideally we would use a decorator PathTokenFilter instead, but the PathTokenFilter constructor
+-            // is package protected. Unfortunately this entails that we can't reuse the provider after this step.
+-            provider.setValueToWrite(value);
+-            return super.getFilter();
+-        }
+-
+-    }
+ }
+--- a/soapui/src/main/java/com/eviware/soapui/support/PlainJavaJsonProvider.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/PlainJavaJsonProvider.java
+@@ -12,8 +12,7 @@
+ package com.eviware.soapui.support;
+ 
+ import com.jayway.jsonpath.InvalidJsonException;
+-import com.jayway.jsonpath.spi.Mode;
+-import com.jayway.jsonpath.spi.impl.AbstractJsonProvider;
++import com.jayway.jsonpath.spi.json.AbstractJsonProvider;
+ import net.sf.json.JSON;
+ import net.sf.json.JSONArray;
+ import net.sf.json.JSONObject;
+@@ -41,17 +40,11 @@
+     }
+ 
+     @Override
+-    public Mode getMode() {
+-        return Mode.SLACK;
+-    }
+-
+-    @Override
+     public Object parse(String json) throws InvalidJsonException {
+         return parse(new StringReader(json));
+     }
+ 
+ 
+-    @Override
+     public Object parse(Reader jsonReader) throws InvalidJsonException {
+         try {
+             JSON jsonRoot = jsonSlurper.parse(jsonReader);
+@@ -62,7 +55,6 @@
+         }
+     }
+ 
+-    @Override
+     public Object parse(InputStream jsonStream) throws InvalidJsonException {
+         return parse(new BufferedReader(new InputStreamReader(jsonStream)));
+     }
+@@ -88,26 +80,11 @@
+     }
+ 
+     @Override
+-    public boolean isContainer(Object obj) {
+-        return super.isContainer(obj);
+-    }
+-
+-    @Override
+     public boolean isMap(Object obj) {
+         return MutableValue.extractValueFromMutable(obj) instanceof Map;
+     }
+ 
+     @Override
+-    public Object getProperty(Object obj, Object key) {
+-        Object oldValue = super.getProperty(MutableValue.extractValueFromMutable(obj), key);
+-        if (oldValue instanceof MutableValue && valueToWrite != null) {
+-            ((MutableValue) oldValue).setValue(valueToWrite);
+-            return valueToWrite;
+-        }
+-        return MutableValue.extractValueFromMutable(oldValue);
+-    }
+-
+-    @Override
+     public void setProperty(Object obj, Object key, Object value) {
+         super.setProperty(MutableValue.extractValueFromMutable(obj), key, value);
+     }
+@@ -123,7 +100,7 @@
+     }
+ 
+     @Override
+-    public Iterable<Object> toIterable(Object obj) {
++    public Iterable<? extends Object> toIterable(Object obj) {
+         return super.toIterable(MutableValue.extractValueFromMutable(obj));
+     }
+ 
+@@ -157,4 +134,9 @@
+         }
+     }
+ 
++    @Override
++    public Object parse(InputStream in, String string) throws InvalidJsonException {
++        return parse(new BufferedReader(new InputStreamReader(in)));
++    }
++
+ }

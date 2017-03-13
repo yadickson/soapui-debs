@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/support/UISupport.java
 +++ b/soapui/src/main/java/com/eviware/soapui/support/UISupport.java
-@@ -41,7 +41,6 @@ import com.eviware.x.impl.swing.SwingDia
+@@ -40,7 +40,6 @@
  import com.eviware.x.impl.swing.SwingFileDialogs;
  import com.jgoodies.looks.HeaderStyle;
  import com.jgoodies.looks.Options;
@@ -8,7 +8,7 @@
  
  import javax.swing.AbstractAction;
  import javax.swing.Action;
-@@ -697,16 +696,7 @@ public class UISupport {
+@@ -694,16 +693,7 @@
       */
  
      public static KeyStroke getKeyStroke(String keyStroke) {

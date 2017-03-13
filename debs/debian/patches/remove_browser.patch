@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
 +++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
-@@ -117,7 +117,6 @@ import com.eviware.x.impl.swing.SwingDia
+@@ -116,7 +116,6 @@
  import com.google.common.base.Objects;
  import com.jgoodies.looks.HeaderStyle;
  import com.jgoodies.looks.Options;
@@ -8,7 +8,7 @@
  import org.apache.commons.cli.CommandLine;
  import org.apache.commons.cli.CommandLineParser;
  import org.apache.commons.cli.PosixParser;
-@@ -260,12 +259,7 @@ public class SoapUI {
+@@ -259,12 +258,7 @@
      private static CmdLineRunner soapUIRunner;
  
      static {
@@ -24,7 +24,7 @@
      // --------------------------- CONSTRUCTORS ---------------------------
 --- a/soapui/src/main/java/com/eviware/soapui/support/components/WebViewBasedBrowserComponentFactory.java
 +++ b/soapui/src/main/java/com/eviware/soapui/support/components/WebViewBasedBrowserComponentFactory.java
-@@ -33,7 +33,7 @@ public class WebViewBasedBrowserComponen
+@@ -33,7 +33,7 @@
          if (SoapUI.isBrowserDisabled()) {
              return new DisabledWebViewBasedBrowserComponent();
          } else {

@@ -1,18 +1,17 @@
 --- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
 +++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
-@@ -22,11 +22,8 @@ import com.eviware.soapui.actions.SoapUI
+@@ -22,10 +22,7 @@
  import com.eviware.soapui.actions.StartHermesJMSButtonAction;
  import com.eviware.soapui.actions.SumbitUserInfoAction;
  import com.eviware.soapui.actions.SwitchDesktopPanelAction;
 -import com.eviware.soapui.actions.VersionUpdateAction;
- import com.eviware.soapui.analytics.Analytics;
  import com.eviware.soapui.analytics.AnalyticsHelper;
 -import com.eviware.soapui.autoupdate.SoapUIAutoUpdaterUtils;
 -import com.eviware.soapui.autoupdate.SoapUIUpdateProvider;
  import com.eviware.soapui.impl.WorkspaceImpl;
  import com.eviware.soapui.impl.actions.ImportWsdlProjectAction;
  import com.eviware.soapui.impl.actions.NewEmptyProjectAction;
-@@ -497,12 +494,6 @@ public class SoapUI {
+@@ -496,12 +493,6 @@
          helpMenu.addSeparator();
          helpMenu.add(new ShowSystemPropertiesAction());
          helpMenu.addSeparator();
@@ -25,7 +24,7 @@
          helpMenu.add(new OpenUrlAction("soapui.org", "http://www.soapui.org"));
          helpMenu.add(new OpenUrlAction("smartbear.com", HelpUrls.SMARTBEAR_WEB_SITE_START_PAGE));
          helpMenu.addSeparator();
-@@ -699,12 +690,6 @@ public class SoapUI {
+@@ -698,12 +689,6 @@
  
      private static final class SoapUIRunner implements Runnable {
          public void run() {
@@ -38,3 +37,10 @@
  
              addStandardPreferencesShortcutOnMac();
              boolean isFirstLaunch = !DefaultSoapUICore.settingsFileExists();
+@@ -1757,4 +1742,4 @@
+             return false;
+         }
+     }
+-}
+\ No newline at end of file
++}

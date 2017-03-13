@@ -77,6 +77,11 @@ rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/actions/Sumbi
 find "${PKG}-${VERSION}" -type f -name '*.java' -exec perl -pi -e 's/\r\n/\n/g' '{}' \;
 find "${PKG}-${VERSION}" -type f -name '*.xml' -exec perl -pi -e 's/\r\n/\n/g' '{}' \;
 
+#Remove analitys
+find "${PKG}-${VERSION}" -type f -name '*.java' -exec sed -i '/\.Analytics;/d' '{}' \;
+find "${PKG}-${VERSION}" -type f -name '*.java' -exec sed -i '/Analytics\./d' '{}' \;
+
+
 tar -cJf "${ORIG_TARBALL}" --exclude-vcs "${PKG}-${VERSION}" || exit 1
 
 rm -rf "${PKG}-${VERSION}"

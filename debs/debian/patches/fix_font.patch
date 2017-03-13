@@ -1,0 +1,28 @@
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/JPropertiesTable.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/JPropertiesTable.java
+@@ -116,9 +116,22 @@
+ 
+     private Font getUIDefaultFont() {
+         UIDefaults uidefs = UIManager.getLookAndFeelDefaults();
+-        for (Object key : uidefs.keySet()) {
+-            if (uidefs.get(key) instanceof Font) {
+-                return uidefs.getFont(key);
++        boolean done = false;
++
++        while (!done) {
++            try {
++                if (uidefs != null) {
++
++                    for (Object key : uidefs.keySet()) {
++                        if (uidefs.get(key) instanceof Font) {
++                            return uidefs.getFont(key);
++                        }
++                    }
++                }
++
++                done = true;
++            } catch (Exception ex) {
++
+             }
+         }
+         return null;

@@ -1,0 +1,32 @@
+--- a/soapui/src/main/java/com/eviware/soapui/StandaloneSoapUICore.java
++++ b/soapui/src/main/java/com/eviware/soapui/StandaloneSoapUICore.java
+@@ -63,7 +63,14 @@
+     }
+ 
+     public void initSoapUILookAndFeel() {
++
+         try {
++            String lookFeel = "";
++
++            if (System.getProperty("java.runtime.name").contains("OpenJDK")) {
++                lookFeel = UIManager.getCrossPlatformLookAndFeelClassName();
++            }
++
+             // Enabling native look & feel by default on Mac OS X
+             if (UISupport.isMac()) {
+                 javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+@@ -71,11 +78,14 @@
+                 log.info("Defaulting to native L&F for Mac OS X");
+             } else if (getSettings().getBoolean(UISettings.NATIVE_LAF)) {
+                 javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
++            } else if (!lookFeel.isEmpty()) {
++                UIManager.setLookAndFeel(lookFeel);
+             } else {
+                 SoapUITheme theme = new SoapUITheme();
+ 
+                 PlasticXPLookAndFeel.setCurrentTheme(theme);
+                 PlasticXPLookAndFeel.setTabStyle("Metal");
++                com.jgoodies.looks.Options.setPopupDropShadowEnabled(true);
+ 
+                 UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+                 UIManager.put("TabbedPane.tabAreaInsets", new Insets(3, 2, 0, 0));

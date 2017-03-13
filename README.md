@@ -27,11 +27,10 @@ Build Debian Package for SoapUI Open Source
 - libhttpcore-java
 - libhttpmime-java
 - libjcifs-java
-- libjenkins-htmlunit-java (>= 2.6-jenkins-6)
-- libjetty-java
 - libjgoodies-binding-java
 - libjgoodies-forms-java
 - libjgoodies-looks-java
+- libjgoodies-common-java
 - libjson-java
 - libjsr305-java
 - libjtidy-java
@@ -56,13 +55,26 @@ Build Debian Package for SoapUI Open Source
 - libxom-java
 - libxstream-java
 - [libflex-java](https://github.com/yadickson/flex-debs)
-- [libjsonpath-java](https://github.com/yadickson/jsonpath-debs)
 - [libl2fprod-common-java](https://github.com/yadickson/l2fprod-common-debs)
 - [libproxy-vole-java](https://github.com/yadickson/proxy-vole-debs)
+
+For jessie
+
+- libjenkins-htmlunit-java (>= 2.6-jenkins-6)
+- libjetty-java
+- [libjsonpath-java](https://github.com/yadickson/jsonpath-debs)
+
+For stretch
+
+- libhtmlunit-java
+- libjetty8-java
+- libjsonpath-java
+
 
 **Tested**
 
 - Debian jessie
+- Debian stretch (Use look and feel Metal)
 
 **Links**
 

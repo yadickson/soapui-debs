@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/resource/RestParamsTable.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/resource/RestParamsTable.java
-@@ -238,7 +238,7 @@ public class RestParamsTable extends JPa
+@@ -238,7 +238,7 @@
      }
  
      private JComponent buildDetails() {
@@ -11,7 +11,7 @@
          detailsForm.addSpace(5);
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/dispatch/QueryMatchMockOperationDispatcher.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/dispatch/QueryMatchMockOperationDispatcher.java
-@@ -160,7 +160,7 @@ public class QueryMatchMockOperationDisp
+@@ -160,7 +160,7 @@
      }
  
      protected Component buildQueryDetailComponent() {
@@ -22,7 +22,7 @@
          detailForm.setDefaultTextAreaRows(5);
 --- a/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsa/AbstractWsaInspector.java
 +++ b/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsa/AbstractWsaInspector.java
-@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
+@@ -24,6 +24,7 @@
  
  import com.eviware.soapui.impl.support.AbstractHttpRequest;
  import com.eviware.soapui.impl.wsdl.support.wsa.WsaContainer;
@@ -30,7 +30,7 @@
  import com.eviware.soapui.support.components.SimpleBindingForm;
  import com.eviware.soapui.support.editor.EditorView;
  import com.eviware.soapui.support.editor.inspectors.AbstractXmlInspector;
-@@ -44,7 +45,7 @@ public abstract class AbstractWsaInspect
+@@ -44,7 +45,7 @@
      public JComponent getComponent() {
          if (mainPanel == null) {
              mainPanel = new JPanel(new BorderLayout());
@@ -41,7 +41,7 @@
          }
 --- a/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsrm/AbstractWsrmInspector.java
 +++ b/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/wsrm/AbstractWsrmInspector.java
-@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
+@@ -24,6 +24,7 @@
  
  import com.eviware.soapui.impl.support.AbstractHttpRequest;
  import com.eviware.soapui.impl.wsdl.support.wsrm.WsrmContainer;
@@ -49,7 +49,7 @@
  import com.eviware.soapui.support.components.SimpleBindingForm;
  import com.eviware.soapui.support.editor.EditorView;
  import com.eviware.soapui.support.editor.inspectors.AbstractXmlInspector;
-@@ -45,7 +46,7 @@ public abstract class AbstractWsrmInspec
+@@ -45,7 +46,7 @@
      public JComponent getComponent() {
          if (mainPanel == null) {
              mainPanel = new JPanel(new BorderLayout());
@@ -60,7 +60,7 @@
          }
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/entries/EncryptionEntry.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/entries/EncryptionEntry.java
-@@ -73,7 +73,7 @@ public class EncryptionEntry extends Wss
+@@ -73,7 +73,7 @@
  
      @Override
      protected JComponent buildUI() {

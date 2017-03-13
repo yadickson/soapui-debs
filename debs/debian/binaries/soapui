@@ -8,7 +8,7 @@ find_java_runtime openjdk sun  || find_java_runtime
 
 find_jars soapui
 find_jars xalan2 commons-collections3 geronimo-jms_1.1_spec jsr305
-find_jars wsdl4j binding json-lib jcifs FontChooser swingx
+find_jars json-lib FontChooser swingx
 
 run_java -Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=/usr/share/soapui com.eviware.soapui.SoapUI "$@"
 

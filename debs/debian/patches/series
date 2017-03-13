@@ -4,7 +4,6 @@ remove_jedit.patch
 remove_autoupdate.patch
 remove_providers.patch
 remove_browser.patch
-remove_analytics.patch
 remove_load_plugin.patch
 remove_cajo.patch
 remove_start_help.patch
@@ -18,3 +17,9 @@ update_jgoodies_binding.patch
 update_swingx1.patch
 update_wss4j.patch
 update_actions_conf.patch
+update_jetty8.patch
+remove_analytics.patch
+#update_proxy_vole.patch
+update_json_path.patch
+fix_font.patch
+look_and_feel.patch
