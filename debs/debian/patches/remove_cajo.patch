@@ -8,7 +8,7 @@
  import com.eviware.soapui.model.ModelItem;
  import com.eviware.soapui.model.PanelBuilder;
  import com.eviware.soapui.model.TestPropertyHolder;
-@@ -707,7 +706,6 @@
+@@ -706,7 +705,6 @@
                      });
                  }
  
@@ -16,7 +16,7 @@
                  if (isFirstLaunch) {
                      Tools.openURL(HelpUrls.SOAPUI_WELCOME_PAGE);
                  }
-@@ -719,14 +717,6 @@
+@@ -718,14 +716,6 @@
                  System.exit(1);
              }
          }

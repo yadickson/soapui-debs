@@ -42,6 +42,7 @@ rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/tools/JfxrtLo
 rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/support/components/WebViewNavigationBar.java
 rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/support/components/EnabledWebViewBasedBrowserComponent.java
 rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/actions/VersionUpdateAction.java
+rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/settings/VersionUpdateSettings.java
 
 #plugin support
 rm -rf "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/plugins

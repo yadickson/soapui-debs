@@ -11,7 +11,15 @@
  import com.eviware.soapui.impl.WorkspaceImpl;
  import com.eviware.soapui.impl.actions.ImportWsdlProjectAction;
  import com.eviware.soapui.impl.actions.NewEmptyProjectAction;
-@@ -496,12 +493,6 @@
+@@ -72,7 +69,6 @@
+ import com.eviware.soapui.settings.LoadUISettings;
+ import com.eviware.soapui.settings.ProxySettings;
+ import com.eviware.soapui.settings.UISettings;
+-import com.eviware.soapui.settings.VersionUpdateSettings;
+ import com.eviware.soapui.support.SoapUIException;
+ import com.eviware.soapui.support.StringUtils;
+ import com.eviware.soapui.support.Tools;
+@@ -496,12 +492,6 @@
          helpMenu.addSeparator();
          helpMenu.add(new ShowSystemPropertiesAction());
          helpMenu.addSeparator();
@@ -24,7 +32,7 @@
          helpMenu.add(new OpenUrlAction("soapui.org", "http://www.soapui.org"));
          helpMenu.add(new OpenUrlAction("smartbear.com", HelpUrls.SMARTBEAR_WEB_SITE_START_PAGE));
          helpMenu.addSeparator();
-@@ -698,12 +689,6 @@
+@@ -698,12 +688,6 @@
  
      private static final class SoapUIRunner implements Runnable {
          public void run() {
@@ -37,10 +45,59 @@
  
              addStandardPreferencesShortcutOnMac();
              boolean isFirstLaunch = !DefaultSoapUICore.settingsFileExists();
-@@ -1757,4 +1742,4 @@
+@@ -1710,10 +1694,6 @@
+         return soapUIRunner;
+     }
+ 
+-    public static boolean isAutoUpdateVersion() {
+-        return getSettings().getBoolean(VersionUpdateSettings.AUTO_CHECK_VERSION_UPDATE);
+-    }
+-
+     protected static class WindowInitializationTask implements Runnable {
+         public void run() {
+             expandWindow(frame);
+@@ -1757,4 +1737,4 @@
              return false;
          }
      }
 -}
 \ No newline at end of file
 +}
+--- a/soapui/src/main/java/com/eviware/soapui/actions/SoapUIPreferencesAction.java
++++ b/soapui/src/main/java/com/eviware/soapui/actions/SoapUIPreferencesAction.java
+@@ -22,7 +22,6 @@
+ import com.eviware.soapui.settings.HttpSettings;
+ import com.eviware.soapui.settings.SSLSettings;
+ import com.eviware.soapui.settings.SecuritySettings;
+-import com.eviware.soapui.settings.VersionUpdateSettings;
+ import com.eviware.soapui.settings.WSISettings;
+ import com.eviware.soapui.settings.WsaSettings;
+ import com.eviware.soapui.settings.WsdlSettings;
+@@ -59,7 +58,7 @@
+     public static final String INTEGRATED_TOOLS = "Tools";
+     public static final String WSA_SETTINGS = "WS-A Settings";
+     public static final String GLOBAL_SENSITIVE_INFORMATION_TOKENS = "Global Sensitive Information Tokens";
+-    public static final String VERSIONUPDATE_SETTINGS = "Version Update Settings";
++
+     private SwingConfigurationDialogImpl dialog;
+     private JTabbedPane tabs;
+     private List<Prefs> prefs = new ArrayList<Prefs>();
+@@ -86,7 +85,6 @@
+         addPrefs(new AnnotatedSettingsPrefs(SecuritySettings.class, GLOBAL_SECURITY_SETTINGS));
+         addPrefs(new AnnotatedSettingsPrefs(WsaSettings.class, WSA_SETTINGS));
+         addPrefs(new SecurityScansPrefs(GLOBAL_SENSITIVE_INFORMATION_TOKENS));
+-        addPrefs(new AnnotatedSettingsPrefs(VersionUpdateSettings.class, VERSIONUPDATE_SETTINGS));
+ 
+         for (PrefsFactory factory : SoapUI.getFactoryRegistry().getFactories(PrefsFactory.class)) {
+             addPrefsFactory(factory);
+--- a/soapui/src/main/java/com/eviware/soapui/DefaultSoapUICore.java
++++ b/soapui/src/main/java/com/eviware/soapui/DefaultSoapUICore.java
+@@ -338,7 +338,7 @@
+         setIfNotSet(WsaSettings.USE_DEFAULT_RELATES_TO, true);
+         setIfNotSet(WsaSettings.OVERRIDE_EXISTING_HEADERS, false);
+         setIfNotSet(WsaSettings.ENABLE_FOR_OPTIONAL, false);
+-        setIfNotSet(VersionUpdateSettings.AUTO_CHECK_VERSION_UPDATE, true);
++
+         if (!settings.isSet(ProxySettings.AUTO_PROXY) && !settings.isSet(ProxySettings.ENABLE_PROXY)) {
+             settings.setBoolean(ProxySettings.AUTO_PROXY, true);
+             settings.setBoolean(ProxySettings.ENABLE_PROXY, true);

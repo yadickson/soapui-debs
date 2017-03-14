@@ -16,7 +16,7 @@
  import com.eviware.soapui.impl.wsdl.support.HelpUrls;
  import com.eviware.soapui.impl.wsdl.support.http.ProxyUtils;
  import com.eviware.soapui.model.ModelItem;
-@@ -516,10 +514,6 @@
+@@ -515,10 +513,6 @@
          toolsMenu.add(SwingActionDelegate.createDelegate(GSoapAction.SOAPUI_ACTION_ID));
          toolsMenu.addSeparator();
          toolsMenu.add(SwingActionDelegate.createDelegate(TcpMonAction.SOAPUI_ACTION_ID));
