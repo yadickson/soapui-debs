@@ -67,7 +67,7 @@ For jessie
 For stretch
 
 - libhtmlunit-java
-- libjetty8-java
+- [libjetty8-java](https://github.com/yadickson/jetty8-debs)
 - libjsonpath-java
 
 

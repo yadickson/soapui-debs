@@ -19,7 +19,8 @@ update_wss4j.patch
 update_actions_conf.patch
 update_jetty8.patch
 remove_analytics.patch
-#update_proxy_vole.patch
+update_proxy_vole.patch
 update_json_path.patch
 fix_font.patch
 look_and_feel.patch
+jcifs.patch
