@@ -1,3 +1,9 @@
+soapui (5.2.1-5) unstable; urgency=medium
+
+  * Add soapui maven plugin
+
+ -- Yadickson Soto <yadickson@gmail.com>  Fri, 26 Jan 2018 17:27:29 -0300
+
 soapui (5.2.1-4) unstable; urgency=medium
 
   * Add support to build SOAP UI on stretch

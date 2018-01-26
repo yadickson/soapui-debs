@@ -102,6 +102,6 @@ s/net.sf.saxon/net.sourceforge.saxon/ s/Saxon.*/saxon/ jar s/.*/debian/ * *
 s/groovy/org.codehaus.groovy/ groovy* * s/.*/debian/ * *
 org.codehaus.groovy * * s/.*/debian/ * *
 
-
+org.apache.maven maven-plugin-api * s/.*/3.x/ * *
 
 

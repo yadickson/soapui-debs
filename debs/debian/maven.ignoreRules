@@ -17,7 +17,7 @@ l2fprod l2fprod-common-fontchooser * * * *
 net.ju-n.maven.plugins maven-checksum-plugin * * * *
 org.apache.flex flex-messaging-opt * * * *
 org.apache.httpcomponents httpclient-cache * * * *
-org.apache.maven maven-plugin-api * * * *
+
 org.apache.maven.plugins maven-assembly-plugin * * * *
 org.apache.maven.plugins maven-enforcer-plugin * * * *
 org.apache.maven.plugins maven-failsafe-plugin * * * *

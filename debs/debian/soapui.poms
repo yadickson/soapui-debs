@@ -27,7 +27,7 @@
 #
 pom.xml --has-package-version
 soapui/pom.xml --has-package-version --java-lib
-soapui-maven-plugin/pom.xml --ignore
+soapui-maven-plugin/pom.xml --has-package-version --java-lib
 soapui-installer/pom.xml --ignore
 soapui-maven-plugin-tester/pom.xml --ignore
 soapui-system-test/pom.xml --ignore

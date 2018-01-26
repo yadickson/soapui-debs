@@ -17,7 +17,7 @@ Build-Depends-Indep: libxmlbeans-maven-plugin-java, junit4,
  libsaxonb-java (>= 9.1.0.8), libws-commons-util-java (>= 1.0.1), libwss4j-java,  
  libxalan2-java, libxerces2-java, libxml-security-java, libxmlbeans-java,  
  libxmlunit-java, libxom-java, libxstream-java, libanimal-sniffer-java,
- libgeronimo-jms-1.1-spec-java, libjsr305-java,
+ libgeronimo-jms-1.1-spec-java, libjsr305-java, libmaven3-core-java,
  libjgoodies-binding-java, libjgoodies-common-java, libwsdl4j-java, libjson-java, libjcifs-java, libfontchooser-java, libswingx1-java
 Standards-Version: 3.9.6
 Homepage: https://github.com/SmartBear/soapui
