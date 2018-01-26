@@ -10,5 +10,5 @@ find_jars soapui
 find_jars xalan2 commons-collections3 geronimo-jms_1.1_spec jsr305
 find_jars json-lib FontChooser swingx
 
-run_java -Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=/usr/share/soapui com.eviware.soapui.SoapUI "$@"
+run_java -Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=/usr/share/soapui -splash:/usr/share/soapui/SoapUI-Spashscreen.png com.eviware.soapui.SoapUI "$@"
 

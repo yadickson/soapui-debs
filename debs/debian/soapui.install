@@ -1,4 +1,4 @@
 debian/binaries/soapui /usr/bin
 debian/soapui.desktop /usr/share/applications
 debian/soapui.xpm /usr/share/icons
-
+soapui-installer/src/main/resources/SoapUI-Spashscreen.png /usr/share/soapui
