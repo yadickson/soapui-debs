@@ -9,7 +9,6 @@ gnu.cajo cajo * * * *
 hermesjms hermes * * * *
 info.cukes cucumber-java * * * *
 info.cukes cucumber-junit * * * *
-javax.activation activation * * * *
 javax.jms jms * * * *
 javax.xml.bind jsr173_api * * * *
 l2fprod l2fprod-common-directorychooser * * * *

@@ -103,5 +103,6 @@ s/groovy/org.codehaus.groovy/ groovy* * s/.*/debian/ * *
 org.codehaus.groovy * * s/.*/debian/ * *
 
 org.apache.maven maven-plugin-api * s/.*/3.x/ * *
+javax.activation activation * s/.*/debian/ * *
 
 
