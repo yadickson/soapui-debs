@@ -1,0 +1,69 @@
+--- a/soapui/src/main/java/com/eviware/soapui/support/log/JettyLogger.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/log/JettyLogger.java
+@@ -103,4 +103,9 @@
+     public void ignore(Throwable thrwbl) {
+ 
+     }
++
++    @Override
++    public void debug(String string, long l) {
++        log.debug(string);
++    }
+ }
+--- a/soapui/src/main/java/com/eviware/soapui/monitor/SoapUIJettyThreadPool.java
++++ b/soapui/src/main/java/com/eviware/soapui/monitor/SoapUIJettyThreadPool.java
+@@ -23,11 +23,6 @@
+ import com.eviware.soapui.SoapUI;
+ 
+ public final class SoapUIJettyThreadPool implements ThreadPool {
+-    @Override
+-    public boolean dispatch(Runnable arg0) {
+-        SoapUI.getThreadPool().execute(arg0);
+-        return true;
+-    }
+ 
+     @Override
+     public int getIdleThreads() {
+@@ -48,4 +43,9 @@
+     public void join() throws InterruptedException {
+         SoapUI.getThreadPool().awaitTermination(30, TimeUnit.SECONDS);
+     }
++
++    @Override
++    public void execute(Runnable command) {
++        SoapUI.getThreadPool().execute(command);
++    }
+ }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/jettyproxy/JettyServer.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/jettyproxy/JettyServer.java
+@@ -31,7 +31,8 @@
+ import java.net.InetSocketAddress;
+ import java.net.Socket;
+ import java.nio.channels.SocketChannel;
+-import org.eclipse.jetty.server.AbstractHttpConnection;
++import org.eclipse.jetty.server.HttpChannel;
++import org.eclipse.jetty.server.HttpConnection;
+ 
+ public class JettyServer extends org.eclipse.jetty.server.Server {
+     private Logger log = Logger.getLogger(JettyServer.class);
+@@ -45,7 +46,7 @@
+     }
+ 
+     @Override
+-    public void handle(final AbstractHttpConnection connection) throws IOException, ServletException {
++    public void handle(HttpChannel<?> connection) throws IOException, ServletException {
+         final Request request = connection.getRequest();
+ 
+         if (request.getMethod().equals("CONNECT")) {
+@@ -70,9 +71,9 @@
+             // response.setHeader("Connection", "close");
+             response.flushBuffer();
+ 
+-            IO.copyThread(socket.getInputStream(), out);
++            IO.copy(socket.getInputStream(), out);
+ 
+-            IO.copyThread(in, socket.getOutputStream());
++            IO.copy(in, socket.getOutputStream());
+         } else {
+             super.handle(connection);
+         }
