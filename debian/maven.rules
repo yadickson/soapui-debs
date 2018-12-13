@@ -49,7 +49,7 @@ junit junit jar s/4\..*/4.x/ * *
 junit junit jar s/4\\..*/4.x/ * *
 net.sf.ezmorph ezmorph jar s/.*/debian/ * *
 net.sf.jtidy jtidy jar s/.*/debian/ * *
-net.sourceforge.htmlunit htmlunit jar s/.*/debian/ * *
+
 s/org.apache.flex.blazeds/org.apache.flex/ flex-messaging-common jar s/.*/debian/ * *
 s/org.apache.flex.blazeds/org.apache.flex/ flex-messaging-core jar s/.*/debian/ * *
 s/org.apache.flex.blazeds/org.apache.flex/ flex-messaging-proxy jar s/.*/debian/ * *
@@ -98,5 +98,5 @@ org.bouncycastle s/bcprov-jdk15/bcprov/ * s/.*/debian/ * *
 org.bouncycastle s/bcprov-jdk15on/bcprov/ * s/.*/debian/ * *
 org.jsr-305 s/ri/jsr305/ * s/0\..*/0.x/ * *
 wsdl4 wsdl4 * s/.*/debian/ * *
-s/saxon/net.sf.saxon/ s/saxon/Saxon-HE/ jar s/.*/debian/ * *
+s/saxon/net.sourceforge.saxon/ saxon jar s/.*/debian/ * *
 s/net.sourceforge.htmlunit/org.jenkins-ci/ htmlunit jar s/.*/debian/ * *
