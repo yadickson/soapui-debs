@@ -1,0 +1,38 @@
+--- a/soapui/pom.xml
++++ b/soapui/pom.xml
+@@ -350,6 +350,8 @@
+             <groupId>wsdl4j</groupId>
+             <artifactId>wsdl4j</artifactId>
+             <version>1.6.2-fixed</version>
++            <scope>system</scope>
++            <systemPath>/usr/share/java/wsdl4j.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>commons-ssl</groupId>
+@@ -370,6 +372,8 @@
+             <groupId>json</groupId>
+             <artifactId>json-lib</artifactId>
+             <version>2.2.2-jdk15</version>
++            <scope>system</scope>
++            <systemPath>/usr/share/java/json-lib.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>ezmorph</groupId>
+@@ -391,6 +395,8 @@
+             <groupId>swingx</groupId>
+             <artifactId>swingx</artifactId>
+             <version>soapui</version>
++            <scope>system</scope>
++            <systemPath>/usr/share/java/swingx1.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>commons-codec</groupId>
+@@ -495,6 +501,8 @@
+             <artifactId>jcifs</artifactId>
+             <version>1.2.9</version>
+             <type>jar</type>
++            <scope>system</scope>
++            <systemPath>/usr/share/java/jcifs.jar</systemPath>
+             <exclusions>
+                <exclusion>
+                   <groupId>javax.servlet</groupId>
