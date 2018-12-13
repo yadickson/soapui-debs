@@ -1,0 +1,13 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/http/JCIFSEngine.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/http/JCIFSEngine.java
+@@ -40,7 +40,9 @@
+         } catch (IOException ex) {
+             throw new NTLMEngineException("Invalid Type2 message", ex);
+         }
+-        Type3Message t3m = new Type3Message(t2m, password, domain, username, workstation);
++        final int type2Flags = t2m.getFlags();
++        final int type3Flags = type2Flags & (0xffffffff ^ (NtlmFlags.NTLMSSP_TARGET_TYPE_DOMAIN | NtlmFlags.NTLMSSP_TARGET_TYPE_SERVER));
++        Type3Message t3m = new Type3Message(t2m, password, domain, username, workstation, type3Flags);
+         return Base64.encode(t3m.toByteArray());
+     }
+ 

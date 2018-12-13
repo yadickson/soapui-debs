@@ -1,0 +1,619 @@
+--- a/soapui/src/main/java/com/eviware/soapui/actions/ToolsPrefs.java
++++ b/soapui/src/main/java/com/eviware/soapui/actions/ToolsPrefs.java
+@@ -48,7 +48,6 @@
+     public static final String WSA = "Oracle wsa.jar";
+     public static final String WADL = "WADL2Java";
+     public static final String LIBRARIES = "Script libraries";
+-    public static final String HERMES_JMS = "Hermes JMS";
+ 
+     private static final String[][] TOOLS = {{WSTOOLS, ToolsSettings.JBOSSWS_WSTOOLS_LOCATION},
+             {AXIS_1_X, ToolsSettings.AXIS_1_X_LOCATION}, {AXIS_2, ToolsSettings.AXIS_2_LOCATION},
+@@ -58,7 +57,7 @@
+             {GSOAP, ToolsSettings.GSOAP_LOCATION}, {ANT, ToolsSettings.ANT_LOCATION},
+             {XMLBEANS, ToolsSettings.XMLBEANS_LOCATION}, {JAXB, ToolsSettings.JAXB_LOCATION},
+             {TCPMON, ToolsSettings.TCPMON_LOCATION}, {WSA, ToolsSettings.ORACLE_WSA_LOCATION},
+-            {WADL, ToolsSettings.WADL2JAVA_LOCATION}, {HERMES_JMS, ToolsSettings.HERMES_JMS},};
++            {WADL, ToolsSettings.WADL2JAVA_LOCATION},};
+ 
+     private SimpleForm toolsForm;
+     private final String title;
+@@ -114,7 +113,6 @@
+             toolsForm.append(ToolsPrefs.TCPMON, new DirectoryFormComponent("Location of TcpMon directory"));
+             toolsForm.append(ToolsPrefs.WSA, new DirectoryFormComponent("Location of Orace wsa.jar"));
+             toolsForm.append(ToolsPrefs.WADL, new DirectoryFormComponent("Location of wadl2java script"));
+-            toolsForm.append(ToolsPrefs.HERMES_JMS, new DirectoryFormComponent("Location of HermesJMS"));
+             toolsForm.addSpace(5);
+         }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/RestRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/RestRequest.java
+@@ -29,10 +29,7 @@
+ import com.eviware.soapui.impl.wsdl.WsdlSubmit;
+ import com.eviware.soapui.impl.wsdl.submit.RequestTransportRegistry;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.HttpResponse;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.JMSHeader;
+ import com.eviware.soapui.impl.wsdl.support.PathUtils;
+-import com.eviware.soapui.impl.wsdl.support.jms.header.JMSHeaderConfig;
+-import com.eviware.soapui.impl.wsdl.support.jms.property.JMSPropertiesConfig;
+ import com.eviware.soapui.model.ModelItem;
+ import com.eviware.soapui.model.iface.MessagePart;
+ import com.eviware.soapui.model.iface.MessagePart.ContentPart;
+@@ -74,8 +71,6 @@
+     private RestMethod method;
+     private RestRequestParamsPropertyHolder params;
+     private ParamUpdater paramUpdater;
+-    private JMSHeaderConfig jmsHeaderConfig;
+-    private JMSPropertiesConfig jmsPropertyConfig;
+ 
+     public RestRequest(RestMethod method, RestRequestConfig requestConfig, boolean forLoadTest) {
+         super(requestConfig, method.getOperation(), "/rest_request_step.png", forLoadTest);
+@@ -209,32 +204,10 @@
+         result.addAll(super.getPropertyExpansions());
+         result.addAll(getRestMethod().getPropertyExpansions());
+         result.addAll(params.getPropertyExpansions());
+-        addJMSHeaderExpansions(result, getJMSHeaderConfig(), this);
+ 
+         return result.toArray();
+     }
+ 
+-    public void addJMSHeaderExpansions(PropertyExpansionsResult result, JMSHeaderConfig jmsHeaderConfig,
+-                                       ModelItem modelItem) {
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.JMSCORRELATIONID));
+-        result.addAll(PropertyExpansionUtils
+-                .extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.JMSREPLYTO));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.JMSTYPE));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.JMSPRIORITY));
+-        result.addAll(PropertyExpansionUtils
+-                .extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.TIMETOLIVE));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.DURABLE_SUBSCRIPTION_NAME));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.CLIENT_ID));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.SEND_AS_BYTESMESSAGE));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.SOAP_ACTION_ADD));
+-
+-    }
+-
+     public TestProperty addProperty(String name) {
+         return params.addProperty(name);
+     }
+@@ -476,14 +449,6 @@
+             AttachmentConfig config = attachmentConfigs.get(i);
+             getAttachmentsList().get(i).updateConfig(config);
+         }
+-
+-        if (jmsHeaderConfig != null) {
+-            jmsHeaderConfig.setJMSHeaderConfConfig(request.getJmsConfig());
+-        }
+-
+-        if (jmsPropertyConfig != null) {
+-            jmsPropertyConfig.setJmsPropertyConfConfig(request.getJmsPropertyConfig());
+-        }
+     }
+ 
+     protected void updateParams() {
+@@ -555,26 +520,6 @@
+         updateParams();
+     }
+ 
+-    public JMSHeaderConfig getJMSHeaderConfig() {
+-        if (jmsHeaderConfig == null) {
+-            if (!getConfig().isSetJmsConfig()) {
+-                getConfig().addNewJmsConfig();
+-            }
+-            jmsHeaderConfig = new JMSHeaderConfig(getConfig().getJmsConfig(), this);
+-        }
+-        return jmsHeaderConfig;
+-    }
+-
+-    public JMSPropertiesConfig getJMSPropertiesConfig() {
+-        if (jmsPropertyConfig == null) {
+-            if (!getConfig().isSetJmsPropertyConfig()) {
+-                getConfig().addNewJmsPropertyConfig();
+-            }
+-            jmsPropertyConfig = new JMSPropertiesConfig(getConfig().getJmsPropertyConfig(), this);
+-        }
+-        return jmsPropertyConfig;
+-    }
+-
+     @Override
+     public String getMultiValueDelimiter() {
+         return getConfig().getMultiValueDelimiter();
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/submit/RequestTransportRegistry.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/submit/RequestTransportRegistry.java
+@@ -19,7 +19,6 @@
+ import com.eviware.soapui.SoapUI;
+ import com.eviware.soapui.impl.wsdl.submit.filters.*;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.HttpClientRequestTransport;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.HermesJmsRequestTransport;
+ import com.eviware.soapui.model.iface.SubmitContext;
+ import com.eviware.soapui.support.factory.SoapUIFactoryRegistryListener;
+ 
+@@ -38,7 +37,6 @@
+ public class RequestTransportRegistry {
+     public static final String HTTP = "http";
+     public static final String HTTPS = "https";
+-    public static final String JMS = "jms";
+ 
+     private static Map<String, RequestTransport> transports = new HashMap<String, RequestTransport>();
+     private static Map<String, List<RequestFilter>> addedCustomRequestFilters = new HashMap<String, List<RequestFilter>>();
+@@ -47,7 +45,6 @@
+ 
+     static {
+         HttpClientRequestTransport httpTransport = new HttpClientRequestTransport();
+-        HermesJmsRequestTransport jmsTransport = new HermesJmsRequestTransport();
+ 
+         List<RequestFilterFactory> filterFactories = SoapUI.getFactoryRegistry()
+                 .getFactories(RequestFilterFactory.class);
+@@ -89,25 +86,6 @@
+         transports.put(HTTP, httpTransport);
+         transports.put(HTTPS, httpTransport);
+ 
+-        jmsTransport.addRequestFilter(new WssAuthenticationRequestFilter());
+-        jmsTransport.addRequestFilter(new PropertyExpansionRequestFilter());
+-        jmsTransport.addRequestFilter(new RemoveEmptyContentRequestFilter());
+-        jmsTransport.addRequestFilter(new StripWhitespacesRequestFilter());
+-        jmsTransport.addRequestFilter(new WsaRequestFilter());
+-        jmsTransport.addRequestFilter(new WssRequestFilter());
+-
+-        addListenerRequestFilters(jmsTransport);
+-
+-        for (RequestFilterFactory factory : filterFactories) {
+-            if (factory.getProtocol().equals(JMS)) {
+-                RequestFilter requestFilter = factory.createRequestFilter();
+-                jmsTransport.addRequestFilter(requestFilter);
+-
+-                addToCustomRequestFilters(JMS, requestFilter);
+-            }
+-        }
+-
+-        transports.put(JMS, jmsTransport);
+         initCustomTransports(filterFactories);
+ 
+         SoapUI.getFactoryRegistry().addFactoryRegistryListener(new SoapUIFactoryRegistryListener() {
+@@ -195,7 +173,7 @@
+     }
+ 
+     public static synchronized RequestTransport getTransport(String endpoint, SubmitContext submitContext)
+-            throws MissingTransportException, CannotResolveJmsTypeException {
++            throws MissingTransportException {
+         int ix = endpoint.indexOf("://");
+         if (ix == -1) {
+             throw new MissingTransportException("Missing protocol in endpoint [" + endpoint + "]");
+@@ -241,11 +219,5 @@
+             super(msg);
+         }
+     }
+-
+-    public static class CannotResolveJmsTypeException extends Exception {
+-        public CannotResolveJmsTypeException(String msg) {
+-            super(msg);
+-        }
+-    }
+ 
+ }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/project/WsdlProjectSoapUIActionGroup.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/project/WsdlProjectSoapUIActionGroup.java
+@@ -18,7 +18,6 @@
+ 
+ import com.eviware.soapui.SoapUI;
+ import com.eviware.soapui.impl.wsdl.WsdlProject;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.util.HermesUtils;
+ import com.eviware.soapui.support.action.SoapUIActionGroup;
+ import com.eviware.soapui.support.action.support.AbstractSoapUIActionGroup;
+ import com.eviware.soapui.support.action.support.SoapUIActionMappingList;
+@@ -57,7 +56,6 @@
+ 
+             mappings.getMapping(SaveProjectAction.SOAPUI_ACTION_ID).setEnabled(
+                     !project.isRemote());
+-            mappings.getMapping(StartHermesJMS.SOAPUI_ACTION_ID).setEnabled(HermesUtils.isHermesJMSSupported());
+ 
+             return mappings;
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/SwingSoapUICore.java
++++ b/soapui/src/main/java/com/eviware/soapui/SwingSoapUICore.java
+@@ -27,9 +27,6 @@
+ import com.eviware.soapui.support.editor.inspectors.attachments.AttachmentsInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.auth.AuthInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.httpheaders.HttpHeadersInspectorFactory;
+-import com.eviware.soapui.support.editor.inspectors.jms.header.JMSHeaderInspectorFactory;
+-import com.eviware.soapui.support.editor.inspectors.jms.property.JMSHeaderAndPropertyInspectorFactory;
+-import com.eviware.soapui.support.editor.inspectors.jms.property.JMSPropertyInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.script.ScriptInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.ssl.SSLInspectorFactory;
+ import com.eviware.soapui.support.editor.inspectors.wsa.WsaInspectorFactory;
+@@ -77,9 +74,6 @@
+         // inspectorRegistry.addFactory( new WsrmPiggybackInspectorFactory());
+         inspectorRegistry.addFactory(new RestRepresentationsInspectorFactory());
+         inspectorRegistry.addFactory(new InferredSchemaInspectorFactory());
+-        inspectorRegistry.addFactory(new JMSHeaderInspectorFactory());
+-        inspectorRegistry.addFactory(new JMSPropertyInspectorFactory());
+-        inspectorRegistry.addFactory(new JMSHeaderAndPropertyInspectorFactory());
+         inspectorRegistry.addFactory(new AMFHeadersInspectorFactory());
+ 
+         String actionsDir = System.getProperty("soapui.ext.actions");
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlRequest.java
+@@ -26,9 +26,6 @@
+ import com.eviware.soapui.impl.wsdl.submit.RequestTransportRegistry;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.WsdlResponse;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.support.attachments.AttachmentUtils;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.JMSHeader;
+-import com.eviware.soapui.impl.wsdl.support.jms.header.JMSHeaderConfig;
+-import com.eviware.soapui.impl.wsdl.support.jms.property.JMSPropertiesConfig;
+ import com.eviware.soapui.impl.wsdl.support.wsa.WsaConfig;
+ import com.eviware.soapui.impl.wsdl.support.wsa.WsaContainer;
+ import com.eviware.soapui.impl.wsdl.support.wsrm.WsrmConfig;
+@@ -125,14 +122,6 @@
+         if (wsrmConfig != null) {
+             wsrmConfig.setWsrmConfig(request.getWsrmConfig());
+         }
+-
+-        if (jmsHeaderConfig != null) {
+-            jmsHeaderConfig.setJMSHeaderConfConfig(request.getJmsConfig());
+-        }
+-
+-        if (jmsPropertyConfig != null) {
+-            jmsPropertyConfig.setJmsPropertyConfConfig(request.getJmsPropertyConfig());
+-        }
+     }
+ 
+     protected void initEndpoints() {
+@@ -460,7 +449,6 @@
+             }
+         }
+         addWsaPropertyExpansions(result, getWsaConfig(), this);
+-        addJMSHeaderExpansions(result, getJMSHeaderConfig(), this);
+         return result.toArray();
+     }
+ 
+@@ -477,24 +465,6 @@
+         result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, wsaConfig, "messageID"));
+     }
+ 
+-    public void addJMSHeaderExpansions(PropertyExpansionsResult result, JMSHeaderConfig jmsHeaderConfig,
+-                                       ModelItem modelItem) {
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.JMSCORRELATIONID));
+-        result.addAll(PropertyExpansionUtils
+-                .extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.JMSREPLYTO));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.JMSTYPE));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.JMSPRIORITY));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.DURABLE_SUBSCRIPTION_NAME));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig, JMSHeader.CLIENT_ID));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.SEND_AS_BYTESMESSAGE));
+-        result.addAll(PropertyExpansionUtils.extractPropertyExpansions(modelItem, jmsHeaderConfig,
+-                JMSHeader.SOAP_ACTION_ADD));
+-    }
+-
+     public AttachmentEncoding getAttachmentEncoding(String partName) {
+         HttpAttachmentPart attachmentPart = getAttachmentPart(partName);
+         if (attachmentPart == null) {
+@@ -559,29 +529,6 @@
+         return getResponse() == null ? null : getResponse().getContentAsString();
+     }
+ 
+-    private JMSHeaderConfig jmsHeaderConfig;
+-    private JMSPropertiesConfig jmsPropertyConfig;
+-
+-    public JMSHeaderConfig getJMSHeaderConfig() {
+-        if (jmsHeaderConfig == null) {
+-            if (!getConfig().isSetJmsConfig()) {
+-                getConfig().addNewJmsConfig();
+-            }
+-            jmsHeaderConfig = new JMSHeaderConfig(getConfig().getJmsConfig(), this);
+-        }
+-        return jmsHeaderConfig;
+-    }
+-
+-    public JMSPropertiesConfig getJMSPropertiesConfig() {
+-        if (jmsPropertyConfig == null) {
+-            if (!getConfig().isSetJmsPropertyConfig()) {
+-                getConfig().addNewJmsPropertyConfig();
+-            }
+-            jmsPropertyConfig = new JMSPropertiesConfig(getConfig().getJmsPropertyConfig(), this);
+-        }
+-        return jmsPropertyConfig;
+-    }
+-
+     public String getAction() {
+         if (isWsaEnabled() && StringUtils.hasContent(getWsaConfig().getAction())) {
+             return getWsaConfig().getAction();
+--- a/soapui/src/main/java/com/eviware/soapui/SoapUI.java
++++ b/soapui/src/main/java/com/eviware/soapui/SoapUI.java
+@@ -19,7 +19,6 @@
+ import com.eviware.soapui.actions.SaveAllProjectsAction;
+ import com.eviware.soapui.actions.ShowSystemPropertiesAction;
+ import com.eviware.soapui.actions.SoapUIPreferencesAction;
+-import com.eviware.soapui.actions.StartHermesJMSButtonAction;
+ import com.eviware.soapui.actions.SumbitUserInfoAction;
+ import com.eviware.soapui.actions.SwitchDesktopPanelAction;
+ import com.eviware.soapui.analytics.AnalyticsHelper;
+@@ -47,7 +46,6 @@
+ import com.eviware.soapui.impl.wsdl.actions.iface.tools.xmlbeans.XmlBeans2Action;
+ import com.eviware.soapui.impl.wsdl.actions.support.OpenUrlAction;
+ import com.eviware.soapui.impl.wsdl.panels.teststeps.support.PropertyHolderTable;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.util.HermesUtils;
+ import com.eviware.soapui.impl.wsdl.support.HelpUrls;
+ import com.eviware.soapui.impl.wsdl.support.http.ProxyUtils;
+ import com.eviware.soapui.model.ModelItem;
+@@ -516,9 +514,6 @@
+         toolsMenu.addSeparator();
+         toolsMenu.add(SwingActionDelegate.createDelegate(TcpMonAction.SOAPUI_ACTION_ID));
+         toolsMenu.addSeparator();
+-        StartHermesJMSButtonAction hermesJMSButtonAction = new StartHermesJMSButtonAction();
+-        hermesJMSButtonAction.setEnabled(HermesUtils.isHermesJMSSupported());
+-        toolsMenu.add(hermesJMSButtonAction);
+ 
+         return toolsMenu;
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/WsdlInterfaceSoapUIActionGroup.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/WsdlInterfaceSoapUIActionGroup.java
+@@ -17,7 +17,6 @@
+ package com.eviware.soapui.impl.wsdl.actions.iface;
+ 
+ import com.eviware.soapui.impl.wsdl.WsdlInterface;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.util.HermesUtils;
+ import com.eviware.soapui.support.action.support.DefaultSoapUIActionGroup;
+ import com.eviware.soapui.support.action.support.SoapUIActionMappingList;
+ 
+@@ -36,8 +35,6 @@
+     public SoapUIActionMappingList<WsdlInterface> getActionMappings(WsdlInterface modelItem) {
+         SoapUIActionMappingList<WsdlInterface> actionMappings = super.getActionMappings(modelItem);
+ 
+-        actionMappings.getMapping(AddJMSEndpointAction.SOAPUI_ACTION_ID)
+-                .setEnabled(HermesUtils.isHermesJMSSupported());
+         // SoapUIActionMapping<WsdlInterface> mapping = actionMappings.getMapping(
+         // WSToolsRegenerateJava2WsdlAction.SOAPUI_ACTION_ID );
+         // WSToolsRegenerateJava2WsdlAction action = (
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/http/HttpRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/http/HttpRequest.java
+@@ -29,8 +29,6 @@
+ import com.eviware.soapui.impl.wsdl.WsdlSubmit;
+ import com.eviware.soapui.impl.wsdl.submit.RequestTransportRegistry;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.HttpResponse;
+-import com.eviware.soapui.impl.wsdl.support.jms.header.JMSHeaderConfig;
+-import com.eviware.soapui.impl.wsdl.support.jms.property.JMSPropertiesConfig;
+ import com.eviware.soapui.model.ModelItem;
+ import com.eviware.soapui.model.iface.MessagePart;
+ import com.eviware.soapui.model.iface.MessagePart.ContentPart;
+@@ -260,15 +258,6 @@
+             AttachmentConfig config = attachmentConfigs.get(i);
+             getAttachmentsList().get(i).updateConfig(config);
+         }
+-
+-        if (jmsHeaderConfig != null) {
+-            jmsHeaderConfig.setJMSHeaderConfConfig(request.getJmsConfig());
+-        }
+-
+-        if (jmsPropertyConfig != null) {
+-            jmsPropertyConfig.setJmsPropertyConfConfig(request.getJmsPropertyConfig());
+-        }
+-
+     }
+ 
+     public AbstractHttpOperation getOperation() {
+@@ -308,29 +297,6 @@
+         return params.getPropertyList();
+     }
+ 
+-    private JMSHeaderConfig jmsHeaderConfig;
+-    private JMSPropertiesConfig jmsPropertyConfig;
+-
+-    public JMSHeaderConfig getJMSHeaderConfig() {
+-        if (jmsHeaderConfig == null) {
+-            if (!getConfig().isSetJmsConfig()) {
+-                getConfig().addNewJmsConfig();
+-            }
+-            jmsHeaderConfig = new JMSHeaderConfig(getConfig().getJmsConfig(), this);
+-        }
+-        return jmsHeaderConfig;
+-    }
+-
+-    public JMSPropertiesConfig getJMSPropertiesConfig() {
+-        if (jmsPropertyConfig == null) {
+-            if (!getConfig().isSetJmsPropertyConfig()) {
+-                getConfig().addNewJmsPropertyConfig();
+-            }
+-            jmsPropertyConfig = new JMSPropertiesConfig(getConfig().getJmsPropertyConfig(), this);
+-        }
+-        return jmsPropertyConfig;
+-    }
+-
+     public void notifyPropertyChanged(String responseContentProperty, String oldContent, String responseContent) {
+         notifyPropertyChanged(responseContentProperty, (Object) oldContent, (Object) responseContent);
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractHttpRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractHttpRequest.java
+@@ -32,8 +32,6 @@
+ import com.eviware.soapui.impl.wsdl.support.FileAttachment;
+ import com.eviware.soapui.impl.wsdl.support.IconAnimator;
+ import com.eviware.soapui.impl.wsdl.support.RequestFileAttachment;
+-import com.eviware.soapui.impl.wsdl.support.jms.header.JMSHeaderContainer;
+-import com.eviware.soapui.impl.wsdl.support.jms.property.JMSPropertyContainer;
+ import com.eviware.soapui.impl.wsdl.teststeps.HttpTestRequestStep.RequestHeaderHolder;
+ import com.eviware.soapui.impl.wsdl.teststeps.SettingPathPropertySupport;
+ import com.eviware.soapui.model.iface.Attachment;
+@@ -65,7 +63,7 @@
+ import java.util.Set;
+ 
+ public abstract class AbstractHttpRequest<T extends AbstractRequestConfig> extends AbstractWsdlModelItem<T> implements
+-        Request, AbstractHttpRequestInterface<T>, JMSHeaderContainer, JMSPropertyContainer {
++        Request, AbstractHttpRequestInterface<T> {
+     public static final String BASIC_AUTH_PROFILE = "Basic";
+     public static final String SELECTED_AUTH_PROFILE_PROPERTY_NAME = "selectedAuthProfile";
+     public static final String CR_ESCAPE_SEQUENCE = "\\\\_r";
+--- a/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/httpheaders/HttpHeadersInspectorFactory.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/editor/inspectors/httpheaders/HttpHeadersInspectorFactory.java
+@@ -22,8 +22,6 @@
+ import com.eviware.soapui.impl.wsdl.mock.WsdlMockResponse;
+ import com.eviware.soapui.impl.wsdl.panels.teststeps.amf.AMFRequest;
+ import com.eviware.soapui.impl.wsdl.panels.teststeps.amf.AMFResponse;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.JMSEndpoint;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.util.JMSUtils;
+ import com.eviware.soapui.impl.wsdl.support.MessageExchangeModelItem;
+ import com.eviware.soapui.impl.wsdl.teststeps.AMFRequestTestStep;
+ import com.eviware.soapui.impl.wsdl.teststeps.AMFTestStepResult;
+@@ -52,12 +50,12 @@
+         if (modelItem instanceof AbstractHttpRequestInterface<?>) {
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new WsdlRequestHeadersModel(
+                     (AbstractHttpRequest<?>) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         } else if (modelItem instanceof WsdlMockResponse) {
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new WsdlMockResponseRequestHeadersModel(
+                     (WsdlMockResponse) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         } else if (modelItem instanceof MessageExchangeModelItem) {
+             if (((MessageExchangeModelItem) modelItem).getMessageExchange() instanceof AMFTestStepResult) {
+@@ -68,12 +66,12 @@
+             }
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new WsdlMessageExchangeRequestHeadersModel(
+                     (MessageExchangeModelItem) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         } else if (modelItem instanceof AMFRequestTestStep) {
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new AMFRequestHeadersModel(
+                     (AMFRequestTestStep) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         }
+ 
+@@ -84,11 +82,11 @@
+         if (modelItem instanceof AbstractHttpRequestInterface<?>) {
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new WsdlRequestResponseHeadersModel(
+                     (AbstractHttpRequest<?>) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         } else if (modelItem instanceof WsdlMockResponse) {
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new MockResponseHeadersModel((WsdlMockResponse) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         } else if (modelItem instanceof MessageExchangeModelItem) {
+             if (((MessageExchangeModelItem) modelItem).getMessageExchange() instanceof AMFTestStepResult) {
+@@ -99,12 +97,12 @@
+             }
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new WsdlMessageExchangeResponseHeadersModel(
+                     (MessageExchangeModelItem) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         } else if (modelItem instanceof AMFRequestTestStep) {
+             HttpHeadersInspector inspector = new HttpHeadersInspector(new AMFResponseHeadersModel(
+                     (AMFRequestTestStep) modelItem));
+-            inspector.setEnabled(!JMSUtils.checkIfJMS(modelItem));
++            inspector.setEnabled(true);
+             return inspector;
+         }
+ 
+@@ -193,7 +191,7 @@
+         public void propertyChange(PropertyChangeEvent evt) {
+             if (evt.getPropertyName().equals(AbstractHttpRequest.ENDPOINT_PROPERTY)) {
+                 if (inspector != null && request.getEndpoint() != null) {
+-                    inspector.setEnabled(!request.getEndpoint().startsWith(JMSEndpoint.JMS_ENDPOINT_PREFIX));
++                    inspector.setEnabled(true);
+                 }
+             }
+             super.propertyChange(evt);
+@@ -282,7 +280,7 @@
+ 
+         public void propertyChange(PropertyChangeEvent evt) {
+             if (request.getEndpoint() != null && evt.getPropertyName().equals(AbstractHttpRequest.ENDPOINT_PROPERTY)) {
+-                inspector.setEnabled(!request.getEndpoint().startsWith(JMSEndpoint.JMS_ENDPOINT_PREFIX));
++                inspector.setEnabled(true);
+             }
+             super.propertyChange(evt);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/inspectors/schema/InferredSchemaInspector.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/inspectors/schema/InferredSchemaInspector.java
+@@ -53,7 +53,6 @@
+ import com.eviware.soapui.impl.settings.XmlBeansSettingsImpl;
+ import com.eviware.soapui.impl.wadl.inference.ConflictHandler;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.HttpResponse;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.JMSResponse;
+ import com.eviware.soapui.model.iface.Submit;
+ import com.eviware.soapui.model.iface.Submit.Status;
+ import com.eviware.soapui.model.iface.SubmitContext;
+@@ -115,10 +114,6 @@
+             String defaultNamespace = null;
+             if (url != null) {
+                 defaultNamespace = url.getProtocol() + "://" + url.getHost();
+-            } else {
+-                if (httpResponse instanceof JMSResponse) {
+-                    defaultNamespace = ((JMSResponse) httpResponse).getEndpoint();
+-                }
+             }
+             XmlOptions options = new XmlOptions().setLoadSubstituteNamespaces(Collections.singletonMap("",
+                     defaultNamespace));
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequest.java
+@@ -31,7 +31,6 @@
+ import com.eviware.soapui.impl.wsdl.WsdlOperation;
+ import com.eviware.soapui.impl.wsdl.WsdlRequest;
+ import com.eviware.soapui.impl.wsdl.submit.transports.http.HttpResponse;
+-import com.eviware.soapui.impl.wsdl.submit.transports.jms.JMSResponse;
+ import com.eviware.soapui.impl.wsdl.support.assertions.AssertableConfig;
+ import com.eviware.soapui.impl.wsdl.support.assertions.AssertionsSupport;
+ import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase;
+@@ -158,17 +157,7 @@
+             notifier = new PropertyChangeNotifier();
+         }
+ 
+-        if (getResponse() instanceof JMSResponse) {
+-            messageExchange = getResponse() == null ? null : new WsdlResponseMessageExchange(this) {
+-                @Override
+-                public boolean hasResponse() {// JMS tweak
+-                    String responseContent = getResponseContent();
+-                    return responseContent != null;
+-                }
+-            };
+-        } else {
+-            messageExchange = getResponse() == null ? null : new WsdlResponseMessageExchange(this);
+-        }
++        messageExchange = getResponse() == null ? null : new WsdlResponseMessageExchange(this);
+ 
+         if (messageExchange != null) {
+             // assert!
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/TestAssertionRegistry.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/TestAssertionRegistry.java
+@@ -25,8 +25,6 @@
+ import com.eviware.soapui.impl.wsdl.teststeps.assertions.http.HttpDownloadAllResourcesAssertion;
+ import com.eviware.soapui.impl.wsdl.teststeps.assertions.jdbc.JdbcStatusAssertion;
+ import com.eviware.soapui.impl.wsdl.teststeps.assertions.jdbc.JdbcTimeoutAssertion;
+-import com.eviware.soapui.impl.wsdl.teststeps.assertions.jms.JMSStatusAssertion;
+-import com.eviware.soapui.impl.wsdl.teststeps.assertions.jms.JMSTimeoutAssertion;
+ import com.eviware.soapui.impl.wsdl.teststeps.assertions.json.JsonPathContentAssertion;
+ import com.eviware.soapui.impl.wsdl.teststeps.assertions.json.JsonPathCountAssertion;
+ import com.eviware.soapui.impl.wsdl.teststeps.assertions.json.JsonPathExistenceAssertion;
+@@ -72,8 +70,6 @@
+         addAssertion(new WSSStatusAssertion.Factory());
+         addAssertion(new WSAResponseAssertion.Factory());
+         addAssertion(new WSARequestAssertion.Factory());
+-        addAssertion(new JMSStatusAssertion.Factory());
+-        addAssertion(new JMSTimeoutAssertion.Factory());
+         addAssertion(new JdbcStatusAssertion.Factory());
+         addAssertion(new JdbcTimeoutAssertion.Factory());
+         addAssertion(new HttpDownloadAllResourcesAssertion.Factory());
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequestStep.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequestStep.java
+@@ -601,7 +601,6 @@
+         }
+ 
+         testRequest.addWsaPropertyExpansions(result, testRequest.getWsaConfig(), this);
+-        testRequest.addJMSHeaderExpansions(result, testRequest.getJMSHeaderConfig(), this);
+         return result.toArray(new PropertyExpansion[result.size()]);
+     }
+ 

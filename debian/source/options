@@ -1,0 +1,6 @@
+compression="gzip"
+extend-diff-ignore = "^\.travis\.yml$"
+extend-diff-ignore = "^\.gitignore$"
+extend-diff-ignore = "^\.travis.bintray.json$"
+extend-diff-ignore = "^\.travis.bintray.json.in$"
+extend-diff-ignore = "^README.md$"

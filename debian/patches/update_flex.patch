@@ -1,0 +1,36 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/teststeps/amf/SoapUIAMFConnection.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/teststeps/amf/SoapUIAMFConnection.java
+@@ -50,7 +50,6 @@
+ import flex.messaging.io.amf.client.AMFHeaderProcessor;
+ import flex.messaging.io.amf.client.exceptions.ClientStatusException;
+ import flex.messaging.io.amf.client.exceptions.ServerStatusException;
+-import flex.messaging.io.amf.client.exceptions.ServerStatusException.HttpResponseInfo;
+ 
+ /**
+  * AMFConnection derivate using HttpClient instead of UrlConnection
+@@ -298,25 +297,6 @@
+     // --------------------------------------------------------------------------
+ 
+     /**
+-     * Generates the HTTP response info for the server status exception.
+-     *
+-     * @return The HTTP response info for the server status exception.
+-     */
+-    protected HttpResponseInfo generateHttpResponseInfo() {
+-        HttpResponseInfo httpResponseInfo = null;
+-        try {
+-            int responseCode = 0;
+-            if (postMethod.hasHttpResponse()) {
+-                responseCode = postMethod.getHttpResponse().getStatusLine().getStatusCode();
+-            }
+-            String responseMessage = postMethod.getResponseBodyAsString();
+-            httpResponseInfo = new HttpResponseInfo(responseCode, responseMessage);
+-        } catch (IOException ignore) {
+-        }
+-        return httpResponseInfo;
+-    }
+-
+-    /**
+      * Generates and returns the response URI.
+      *
+      * @return The response URI.

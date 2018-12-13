@@ -1,0 +1,360 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/component/RestResourceEditorPopupWindow.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/component/RestResourceEditorPopupWindow.java
+@@ -21,7 +21,7 @@
+ import com.eviware.soapui.support.DocumentListenerAdapter;
+ import com.eviware.soapui.support.StringUtils;
+ import com.eviware.soapui.support.UISupport;
+-import com.jgoodies.forms.factories.ButtonBarFactory;
++import com.jgoodies.forms.factories.Forms;
+ 
+ import javax.swing.AbstractAction;
+ import javax.swing.BorderFactory;
+@@ -96,7 +96,8 @@
+         cancelButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "cancel");
+         cancelButton.getActionMap().put("cancel", cancelAction);
+ 
+-        JPanel buttonBar = ButtonBarFactory.buildRightAlignedBar(okButton, cancelButton);
++        JPanel buttonBar = new JPanel();
++        buttonBar.add(Forms.buttonBar(okButton, cancelButton));
+         buttonBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+         contentPane.add(createResourceEditorPanel(focusedResource), BorderLayout.CENTER);
+         contentPane.add(buttonBar, BorderLayout.SOUTH);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/service/RestServiceDesktopPanel.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/service/RestServiceDesktopPanel.java
+@@ -464,7 +464,7 @@
+             progressBar.setString("Loading Definition..");
+             progressBar.setIndeterminate(true);
+ 
+-            ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
++            ButtonBarBuilder builder = new ButtonBarBuilder();
+             builder.addGlue();
+             builder.addFixed(progressBar);
+             builder.addGlue();
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/tools/support/ProcessDialog.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/tools/support/ProcessDialog.java
+@@ -102,7 +102,7 @@
+         }
+ 
+         if (allowCancel) {
+-            ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
++            ButtonBarBuilder builder = new ButtonBarBuilder();
+             builder.addGlue();
+             cancelButton = new JButton(new CancelAction());
+             builder.addFixed(cancelButton);
+@@ -118,7 +118,7 @@
+             builder.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+             getContentPane().add(builder.getPanel(), BorderLayout.SOUTH);
+         } else if (showLog) {
+-            ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
++            ButtonBarBuilder builder = new ButtonBarBuilder();
+             builder.addGlue();
+ 
+             closeButton = new JButton(new CloseAction());
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/tools/support/ShowConfigFileAction.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/actions/iface/tools/support/ShowConfigFileAction.java
+@@ -76,7 +76,7 @@
+             getContentPane().add(label, BorderLayout.NORTH);
+             getContentPane().add(buildContent(), BorderLayout.CENTER);
+ 
+-            ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
++            ButtonBarBuilder builder = new ButtonBarBuilder();
+             builder.addGlue();
+             JButton closeButton = new JButton(new CloseAction());
+             builder.addFixed(closeButton);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/iface/WsdlInterfaceDesktopPanel.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/iface/WsdlInterfaceDesktopPanel.java
+@@ -580,7 +580,7 @@
+             progressBar.setString("Loading Definition..");
+             progressBar.setIndeterminate(true);
+ 
+-            ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
++            ButtonBarBuilder builder = new ButtonBarBuilder();
+             builder.addGlue();
+             builder.addFixed(progressBar);
+             builder.addGlue();
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/ProgressDialog.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/ProgressDialog.java
+@@ -56,7 +56,7 @@
+         getContentPane().add(panel, BorderLayout.CENTER);
+ 
+         if (allowCancel) {
+-            ButtonBarBuilder builder = ButtonBarBuilder.createLeftToRightBuilder();
++            ButtonBarBuilder builder = new ButtonBarBuilder();
+             builder.addGlue();
+             cancelButton = new JButton(new CancelAction());
+             builder.addFixed(cancelButton);
+--- a/soapui/src/main/java/com/eviware/x/impl/swing/SwingDialogs.java
++++ b/soapui/src/main/java/com/eviware/x/impl/swing/SwingDialogs.java
+@@ -22,7 +22,7 @@
+ import com.eviware.soapui.support.components.ProgressDialog;
+ import com.eviware.x.dialogs.XDialogs;
+ import com.eviware.x.dialogs.XProgressDialog;
+-import com.jgoodies.forms.factories.ButtonBarFactory;
++import com.jgoodies.forms.factories.Forms;
+ 
+ import javax.swing.AbstractAction;
+ import javax.swing.BorderFactory;
+@@ -141,7 +141,8 @@
+ 
+     public void showExtendedInfo(final String title, final String description, final String content, final Dimension size) {
+         try {
+-            final JPanel buttonBar = ButtonBarFactory.buildRightAlignedBar(new JButton(new OkAction("OK")));
++            final JPanel buttonBar = new JPanel ();
++            buttonBar.add(Forms.buttonBar(new JButton(new OkAction("OK"))));
+             if (SwingUtilities.isEventDispatchThread()) {
+                 showExtendedInfo(title, description, content, buttonBar, size);
+             } else {
+@@ -190,8 +191,9 @@
+     }
+ 
+     public boolean confirmExtendedInfo(String title, String description, String content, Dimension size) {
+-        JPanel buttonBar = ButtonBarFactory.buildRightAlignedBar(new JButton(new OkAction("OK")), new JButton(
+-                new CancelAction("Cancel")));
++        JPanel buttonBar = new JPanel ();
++        buttonBar.add(Forms.buttonBar(new JButton(new OkAction("OK")), new JButton(
++                new CancelAction("Cancel"))), BorderLayout.SOUTH);
+ 
+         showExtendedInfo(title, description, content, buttonBar, size);
+ 
+@@ -199,8 +201,9 @@
+     }
+ 
+     public Boolean confirmOrCancleExtendedInfo(String title, String description, String content, Dimension size) {
+-        JPanel buttonBar = ButtonBarFactory.buildRightAlignedBar(new JButton(new OkAction("Yes")), new JButton(
+-                new NoAction("No")), new JButton(new CancelAction("Cancel")));
++        JPanel buttonBar = new JPanel ();
++        buttonBar.add(Forms.buttonBar(new JButton(new OkAction("Yes")), new JButton(
++                new NoAction("No")), new JButton(new CancelAction("Cancel"))), BorderLayout.SOUTH);
+ 
+         showExtendedInfo(title, description, content, buttonBar, size);
+ 
+@@ -288,4 +291,4 @@
+         public void ancestorRemoved(AncestorEvent e) {
+         }
+     }
+-}
+\ No newline at end of file
++}
+--- a/soapui/src/main/java/com/eviware/x/impl/swing/FileFormField.java
++++ b/soapui/src/main/java/com/eviware/x/impl/swing/FileFormField.java
+@@ -56,7 +56,7 @@
+         textField = new JUndoableTextField(30);
+         textField.setName(name);
+         textField.setToolTipText(tooltip);
+-        builder.addGriddedGrowing(textField);
++        builder.addGrowing(textField);
+         builder.addRelatedGap();
+         selectDirectoryButton = new JButton(new SelectDirectoryAction());
+         builder.addFixed(selectDirectoryButton);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/testcase/actions/SetCredentialsAction.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/testcase/actions/SetCredentialsAction.java
+@@ -32,7 +32,7 @@
+ import com.eviware.soapui.model.testsuite.TestStep;
+ import com.eviware.soapui.support.UISupport;
+ import com.eviware.soapui.support.components.SimpleForm;
+-import com.jgoodies.forms.factories.ButtonBarFactory;
++import com.jgoodies.forms.factories.Forms;
+ 
+ /**
+  * Set the credentials for all requests in a testcase
+@@ -74,9 +74,8 @@
+         JPanel panel = new JPanel(new BorderLayout());
+         panel.add(form.getPanel(), BorderLayout.CENTER);
+ 
+-        JPanel buttonBar = ButtonBarFactory.buildOKCancelBar(new JButton(new OkAction()), new JButton(
+-                new CancelAction()));
+-        panel.add(buttonBar, BorderLayout.SOUTH);
++        JPanel buttonBar = new JPanel();
++        panel.add(Forms.buttonBar(new JButton(new OkAction()), new JButton(new CancelAction())), BorderLayout.SOUTH);
+         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+         panel.setPreferredSize(new Dimension(270, (int) panel.getPreferredSize().getHeight()));
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/JEditorStatusBar.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/JEditorStatusBar.java
+@@ -61,7 +61,7 @@
+                 BorderFactory.createMatteBorder(0, 1, 0, 0, Color.WHITE)));
+ 
+         ButtonBarBuilder builder = new ButtonBarBuilder(this);
+-        builder.addGriddedGrowing(infoLabel);
++        builder.addGrowing(infoLabel);
+         builder.addStrut(Sizes.pixel(2));
+ 
+         statusPanel = new JPanel(new BorderLayout());
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/SimpleForm.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/SimpleForm.java
+@@ -108,7 +108,7 @@
+         this.layout = layout;
+         panel = new JPanel(layout);
+         panel.setBorder(border);
+-        rowSpec = new RowSpec(rowAlignment + ":pref");
++        rowSpec = RowSpec.decode(rowAlignment + ":pref");
+     }
+ 
+     public JPanel getPanel() {
+@@ -137,12 +137,12 @@
+ 
+     public void setRowAlignment(String rowAlignment) {
+         this.rowAlignment = rowAlignment;
+-        rowSpec = new RowSpec(rowAlignment + ":pref");
++        rowSpec = RowSpec.decode(rowAlignment + ":pref");
+     }
+ 
+     public void setRowAlignment(String alignment, String size, String resize) {
+         this.rowAlignment = alignment + ":" + size + ":" + resize;
+-        rowSpec = new RowSpec(rowAlignment);
++        rowSpec = RowSpec.decode(rowAlignment);
+     }
+ 
+     public int getRowSpacing() {
+@@ -482,7 +482,7 @@
+ 
+     public void addSpace(int size) {
+         if (size > 0) {
+-            layout.appendRow(new RowSpec(size + "px"));
++            layout.appendRow(RowSpec.decode(size + "px"));
+         }
+     }
+ 
+@@ -709,7 +709,7 @@
+             }
+ 
+             if (rowIndex >= 0 && rowIndex < layout.getRowCount()) {
+-                layout.setRowSpec(rowIndex, new RowSpec("0px"));
++                layout.setRowSpec(rowIndex, RowSpec.decode("0px"));
+             }
+         }
+ 
+@@ -719,7 +719,7 @@
+             }
+ 
+             if (rowIndex >= 0 && rowIndex < layout.getRowCount()) {
+-                layout.setRowSpec(rowIndex, new RowSpec(rowSpacing + "px"));
++                layout.setRowSpec(rowIndex, RowSpec.decode(rowSpacing + "px"));
+             }
+         }
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/actions/EditorPrefs.java
++++ b/soapui/src/main/java/com/eviware/soapui/actions/EditorPrefs.java
+@@ -31,7 +31,7 @@
+ import com.eviware.soapui.support.components.SimpleForm;
+ import com.eviware.soapui.support.types.StringToStringMap;
+ import com.jgoodies.forms.builder.ButtonBarBuilder;
+-import com.l2fprod.common.swing.JFontChooser;
++import com.connectina.swing.fontchooser.JFontChooser;
+ 
+ /**
+  * Preferences class for UISettings
+@@ -71,7 +71,7 @@
+             builder.addRelatedGap();
+             builder.addFixed(new JButton(new AbstractAction("Select Font..") {
+                 public void actionPerformed(ActionEvent e) {
+-                    Font font = JFontChooser.showDialog(UISupport.getMainFrame(), "Select XML Editor Font",
++                    Font font = JFontChooser.showDialog(UISupport.getMainFrame(),
+                             Font.decode(editorFontTextField.getText()));
+ 
+                     if (font != null) {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/basic/SimpleNotContainsAssertion.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/basic/SimpleNotContainsAssertion.java
+@@ -174,7 +174,7 @@
+ 
+         mainForm.addTextField(CONTENT, "Content to check for", XForm.FieldType.TEXTAREA).setWidth(40);
+ 
+-        mainFormLayout.setRowSpec(mainFormLayout.getRowCount(), new RowSpec("top:default:grow(1.0)"));
++        mainFormLayout.setRowSpec(mainFormLayout.getRowCount(), RowSpec.decode("top:default:grow(1.0)"));
+         mainFormPanel.add(mainFormPanel.getComponent(mainFormPanel.getComponents().length-1),cc.xy(4,mainFormLayout.getRowCount(),"fill,fill"));
+ 
+         mainForm.addCheckBox(IGNORE_CASE, "Ignore case in comparison");
+--- a/soapui/src/main/java/com/eviware/x/impl/swing/SwingXFormImpl.java
++++ b/soapui/src/main/java/com/eviware/x/impl/swing/SwingXFormImpl.java
+@@ -57,14 +57,14 @@
+         this.name = name;
+         layout = new FormLayout(leftIndent + "px,left:pref,5px,left:default,5px:grow(1.0)");
+         panel = new JPanel(layout);
+-        rowSpec = new RowSpec(rowAlignment + ":pref");
++        rowSpec = RowSpec.decode(rowAlignment + ":pref");
+     }
+ 
+     public SwingXFormImpl(String name, FormLayout layout) {
+         this.name = name;
+         this.layout = layout;
+         panel = new JPanel(layout);
+-        rowSpec = new RowSpec(rowAlignment + ":pref");
++        rowSpec = RowSpec.decode(rowAlignment + ":pref");
+     }
+ 
+ 
+@@ -90,7 +90,7 @@
+ 
+     public void addSpace(int size) {
+         if (size > 0) {
+-            layout.appendRow(new RowSpec(size + "px"));
++            layout.appendRow(RowSpec.decode(size + "px"));
+         }
+     }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/FileFormComponent.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/FileFormComponent.java
+@@ -38,7 +38,7 @@
+         ButtonBarBuilder builder = new ButtonBarBuilder(this);
+         textField = new JTextField(30);
+         textField.setToolTipText(tooltip);
+-        builder.addGriddedGrowing(textField);
++        builder.addGrowing(textField);
+         builder.addRelatedGap();
+         builder.addFixed(new JButton(new SelectFileAction()));
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/basic/SimpleContainsAssertion.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/assertions/basic/SimpleContainsAssertion.java
+@@ -202,7 +202,7 @@
+ 
+         mainForm.addTextField(CONTENT, "Content to check for", XForm.FieldType.TEXTAREA).setWidth(40);
+ 
+-        mainFormLayout.setRowSpec(mainFormLayout.getRowCount(), new RowSpec("top:default:grow(1.0)"));
++        mainFormLayout.setRowSpec(mainFormLayout.getRowCount(), RowSpec.decode("top:default:grow(1.0)"));
+         mainFormPanel.add(mainFormPanel.getComponent(mainFormPanel.getComponents().length-1),cc.xy(4,mainFormLayout.getRowCount(),"fill,fill"));
+ 
+         mainForm.addCheckBox(IGNORE_CASE, "Ignore case in comparison");
+--- a/soapui/src/main/java/com/eviware/soapui/support/resolver/ChooseAnotherPropertyTargetResolver.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/resolver/ChooseAnotherPropertyTargetResolver.java
+@@ -196,7 +196,7 @@
+             });
+ 
+             setLocationRelativeTo(UISupport.getParentFrame(this));
+-            panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
++            panel.border(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+             this.add(panel.getPanel());
+         }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/support/resolver/ChooseAnotherTestCase.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/resolver/ChooseAnotherTestCase.java
+@@ -160,7 +160,7 @@
+             });
+ 
+             setLocationRelativeTo(UISupport.getParentFrame(this));
+-            panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
++            panel.border(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+             this.add(panel.getPanel());
+         }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/support/resolver/ChooseAnotherPropertySourceResolver.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/resolver/ChooseAnotherPropertySourceResolver.java
+@@ -197,7 +197,7 @@
+             });
+ 
+             setLocationRelativeTo(UISupport.getParentFrame(this));
+-            panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
++            panel.border(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+             this.add(panel.getPanel());
+             setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/support/components/DirectoryFormComponent.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/components/DirectoryFormComponent.java
+@@ -37,7 +37,7 @@
+         ButtonBarBuilder builder = new ButtonBarBuilder(this);
+         textField = new JTextField(30);
+         textField.setToolTipText(tooltip);
+-        builder.addGriddedGrowing(textField);
++        builder.addGrowing(textField);
+         builder.addRelatedGap();
+         builder.addFixed(new JButton(new SelectDirectoryAction()));
+     }

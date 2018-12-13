@@ -1,5 +1,6 @@
-# soapui-debs
-Build Debian Package for SoapUI Open Source
+# Debian Package for SoapUI Open Source
+
+[![TravisCI Status][travis-image]][travis-url]
 
 **Build dependencies**
 
@@ -7,8 +8,8 @@ Build Debian Package for SoapUI Open Source
 - cdbs
 - default-jdk
 - maven-debian-helper (>= 1.5)
+- libxmlbeans-maven-plugin-java
 - junit4
-- libanimal-sniffer-java
 - libbcprov-java
 - libcommons-beanutils-java
 - libcommons-cli-java
@@ -19,20 +20,15 @@ Build Debian Package for SoapUI Open Source
 - libcommons-lang-java (>= 2.4)
 - libcssparser-java
 - libezmorph-java
-- libfontchooser-java
-- libgeronimo-jms-1.1-spec-java
 - libguava-java
 - libhtmlunit-core-js-java
 - libhttpclient-java
 - libhttpcore-java
 - libhttpmime-java
-- libjcifs-java
-- libjgoodies-binding-java
+- libjenkins-htmlunit-java (>= 2.6-jenkins-6)
+- libjetty-java
 - libjgoodies-forms-java
 - libjgoodies-looks-java
-- libjgoodies-common-java
-- libjson-java
-- libjsr305-java
 - libjtidy-java
 - liblog4j1.2-java (>= 1.2.17)
 - libmail-java
@@ -42,42 +38,79 @@ Build Debian Package for SoapUI Open Source
 - librsyntaxtextarea-java
 - libsac-java
 - libsaxonb-java (>= 9.1.0.8)
-- libswingx1-java
 - libws-commons-util-java (>= 1.0.1)
-- libwsdl4j-java
 - libwss4j-java
 - libxalan2-java
 - libxerces2-java
-- libxmlbeans-java
-- libxmlbeans-maven-plugin-java
 - libxml-security-java
+- libxmlbeans-java
 - libxmlunit-java
 - libxom-java
 - libxstream-java
+- libanimal-sniffer-java
+- libgeronimo-jms-1.1-spec-java
+- libjsr305-java
+- libjgoodies-binding-java
+- libwsdl4j-java
+- libjson-java
+- libjcifs-java
+- libfontchooser-java
+- libswingx1-java
 - [libflex-java](https://github.com/yadickson/flex-debs)
 - [libl2fprod-common-java](https://github.com/yadickson/l2fprod-common-debs)
 - [libproxy-vole-java](https://github.com/yadickson/proxy-vole-debs)
-
-For jessie
-
-- libjenkins-htmlunit-java (>= 2.6-jenkins-6)
-- libjetty-java
 - [libjsonpath-java](https://github.com/yadickson/jsonpath-debs)
 
-For stretch
+**Download source code**
 
-- libhtmlunit-java
-- [libjetty8-java](https://github.com/yadickson/jetty8-debs)
-- libjsonpath-java
+- unzip
+- wget
+- libc-bin
+- dos2unix 
 
+```
+$ debian/rules get-orig-source
+$ debian/rules publish-source
+```
+
+**Build project**
+
+```
+$ dpkg-buildpackage -rfakeroot -D -us -uc -i -I -sa
+```
+or
+```
+$ QUILT_PATCHES=debian/patches quilt push -a
+$ fakeroot debian/rules clean binary
+```
 
 **Tested**
 
-- Debian jessie
-- Debian stretch (Use look and feel Metal)
+- Debian wheezy
 
-**Links**
+**Repositories**
 
-- [Home page from source code](https://github.com/SmartBear/soapui)
-- [Debian source code release](https://github.com/yadickson/soapui-debs/releases)
+[Debian repository](https://bintray.com/yadickson/debian)
+
+```
+$ wget -qO - https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
+```
+```
+$ echo "deb https://dl.bintray.com/yadickson/debian [distribution] main" | sudo tee -a /etc/apt/sources.list.d/bintray.list
+```
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade -y
+$ sudo apt-get install soapui
+```
+
+## License
+
+GPL-3.0 © [Yadickson Soto](https://github.com/yadickson)
+
+EUPL-1.1 © [SmartBear](https://github.com/SmartBear/soapui)
+
+[travis-image]: https://api.travis-ci.org/yadickson/soapui-debs.svg?branch=wheezy
+[travis-url]: https://travis-ci.org/yadickson/soapui-debs
+
 

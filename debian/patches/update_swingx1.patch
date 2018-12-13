@@ -1,0 +1,73 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/SoapMonitor.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/SoapMonitor.java
+@@ -200,13 +200,9 @@
+         logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+ 
+         operationFilter = new PatternFilter(".*", 0, 4);
+-        operationFilter.setAcceptNull(true);
+         interfaceFilter = new PatternFilter(".*", 0, 3);
+-        interfaceFilter.setAcceptNull(true);
+         targetHostFilter = new PatternFilter(".*", 0, 2);
+-        targetHostFilter.setAcceptNull(true);
+         requestHostFilter = new PatternFilter(".*", 0, 1);
+-        requestHostFilter.setAcceptNull(true);
+ 
+         Filter[] filters = new Filter[]{requestHostFilter, targetHostFilter, interfaceFilter, operationFilter};
+ 
+@@ -265,8 +261,6 @@
+                     return;
+                 }
+ 
+-                requestHostFilter.setAcceptNull(ix == 0);
+-
+                 if (ix == 0) {
+                     requestHostFilter.setPattern(".*", 0);
+                 } else {
+@@ -290,8 +284,6 @@
+                     return;
+                 }
+ 
+-                targetHostFilter.setAcceptNull(ix == 0);
+-
+                 if (ix == 0) {
+                     targetHostFilter.setPattern(".*", 0);
+                 } else {
+@@ -347,8 +339,6 @@
+                     return;
+                 }
+ 
+-                operationFilter.setAcceptNull(ix == 0);
+-
+                 if (ix == 0) {
+                     operationFilter.setPattern(".*", 0);
+                 } else {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/loadtest/JLoadTestLogTable.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/panels/loadtest/JLoadTestLogTable.java
+@@ -109,9 +109,7 @@
+         columnModel.getColumn(4).setPreferredWidth(250);
+ 
+         typeFilter = new PatternFilter(".*", 0, 2);
+-        typeFilter.setAcceptNull(true);
+         stepFilter = new PatternFilter(".*", 0, 3);
+-        stepFilter.setAcceptNull(true);
+ 
+         Filter[] filters = new Filter[]{typeFilter, // regex, matchflags, column
+                 stepFilter // regex, matchflags, column
+@@ -188,8 +186,6 @@
+                     return;
+                 }
+ 
+-                typeFilter.setAcceptNull(ix == 0);
+-
+                 if (ix == 0) {
+                     typeFilter.setPattern(".*", 0);
+                 } else {
+@@ -220,8 +216,6 @@
+                     return;
+                 }
+ 
+-                stepFilter.setAcceptNull(ix == 0);
+-
+                 if (ix == 0) {
+                     stepFilter.setPattern(".*", 0);
+                 } else {
