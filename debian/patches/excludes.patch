@@ -1,0 +1,15 @@
+--- a/soapui/pom.xml
++++ b/soapui/pom.xml
+@@ -139,6 +139,12 @@
+             <artifactId>xbean_xpath</artifactId>
+             <version>2.4.0</version>
+             <type>jar</type>
++            <exclusions>
++                <exclusion>
++                    <groupId>net.sf.saxon</groupId>
++                    <artifactId>saxon</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+         <dependency>
+             <groupId>xmlbeans</groupId>
