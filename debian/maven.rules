@@ -98,5 +98,5 @@ org.bouncycastle s/bcprov-jdk15/bcprov/ * s/.*/debian/ * *
 org.bouncycastle s/bcprov-jdk15on/bcprov/ * s/.*/debian/ * *
 org.jsr-305 s/ri/jsr305/ * s/0\..*/0.x/ * *
 wsdl4 wsdl4 * s/.*/debian/ * *
-s/saxon/net.sourceforge.saxon/ saxon jar s/.*/debian/ * *
+s/net.sf.saxon/net.sourceforge.saxon/ saxon jar s/.*/debian/ * *
 s/net.sourceforge.htmlunit/org.jenkins-ci/ htmlunit jar s/.*/debian/ * *
