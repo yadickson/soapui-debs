@@ -84,7 +84,7 @@ rm -rf "${PKG}-${VERSION}"/soapui-system-test
 
 cp debian/soapui.pom.xml "${PKG}-${VERSION}"/pom.xml
 
-find "${PKG}-${VERSION}" -type f -name '*.java' -or -name '*.xml' -or -name '*.xsd' -exec iconv -f ISO-8859-1 -t UTF-8 '{}' -o '{}'.iconv \; -exec mv '{}'.iconv '{}' \; -exec dos2unix '{}' \;
+find "${PKG}-${VERSION}" -type f -name '*.java' -or -name '*.xml' -exec iconv -f ISO-8859-1 -t UTF-8 '{}' -o '{}'.iconv \; -exec mv '{}'.iconv '{}' \; -exec dos2unix '{}' \;
 
 #Remove analitys
 find "${PKG}-${VERSION}" -type f -name '*.java' -exec sed -i '/\.Analytics;/d' '{}' \;

@@ -2,11 +2,11 @@
 <con:soapui-project name="WSTF SC003 Scenario" resourceRoot="" soapui-version="2.5" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="ProjectSettings@projectRoot">D:\soapui-workspace\soapui\src\wstf</con:setting><con:setting id="asertWsaAction">true</con:setting><con:setting id="asertWsaTo">true</con:setting><con:setting id="asertWsaRelatesTo">true</con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" wsaVersion="200508" name="sc003SOAP11Binding" type="wsdl" bindingName="{http://www.wstf.org/docs/scenarios/sc003}sc003SOAP11Binding" soapVersion="1_1" anonymous="optional" definition="http://www.wstf.org/docs/scenarios/sc003/sc003.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://www.wstf.org/docs/scenarios/sc003/sc003.wsdl"><con:part><con:url>http://www.w3.org/2006/03/addressing/ws-addr.xsd</con:url><con:content><![CDATA[<!--W3C XML Schema defined in the Web Services Addressing 1.0 specification
     http://www.w3.org/TR/ws-addr-core
 
-   Copyright © 2005 World Wide Web Consortium,
+   Copyright Â© 2005 World Wide Web Consortium,
 
    (Massachusetts Institute of Technology, European Research Consortium for
    Informatics and Mathematics, Keio University). All Rights Reserved. This
-   work is distributed under the W3C® Software License [1] in the hope that
+   work is distributed under the W3CÂ® Software License [1] in the hope that
    it will be useful, but WITHOUT ANY WARRANTY; without even the implied
    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -422,11 +422,11 @@
 </soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.wstf.org/docs/scenarios/sc002/SendMessages"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="200508" name="sc003SOAP12Binding" type="wsdl" bindingName="{http://www.wstf.org/docs/scenarios/sc003}sc003SOAP12Binding" soapVersion="1_2" anonymous="optional" definition="file:/D:/SoapUI-resources/sc003.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/D:/SoapUI-resources/sc003.wsdl"><con:part><con:url>http://www.w3.org/2006/03/addressing/ws-addr.xsd</con:url><con:content><![CDATA[<!--W3C XML Schema defined in the Web Services Addressing 1.0 specification
     http://www.w3.org/TR/ws-addr-core
 
-   Copyright © 2005 World Wide Web Consortium,
+   Copyright Â© 2005 World Wide Web Consortium,
 
    (Massachusetts Institute of Technology, European Research Consortium for
    Informatics and Mathematics, Keio University). All Rights Reserved. This
-   work is distributed under the W3C® Software License [1] in the hope that
+   work is distributed under the W3CÂ® Software License [1] in the hope that
    it will be useful, but WITHOUT ANY WARRANTY; without even the implied
    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
