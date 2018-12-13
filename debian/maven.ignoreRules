@@ -52,6 +52,5 @@ teamdev xulrunner15-windows * * * *
 com.sun.mail * * * * *
 org.apache.oltu.oauth2 * * * * *
 org.apache.maven maven-plugin-api * * * *
-org.codehaus.groovy * * * * *
 javafx jfxrt * * * *
 javax.activation activation * * * *

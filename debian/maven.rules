@@ -100,3 +100,4 @@ org.jsr-305 s/ri/jsr305/ * s/0\..*/0.x/ * *
 wsdl4 wsdl4 * s/.*/debian/ * *
 s/saxon/net.sourceforge.saxon/ saxon jar s/.*/debian/ * *
 s/net.sourceforge.htmlunit/org.jenkins-ci/ htmlunit jar s/.*/debian/ * *
+org.codehaus.groovy groovy-all jar s/.*/1.x/ * *
