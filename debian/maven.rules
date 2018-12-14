@@ -7,9 +7,10 @@ s/com.google.code.findbugs/org.jsr-305/ jsr305 jar s/.*/0.x/ * *
 s/com.google.code.google-collections/com.google.guava/ s/google-collect/guava/ s/jar/bundle/ s/.*/debian/ * *
 s/com.google.collections/com.google.guava/ s/google-collections/guava/ s/jar/bundle/ s/.*/debian/ * *
 s/com.l2fprod.common/com.github.sarxos/ l2fprod-common-shared jar s/.*/debian/ * *
-com.github.sarxos l2fprod-common-parent pom s/.*/debian/ * *
-com.github.sarxos l2fprod-common-shared jar s/.*/debian/ * *
-com.github.sarxos l2fprod-common-sheet jar s/.*/debian/ * *
+
+s/l2fprod/com.github.sarxos/ s/l2fprod-common-directorychooser/l2fprod-common-shared/ jar s/.*/debian/ * *
+s/l2fprod/com.github.sarxos/ s/l2fprod-common-fontchooser/l2fprod-common-sheet/ jar s/.*/debian/ * *
+
 com.google.guava guava bundle s/.*/debian/ * *
 com.google.guava guava s/jar/bundle/ s/.*/debian/ * *
 com.jayway.jsonpath json-path-parent pom s/.*/debian/ * *
