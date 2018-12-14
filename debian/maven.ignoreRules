@@ -11,8 +11,6 @@ info.cukes cucumber-java * * * *
 info.cukes cucumber-junit * * * *
 javax.jms jms * * * *
 javax.xml.bind jsr173_api * * * *
-l2fprod l2fprod-common-directorychooser * * * *
-l2fprod l2fprod-common-fontchooser * * * *
 net.ju-n.maven.plugins maven-checksum-plugin * * * *
 org.apache.flex flex-messaging-opt * * * *
 org.apache.httpcomponents httpclient-cache * * * *
