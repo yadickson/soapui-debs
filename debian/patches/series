@@ -23,6 +23,6 @@ look_and_feel.patch
 jcifs.patch
 pom_system_scope.patch
 # update_swingx1.patch
-# update_jetty8.patch
+update_jetty8.patch
 
 excludes.patch
