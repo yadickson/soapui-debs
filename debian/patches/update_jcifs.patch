@@ -1,6 +1,14 @@
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/http/JCIFSEngine.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/http/JCIFSEngine.java
-@@ -40,7 +40,9 @@
+@@ -20,6 +20,7 @@
+ import jcifs.ntlmssp.Type1Message;
+ import jcifs.ntlmssp.Type2Message;
+ import jcifs.ntlmssp.Type3Message;
++import jcifs.ntlmssp.NtlmFlags;
+ import jcifs.util.Base64;
+ 
+ import org.apache.http.impl.auth.NTLMEngine;
+@@ -40,7 +41,9 @@
          } catch (IOException ex) {
              throw new NTLMEngineException("Invalid Type2 message", ex);
          }

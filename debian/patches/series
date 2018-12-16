@@ -16,6 +16,7 @@ update_jgoodies_binding.patch
 update_wss4j.patch
 update_actions_conf.patch
 update_proxy_vole.patch
+update_jcifs.patch
 
 fix_disable_logger.patch
 fix_font.patch
@@ -28,6 +29,5 @@ pom_excludes.patch
 
 #update_json_path.patch
 #update_swingx1.patch
-#update_jcifs.patch
 
 
