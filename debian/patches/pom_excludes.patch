@@ -13,10 +13,10 @@
          </dependency>
          <dependency>
              <groupId>xmlbeans</groupId>
-@@ -503,6 +509,12 @@
-             <artifactId>jcifs</artifactId>
-             <version>1.2.9</version>
+@@ -505,6 +511,12 @@
              <type>jar</type>
+             <scope>system</scope>
+             <systemPath>/usr/share/java/jcifs.jar</systemPath>
 +            <exclusions>
 +               <exclusion>
 +                  <groupId>javax.servlet</groupId>
