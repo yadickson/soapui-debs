@@ -45,3 +45,12 @@
          </dependency>
          <dependency>
              <groupId>l2fprod</groupId>
+@@ -512,6 +522,8 @@
+             <artifactId>fontchooser</artifactId>
+             <version>1.0.0</version>
+             <type>jar</type>
++            <scope>system</scope>
++            <systemPath>/usr/share/java/FontChooser.jar</systemPath>
+         </dependency>
+         <dependency>
+             <groupId>org.apache.santuario</groupId>

@@ -24,6 +24,7 @@ fix_look_and_feel.patch
 
 update_jetty8.patch
 update_swingx1.patch
+update_fontchooser.patch
 
 pom_system_scope.patch
 pom_excludes.patch

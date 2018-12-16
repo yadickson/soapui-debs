@@ -1,0 +1,15 @@
+--- a/soapui/pom.xml
++++ b/soapui/pom.xml
+@@ -508,6 +508,12 @@
+             <version>7.3</version>
+         </dependency>
+         <dependency>
++            <groupId>com.connectina.swing</groupId>
++            <artifactId>fontchooser</artifactId>
++            <version>1.0.0</version>
++            <type>jar</type>
++        </dependency>
++        <dependency>
+             <groupId>org.apache.santuario</groupId>
+             <artifactId>xmlsec</artifactId>
+             <version>1.4.5</version>
