@@ -2089,7 +2089,7 @@
   <rawOffset>-28800</rawOffset>
   <status>OK</status>
   <timeZoneId>America/Los_Angeles</timeZoneId>
-  <timeZoneName>hora de verano del Pacífico</timeZoneName>
+  <timeZoneName>hora de verano del PacÃ­fico</timeZoneName>
 </Response>]]></content><allowWildcards>true</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration>
                         </con:assertion>
                         <con:credentials>
