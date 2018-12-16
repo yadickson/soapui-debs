@@ -320,3 +320,14 @@
  
  import com.eviware.soapui.SoapUI;
  
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/jettyproxy/ProxyServlet.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/jettyproxy/ProxyServlet.java
+@@ -38,7 +38,7 @@
+ import org.apache.http.params.CoreProtocolPNames;
+ import org.apache.http.protocol.BasicHttpContext;
+ import org.apache.http.protocol.HttpContext;
+-import org.mortbay.util.IO;
++import org.eclipse.jetty.util.IO;
+ 
+ import javax.servlet.*;
+ import javax.servlet.http.HttpServletRequest;

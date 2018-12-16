@@ -42,6 +42,6 @@
              <type>jar</type>
 +            <scope>system</scope>
 +            <systemPath>/usr/share/java/jcifs.jar</systemPath>
-             <exclusions>
-                <exclusion>
-                   <groupId>javax.servlet</groupId>
+         </dependency>
+         <dependency>
+             <groupId>l2fprod</groupId>

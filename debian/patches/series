@@ -1,4 +1,3 @@
-disable_logger.patch
 remove_jedit.patch
 remove_autoupdate.patch
 remove_providers.patch
@@ -9,20 +8,26 @@ remove_start_help.patch
 remove_hermesjms.patch
 remove_oauth2.patch
 remove_submit_info.patch
-update_jcifs.patch
+remove_analytics.patch
+
 update_flex.patch
 update_jgoodies_forms.patch
 update_jgoodies_binding.patch
 update_wss4j.patch
 update_actions_conf.patch
-remove_analytics.patch
 update_proxy_vole.patch
-#update_json_path.patch
+
+fix_disable_logger.patch
 fix_font.patch
-look_and_feel.patch
-jcifs.patch
-pom_system_scope.patch
-# update_swingx1.patch
+fix_look_and_feel.patch
+
 update_jetty8.patch
 
-excludes.patch
+pom_system_scope.patch
+pom_excludes.patch
+
+#update_json_path.patch
+#update_swingx1.patch
+#update_jcifs.patch
+
+
