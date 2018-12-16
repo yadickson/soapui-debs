@@ -127,7 +127,7 @@
      }
  
      public boolean isDebugEnabled() {
-@@ -58,20 +58,45 @@
+@@ -58,20 +58,50 @@
  
      }
  
@@ -163,6 +163,11 @@
 +    @Override
 +    public void warn(Throwable thrwbl) {
 +        log.warn(thrwbl);
++    }
++
++    @Override
++    public void info(String str, Throwable thrwbl) {
++        log.info(str, thrwbl);
 +    }
 +
 +    @Override
