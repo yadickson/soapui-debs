@@ -9,7 +9,7 @@ find_java_runtime openjdk sun  || find_java_runtime
 find_jars soapui
 find_jars xalan2 commons-collections3 geronimo-jms_1.1_spec jsr305
 find_jars json-lib FontChooser swingx1 jcalendar jgoodies-binding wsdl4j jcifs
-find_jars junit4 servlet-api-3.0
+find_jars junit4 servlet-api-3.0 jaxen
 find_jars jetty8-continuation jetty8-deploy jetty8-http jetty8-io jetty8-jaspi jetty8-jmx jetty8-nested jetty8-overlay-deployer jetty8-policy jetty8-rewrite jetty8-security jetty8-server jetty8-servlet jetty8-servlets jetty8-util jetty8-webapp jetty8-websocket jetty8-xml
 
 run_java -Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=/usr/share/soapui -splash:/usr/share/soapui/SoapUI-Spashscreen.png com.eviware.soapui.SoapUI "$@"

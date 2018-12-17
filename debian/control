@@ -45,6 +45,7 @@ Depends: ${misc:Depends}, ${maven:Depends},
  libmail-java,
  libjtidy-java,
  libjetty8-java,
+ libjaxen-java,
  junit4,
  libl2fprod-common-java,
  java-wrappers, default-jre-headless
