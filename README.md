@@ -26,7 +26,7 @@
 - libhttpcore-java
 - libhttpmime-java
 - libjenkins-htmlunit-java (>= 2.6-jenkins-6)
-- libjetty-java
+- libjetty9-java
 - libjgoodies-forms-java
 - libjgoodies-looks-java
 - libjtidy-java
@@ -87,6 +87,7 @@ $ fakeroot debian/rules clean binary
 **Tested**
 
 - Debian jessie
+- Debian stretch
 
 **Repositories**
 
@@ -110,7 +111,7 @@ GPL-3.0 © [Yadickson Soto](https://github.com/yadickson)
 
 EUPL-1.1 © [SmartBear](https://github.com/SmartBear/soapui)
 
-[travis-image]: https://api.travis-ci.org/yadickson/soapui-debs.svg?branch=jessie
+[travis-image]: https://api.travis-ci.org/yadickson/soapui-debs.svg?branch=stretch
 [travis-url]: https://travis-ci.org/yadickson/soapui-debs
 
 

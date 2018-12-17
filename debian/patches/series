@@ -34,3 +34,5 @@ pom_excludes.patch
 
 pom_classpath.patch
 fix_set_context_null.patch
+
+update_jetty9.patch

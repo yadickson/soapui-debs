@@ -93,7 +93,6 @@ com.github.markusbernhardt proxy-vole * s/.*/debian/ * *
 com.jayway.jsonpath json-path s/.*/jar/ s/.*/debian/ * *
 com.jgoodies jgoodies-binding * s/.*/debian/ * *
 com.jgoodies jgoodies-common * s/1.*/1.x/ * *
-jcifs jcifs * s/.*/debian/ * *
 log4j log4j * s/1\.2\..*/1.2.x/ * *
 org.bouncycastle s/bcprov-jdk15/bcprov/ * s/.*/debian/ * *
 org.bouncycastle s/bcprov-jdk15on/bcprov/ * s/.*/debian/ * *
@@ -102,3 +101,8 @@ wsdl4 wsdl4 * s/.*/debian/ * *
 s/saxon/net.sourceforge.saxon/ saxon jar s/.*/debian/ * *
 s/net.sourceforge.htmlunit/org.jenkins-ci/ htmlunit jar s/.*/debian/ * *
 org.codehaus.groovy groovy-all jar s/.*/1.x/ * *
+
+s/wsdl4j/org.apache.ws.security/ wsdl4j jar s/.*/debian/ * *
+com.jgoodies s/binding/jgoodies-binding/ * s/.*/debian/ * *
+s/org.samba.jcifs/jcifs/ jcifs * s/.*/debian/ * *
+
