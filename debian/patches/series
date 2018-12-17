@@ -32,3 +32,4 @@ pom_excludes.patch
 #update_json_path.patch
 
 
+pom_classpath.patch
