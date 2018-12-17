@@ -26,10 +26,28 @@ Homepage: https://github.com/SmartBear/soapui
 Package: soapui
 Architecture: all
 Depends: ${misc:Depends}, ${maven:Depends},
- libgeronimo-jms-1.1-spec-java, libjsr305-java,
- libxalan2-java, libcommons-collections3-java,
- libjgoodies-binding-java, libwsdl4j-java, libjson-java,
- libjcifs-java, libfontchooser-java, libswingx1-java, libswingx-java,
+ libgeronimo-jms-1.1-spec-java,
+ libjsr305-java,
+ libxalan2-java,
+ libcommons-collections3-java,
+ libcommons-io-java,
+ libjgoodies-binding-java,
+ libwsdl4j-java,
+ libjson-java,
+ libjcifs-java,
+ libfontchooser-java,
+ libswingx1-java,
+ libjcalendar-java,
+ libhttpcore-java,
+ libhttpclient-java,
+ libproxy-vole-java,
+ libbcprov-java,
+ libmail-java,
+ libjtidy-java,
+ libjetty8-java,
+ libjaxen-java,
+ junit4,
+ libl2fprod-common-java,
  java-wrappers, default-jre-headless
 Suggests: ${maven:OptionalDepends}
 Description: Soap ui open source project
