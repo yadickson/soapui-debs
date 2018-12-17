@@ -18,7 +18,7 @@
 -            log.warn("Could not find jfxrt.jar. Internal browser will be disabled.");
 -            System.setProperty(BROWSER_DISABLED_SYSTEM_PROPERTY, Boolean.TRUE.toString());
 -        }
-+        System.setProperty(BROWSER_DISABLED_SYSTEM_PROPERTY, Boolean.FALSE.toString());
++        System.setProperty(BROWSER_DISABLED_SYSTEM_PROPERTY, Boolean.TRUE.toString());
      }
  
      // --------------------------- CONSTRUCTORS ---------------------------
