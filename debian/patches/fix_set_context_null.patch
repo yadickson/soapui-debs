@@ -1,0 +1,11 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/views/html/HttpHtmlResponseView.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/panels/request/views/html/HttpHtmlResponseView.java
+@@ -86,7 +86,7 @@
+     @Override
+     public boolean deactivate() {
+         boolean deactivated = super.deactivate();
+-        if (deactivated) {
++        if (deactivated && browser != null) {
+             browser.setContent("");
+         }
+         return deactivated;
