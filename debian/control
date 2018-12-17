@@ -38,6 +38,12 @@ Depends: ${misc:Depends}, ${maven:Depends},
  libfontchooser-java,
  libswingx1-java,
  libjcalendar-java,
+ libhttpcore-java,
+ libhttpclient-java,
+ libproxy-vole-java,
+ libbcprov-java,
+ libmail-java,
+ libjtidy-java,
  java-wrappers, default-jre-headless
 Suggests: ${maven:OptionalDepends}
 Description: Soap ui open source project
