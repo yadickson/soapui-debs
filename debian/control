@@ -44,6 +44,9 @@ Depends: ${misc:Depends}, ${maven:Depends},
  libbcprov-java,
  libmail-java,
  libjtidy-java,
+ libjetty8-java,
+ junit4,
+ libl2fprod-common-java,
  java-wrappers, default-jre-headless
 Suggests: ${maven:OptionalDepends}
 Description: Soap ui open source project
