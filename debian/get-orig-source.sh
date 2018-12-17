@@ -82,6 +82,9 @@ rm -f  "${PKG}-${VERSION}"/soapui/src/main/java/com/eviware/soapui/actions/Sumbi
 rm -rf "${PKG}-${VERSION}"/soapui-maven-plugin-tester
 rm -rf "${PKG}-${VERSION}"/soapui-system-test
 
+#plugin
+rm -rf "${PKG}-${VERSION}"/soapui-maven-plugin
+
 cp debian/soapui.pom.xml "${PKG}-${VERSION}"/pom.xml
 
 find "${PKG}-${VERSION}" -type f -name '*.java' -or -name '*.xml' -exec iconv -f ISO-8859-1 -t UTF-8 '{}' -o '{}'.iconv \; -exec mv '{}'.iconv '{}' \; -exec dos2unix '{}' \;

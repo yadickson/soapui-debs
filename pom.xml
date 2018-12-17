@@ -30,7 +30,6 @@
 
     <modules>
         <module>soapui</module>
-        <module>soapui-maven-plugin</module>
         <module>soapui-installer</module>
     </modules>
 
