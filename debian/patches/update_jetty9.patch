@@ -65,7 +65,7 @@
 -import org.eclipse.jetty.server.bio.SocketConnector;
 -import org.eclipse.jetty.server.ssl.SslSocketConnector;
 +import org.eclipse.jetty.server.ServerConnector;
-+import org.eclipse.jetty.server.SslConnectionFactory;
++import org.eclipse.jetty.io.ssl.SslConnection;
  import org.eclipse.jetty.servlet.ServletContextHandler;
  import org.eclipse.jetty.servlet.ServletHolder;
  
@@ -76,7 +76,7 @@
 -    SocketConnector connector = new SocketConnector();
 -    private SslSocketConnector sslConnector;
 +    ServerConnector connector;
-+    private SslContextFactory sslConnector;
++    private SslConnection sslConnector;
      private final String sslEndpoint;
      private boolean proxyOrTunnel = true;
      private ContentTypes includedContentTypes = SoapMonitorAction.defaultContentTypes();
@@ -92,7 +92,7 @@
          if (!StringUtils.isNullOrEmpty(sslEndpoint)) {
              if (sslEndpoint.startsWith(HTTPS)) {
 -                sslConnector = new SslSocketConnector();
-+                sslConnector = new SslContextFactory();
++                sslConnector = new SslConnection();
                  sslConnector
                          .setKeystore(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYSTORE, "JKS"));
                  sslConnector.setPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
