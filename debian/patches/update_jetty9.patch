@@ -58,25 +58,31 @@
          }
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/SoapMonitorEngineImpl.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/SoapMonitorEngineImpl.java
-@@ -25,8 +25,8 @@
+@@ -25,11 +25,14 @@
  import com.eviware.soapui.monitor.SoapUIJettyThreadPool;
  import com.eviware.soapui.support.StringUtils;
  import com.eviware.soapui.support.UISupport;
 -import org.eclipse.jetty.server.bio.SocketConnector;
 -import org.eclipse.jetty.server.ssl.SslSocketConnector;
 +import org.eclipse.jetty.server.ServerConnector;
-+import org.eclipse.jetty.io.ssl.SslConnection;
++import org.eclipse.jetty.util.ssl.SslContextFactory;
++import org.eclipse.jetty.server.SslConnectionFactory;
  import org.eclipse.jetty.servlet.ServletContextHandler;
  import org.eclipse.jetty.servlet.ServletHolder;
  
-@@ -38,14 +38,15 @@
++import java.security.KeyStore;
++
+ import java.net.BindException;
+ 
+ public class SoapMonitorEngineImpl implements SoapMonitorEngine {
+@@ -38,14 +41,15 @@
      private static final String HTTP = "http://";
      private static final String HTTPS = "https://";
      JettyServer server = new JettyServer();
 -    SocketConnector connector = new SocketConnector();
 -    private SslSocketConnector sslConnector;
 +    ServerConnector connector;
-+    private SslConnection sslConnector;
++    private SslContextFactory sslConnector;
      private final String sslEndpoint;
      private boolean proxyOrTunnel = true;
      private ContentTypes includedContentTypes = SoapMonitorAction.defaultContentTypes();
@@ -87,18 +93,42 @@
      }
  
      public boolean isRunning() {
-@@ -59,7 +60,7 @@
+@@ -59,21 +63,19 @@
  
          if (!StringUtils.isNullOrEmpty(sslEndpoint)) {
              if (sslEndpoint.startsWith(HTTPS)) {
 -                sslConnector = new SslSocketConnector();
-+                sslConnector = new SslConnection();
-                 sslConnector
-                         .setKeystore(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYSTORE, "JKS"));
-                 sslConnector.setPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
+-                sslConnector
+-                        .setKeystore(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYSTORE, "JKS"));
+-                sslConnector.setPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
+-                sslConnector.setKeyPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYPASSWORD,
+-                        ""));
+-                sslConnector.setTruststore(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE,
+-                        "JKS"));
+-                sslConnector.setTrustPassword(settings.getString(
+-                        SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE_PASSWORD, ""));
++                sslConnector = new SslContextFactory();
++                sslConnector.setKeyStore(KeyStore.getInstance(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYSTORE, "JKS")));
++                sslConnector.setKeyStorePassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
++                sslConnector.setKeyManagerPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYPASSWORD, ""));
++                sslConnector.setTrustStore(KeyStore.getInstance(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE, "JKS")));
++                sslConnector.setTrustStorePassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE_PASSWORD, ""));
+                 sslConnector.setNeedClientAuth(false);
+-                sslConnector.setMaxIdleTime(30000);
+-                sslConnector.setPort(localPort);
+ 
+-                server.addConnector(sslConnector);
++                //SslConnectionFactory scc = new SslConnectionFactory(contextFactory, "JKS"); 
++                //scc.setPort(localPort); 
++                //scc.setHost("localhost");
++
++                //server.addConnector(scc);
+                 TunnelServlet tunnelServlet = new TunnelServlet(project, sslEndpoint, listenerCallBack);
+                 tunnelServlet.setIncludedContentTypes(includedContentTypes);
+                 context.addServlet(new ServletHolder(tunnelServlet), ROOT);
 --- a/soapui/src/main/java/com/eviware/soapui/monitor/JettyMockEngine.java
 +++ b/soapui/src/main/java/com/eviware/soapui/monitor/JettyMockEngine.java
-@@ -34,9 +34,9 @@
+@@ -34,17 +34,16 @@
  import org.eclipse.jetty.util.component.AbstractLifeCycle;
  import org.eclipse.jetty.io.Connection;
  import org.eclipse.jetty.io.EndPoint;
@@ -110,16 +140,16 @@
  import org.eclipse.jetty.server.Request;
  import org.eclipse.jetty.server.RequestLog;
  import org.eclipse.jetty.server.Response;
-@@ -44,7 +44,7 @@
+ import org.eclipse.jetty.server.Server;
  import org.eclipse.jetty.server.handler.AbstractHandler;
  import org.eclipse.jetty.server.handler.RequestLogHandler;
- import org.eclipse.jetty.server.nio.SelectChannelConnector;
+-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 -import org.eclipse.jetty.server.ssl.SslSocketConnector;
-+import org.eclipse.jetty.io.ssl.SslConnection;
++import org.eclipse.jetty.server.ServerConnector;
  
  import javax.servlet.ServletException;
  import javax.servlet.ServletInputStream;
-@@ -66,8 +66,6 @@
+@@ -66,8 +65,6 @@
  import java.util.Map;
  import java.util.Set;
  import java.util.concurrent.CopyOnWriteArrayList;
@@ -128,7 +158,7 @@
  
  /**
   * Core Mock-Engine hosting a Jetty web server
-@@ -83,7 +81,7 @@
+@@ -83,7 +80,7 @@
      private Map<Integer, SoapUIConnector> connectors = new HashMap<Integer, SoapUIConnector>();
      private List<MockRunner> mockRunners = new CopyOnWriteArrayList<MockRunner>();
  
@@ -137,7 +167,7 @@
  
      private boolean addedSslConnector;
  
-@@ -182,7 +180,7 @@
+@@ -182,7 +179,7 @@
          logHandler.setRequestLog(new MockRequestLog());
          server.addLifeCycle(logHandler);
  
@@ -146,7 +176,16 @@
          sslConnector.setMaxIdleTime(30000);
      }
  
-@@ -270,7 +268,7 @@
+@@ -254,7 +251,7 @@
+         }
+     }
+ 
+-    private class SoapUIConnector extends SelectChannelConnector {
++    private class SoapUIConnector extends ServerConnector {
+         private Set<Connection> connections = new HashSet<Connection>();
+ 
+         @Override
+@@ -270,7 +267,7 @@
          }
  
          @Override
@@ -155,7 +194,7 @@
              return new SoapUIHttpConnection(SoapUIConnector.this, selectChannelEndPoint, getServer());
          }
  
-@@ -295,7 +293,7 @@
+@@ -295,7 +292,7 @@
          }
      }
  
