@@ -14,9 +14,9 @@
          <dependency>
              <groupId>xmlbeans</groupId>
 @@ -505,6 +511,12 @@
+             <artifactId>jcifs</artifactId>
+             <version>1.2.9</version>
              <type>jar</type>
-             <scope>system</scope>
-             <systemPath>/usr/share/java/jcifs.jar</systemPath>
 +            <exclusions>
 +               <exclusion>
 +                  <groupId>javax.servlet</groupId>
