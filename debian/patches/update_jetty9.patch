@@ -58,7 +58,7 @@
          }
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/SoapMonitorEngineImpl.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/SoapMonitorEngineImpl.java
-@@ -25,11 +25,14 @@
+@@ -25,11 +25,18 @@
  import com.eviware.soapui.monitor.SoapUIJettyThreadPool;
  import com.eviware.soapui.support.StringUtils;
  import com.eviware.soapui.support.UISupport;
@@ -67,6 +67,10 @@
 +import org.eclipse.jetty.server.ServerConnector;
 +import org.eclipse.jetty.util.ssl.SslContextFactory;
 +import org.eclipse.jetty.server.SslConnectionFactory;
++import org.eclipse.jetty.io.ssl.SslConnection;
++import org.eclipse.jetty.server.HttpConfiguration;
++import org.eclipse.jetty.server.HttpConnectionFactory;
++import org.eclipse.jetty.server.SecureRequestCustomizer;
  import org.eclipse.jetty.servlet.ServletContextHandler;
  import org.eclipse.jetty.servlet.ServletHolder;
  
@@ -75,14 +79,17 @@
  import java.net.BindException;
  
  public class SoapMonitorEngineImpl implements SoapMonitorEngine {
-@@ -38,14 +41,15 @@
+@@ -38,14 +45,18 @@
      private static final String HTTP = "http://";
      private static final String HTTPS = "https://";
      JettyServer server = new JettyServer();
 -    SocketConnector connector = new SocketConnector();
 -    private SslSocketConnector sslConnector;
 +    ServerConnector connector;
-+    private SslContextFactory sslConnector;
++
++    private SslContextFactory sslContextFactory;
++    private ServerConnector sslConnector;
++
      private final String sslEndpoint;
      private boolean proxyOrTunnel = true;
      private ContentTypes includedContentTypes = SoapMonitorAction.defaultContentTypes();
@@ -93,7 +100,7 @@
      }
  
      public boolean isRunning() {
-@@ -59,21 +63,19 @@
+@@ -59,19 +70,16 @@
  
          if (!StringUtils.isNullOrEmpty(sslEndpoint)) {
              if (sslEndpoint.startsWith(HTTPS)) {
@@ -107,28 +114,25 @@
 -                        "JKS"));
 -                sslConnector.setTrustPassword(settings.getString(
 -                        SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE_PASSWORD, ""));
-+                sslConnector = new SslContextFactory();
-+                sslConnector.setKeyStore(KeyStore.getInstance(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYSTORE, "JKS")));
-+                sslConnector.setKeyStorePassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
-+                sslConnector.setKeyManagerPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYPASSWORD, ""));
-+                sslConnector.setTrustStore(KeyStore.getInstance(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE, "JKS")));
-+                sslConnector.setTrustStorePassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE_PASSWORD, ""));
-                 sslConnector.setNeedClientAuth(false);
+-                sslConnector.setNeedClientAuth(false);
 -                sslConnector.setMaxIdleTime(30000);
 -                sslConnector.setPort(localPort);
- 
--                server.addConnector(sslConnector);
-+                //SslConnectionFactory scc = new SslConnectionFactory(contextFactory, "JKS"); 
-+                //scc.setPort(localPort); 
-+                //scc.setHost("localhost");
++                sslContextFactory = new SslContextFactory();
++                sslContextFactory.setKeyStore(KeyStore.getInstance(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYSTORE, "JKS")));
++                sslContextFactory.setKeyStorePassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
++                sslContextFactory.setKeyManagerPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_KEYPASSWORD, ""));
++                sslCosslContextFactorynnector.setTrustStore(KeyStore.getInstance(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE, "JKS")));
++                sslContextFactory.setTrustStorePassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_TRUSTSTORE_PASSWORD, ""));
++                sslContextFactory.setNeedClientAuth(false);
 +
-+                //server.addConnector(scc);
++                sslConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "JKS"));
++                sslConnector.setPort(localPort); 
+ 
+                 server.addConnector(sslConnector);
                  TunnelServlet tunnelServlet = new TunnelServlet(project, sslEndpoint, listenerCallBack);
-                 tunnelServlet.setIncludedContentTypes(includedContentTypes);
-                 context.addServlet(new ServletHolder(tunnelServlet), ROOT);
 --- a/soapui/src/main/java/com/eviware/soapui/monitor/JettyMockEngine.java
 +++ b/soapui/src/main/java/com/eviware/soapui/monitor/JettyMockEngine.java
-@@ -34,17 +34,16 @@
+@@ -34,17 +34,22 @@
  import org.eclipse.jetty.util.component.AbstractLifeCycle;
  import org.eclipse.jetty.io.Connection;
  import org.eclipse.jetty.io.EndPoint;
@@ -146,37 +150,70 @@
 -import org.eclipse.jetty.server.nio.SelectChannelConnector;
 -import org.eclipse.jetty.server.ssl.SslSocketConnector;
 +import org.eclipse.jetty.server.ServerConnector;
++import org.eclipse.jetty.util.ssl.SslContextFactory;
++import org.eclipse.jetty.server.SslConnectionFactory;
++import org.eclipse.jetty.io.ssl.SslConnection;
++import org.eclipse.jetty.server.HttpConfiguration;
++import org.eclipse.jetty.server.HttpConnectionFactory;
++import org.eclipse.jetty.server.SecureRequestCustomizer;
  
  import javax.servlet.ServletException;
  import javax.servlet.ServletInputStream;
-@@ -66,8 +65,6 @@
+@@ -66,8 +71,8 @@
  import java.util.Map;
  import java.util.Set;
  import java.util.concurrent.CopyOnWriteArrayList;
 -import org.eclipse.jetty.io.AsyncEndPoint;
 -import org.eclipse.jetty.io.nio.AsyncConnection;
++
++import java.security.KeyStore;
  
  /**
   * Core Mock-Engine hosting a Jetty web server
-@@ -83,7 +80,7 @@
+@@ -83,7 +88,8 @@
      private Map<Integer, SoapUIConnector> connectors = new HashMap<Integer, SoapUIConnector>();
      private List<MockRunner> mockRunners = new CopyOnWriteArrayList<MockRunner>();
  
 -    private SslSocketConnector sslConnector;
-+    private SslConnection sslConnector;
++    private SslContextFactory sslContextFactory;
++    private ServerConnector sslConnector;
  
      private boolean addedSslConnector;
  
-@@ -182,7 +179,7 @@
+@@ -182,22 +188,24 @@
          logHandler.setRequestLog(new MockRequestLog());
          server.addLifeCycle(logHandler);
  
 -        sslConnector = new SslSocketConnector();
-+        sslConnector = new SslConnection();
-         sslConnector.setMaxIdleTime(30000);
+-        sslConnector.setMaxIdleTime(30000);
++        sslContextFactory = new SslContextFactory();
++        sslConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"));
      }
  
-@@ -254,7 +251,7 @@
+     private void updateSslConnectorSettings() {
+-        sslConnector.setKeystore(SoapUI.getSettings().getString(SSLSettings.MOCK_KEYSTORE, null));
+-        sslConnector.setPassword(SoapUI.getSettings().getString(SSLSettings.MOCK_PASSWORD, null));
+-        sslConnector.setKeyPassword(SoapUI.getSettings().getString(SSLSettings.MOCK_KEYSTORE_PASSWORD, null));
++        sslConnsslContextFactoryector.setKeyStore(KeyStore.getInstance(SoapUI.getSettings().getString(SSLSettings.MOCK_KEYSTORE, null)));
++        sslContextFactory.setKeyStorePassword(SoapUI.getSettings().getString(SSLSettings.MOCK_PASSWORD, null));
++        sslContextFactory.setKeyManagerPassword(SoapUI.getSettings().getString(SSLSettings.MOCK_KEYSTORE_PASSWORD, null));
+         String trustStore = SoapUI.getSettings().getString(SSLSettings.MOCK_TRUSTSTORE, null);
+         if (StringUtils.hasContent(trustStore)) {
+-            sslConnector.setTruststore(trustStore);
+-            sslConnector.setTrustPassword(SoapUI.getSettings().getString(SSLSettings.MOCK_TRUSTSTORE_PASSWORD, null));
++            sslContextFactory.setTrustStore(KeyStore.getInstance(trustStore));
++            sslContextFactory.setTrustStorePassword(SoapUI.getSettings().getString(SSLSettings.MOCK_TRUSTSTORE_PASSWORD, null));
+         }
+ 
++        sslContextFactory.setNeedClientAuth(SoapUI.getSettings().getBoolean(SSLSettings.CLIENT_AUTHENTICATION));
++
+         sslConnector.setPort((int) SoapUI.getSettings().getLong(SSLSettings.MOCK_PORT, 443));
+-        sslConnector.setNeedClientAuth(SoapUI.getSettings().getBoolean(SSLSettings.CLIENT_AUTHENTICATION));
++        sslConnector.setMaxIdleTime(30000);
+     }
+ 
+     public void stopMockService(MockRunner runner) {
+@@ -254,7 +262,7 @@
          }
      }
  
@@ -185,7 +222,7 @@
          private Set<Connection> connections = new HashSet<Connection>();
  
          @Override
-@@ -270,7 +267,7 @@
+@@ -270,7 +278,7 @@
          }
  
          @Override
@@ -194,7 +231,7 @@
              return new SoapUIHttpConnection(SoapUIConnector.this, selectChannelEndPoint, getServer());
          }
  
-@@ -295,7 +292,7 @@
+@@ -295,7 +303,7 @@
          }
      }
  
