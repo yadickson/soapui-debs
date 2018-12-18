@@ -59,7 +59,7 @@
 - [libflex-java](https://github.com/yadickson/flex-debs)
 - [libl2fprod-common-java](https://github.com/yadickson/l2fprod-common-debs)
 - [libproxy-vole-java](https://github.com/yadickson/proxy-vole-debs)
-- [libjsonpath-java](https://github.com/yadickson/jsonpath-debs)
+- libjsonpath-java
 
 **Download source code**
 
