@@ -1,6 +1,6 @@
 --- a/soapui/src/main/java/com/eviware/soapui/support/log/JettyLogger.java
 +++ b/soapui/src/main/java/com/eviware/soapui/support/log/JettyLogger.java
-@@ -103,4 +103,9 @@
+@@ -104,4 +104,9 @@
      public void ignore(Throwable thrwbl) {
  
      }
@@ -12,28 +12,17 @@
  }
 --- a/soapui/src/main/java/com/eviware/soapui/monitor/SoapUIJettyThreadPool.java
 +++ b/soapui/src/main/java/com/eviware/soapui/monitor/SoapUIJettyThreadPool.java
-@@ -23,11 +23,6 @@
- import com.eviware.soapui.SoapUI;
+@@ -24,9 +24,8 @@
  
  public final class SoapUIJettyThreadPool implements ThreadPool {
--    @Override
+     @Override
 -    public boolean dispatch(Runnable arg0) {
--        SoapUI.getThreadPool().execute(arg0);
++    public void execute(Runnable arg0) {
+         SoapUI.getThreadPool().execute(arg0);
 -        return true;
--    }
+     }
  
      @Override
-     public int getIdleThreads() {
-@@ -48,4 +43,9 @@
-     public void join() throws InterruptedException {
-         SoapUI.getThreadPool().awaitTermination(30, TimeUnit.SECONDS);
-     }
-+
-+    @Override
-+    public void execute(Runnable command) {
-+        SoapUI.getThreadPool().execute(command);
-+    }
- }
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/jettyproxy/JettyServer.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/monitor/jettyproxy/JettyServer.java
 @@ -31,7 +31,8 @@
@@ -51,7 +40,7 @@
  
      @Override
 -    public void handle(final AbstractHttpConnection connection) throws IOException, ServletException {
-+    public void handle(HttpChannel<?> connection) throws IOException, ServletException {
++    public void handle(final HttpChannel<?> connection) throws IOException, ServletException {
          final Request request = connection.getRequest();
  
          if (request.getMethod().equals("CONNECT")) {
