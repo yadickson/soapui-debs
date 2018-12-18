@@ -98,15 +98,27 @@
                  sslConnector.setPassword(settings.getString(SoapMonitorAction.SecurityTabForm.SSLTUNNEL_PASSWORD, ""));
 --- a/soapui/src/main/java/com/eviware/soapui/monitor/JettyMockEngine.java
 +++ b/soapui/src/main/java/com/eviware/soapui/monitor/JettyMockEngine.java
-@@ -36,7 +36,7 @@
+@@ -34,9 +34,9 @@
+ import org.eclipse.jetty.util.component.AbstractLifeCycle;
+ import org.eclipse.jetty.io.Connection;
  import org.eclipse.jetty.io.EndPoint;
- import org.eclipse.jetty.io.nio.SelectChannelEndPoint;
+-import org.eclipse.jetty.io.nio.SelectChannelEndPoint;
++import org.eclipse.jetty.io.SelectChannelEndPoint;
  import org.eclipse.jetty.server.Connector;
 -import org.eclipse.jetty.server.AsyncHttpConnection;
 +import org.eclipse.jetty.server.HttpConnection;
  import org.eclipse.jetty.server.Request;
  import org.eclipse.jetty.server.RequestLog;
  import org.eclipse.jetty.server.Response;
+@@ -44,7 +44,7 @@
+ import org.eclipse.jetty.server.handler.AbstractHandler;
+ import org.eclipse.jetty.server.handler.RequestLogHandler;
+ import org.eclipse.jetty.server.nio.SelectChannelConnector;
+-import org.eclipse.jetty.server.ssl.SslSocketConnector;
++import org.eclipse.jetty.io.ssl.SslConnection;
+ 
+ import javax.servlet.ServletException;
+ import javax.servlet.ServletInputStream;
 @@ -66,8 +66,6 @@
  import java.util.Map;
  import java.util.Set;
@@ -116,6 +128,24 @@
  
  /**
   * Core Mock-Engine hosting a Jetty web server
+@@ -83,7 +81,7 @@
+     private Map<Integer, SoapUIConnector> connectors = new HashMap<Integer, SoapUIConnector>();
+     private List<MockRunner> mockRunners = new CopyOnWriteArrayList<MockRunner>();
+ 
+-    private SslSocketConnector sslConnector;
++    private SslConnection sslConnector;
+ 
+     private boolean addedSslConnector;
+ 
+@@ -182,7 +180,7 @@
+         logHandler.setRequestLog(new MockRequestLog());
+         server.addLifeCycle(logHandler);
+ 
+-        sslConnector = new SslSocketConnector();
++        sslConnector = new SslConnection();
+         sslConnector.setMaxIdleTime(30000);
+     }
+ 
 @@ -270,7 +268,7 @@
          }
  
