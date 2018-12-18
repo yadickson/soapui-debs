@@ -11,6 +11,7 @@ find_jars xalan2 commons-collections3 geronimo-jms_1.1_spec jsr305
 find_jars json-lib FontChooser swingx1 jcalendar
 find_jars junit4 servlet-api-3.1 jaxen
 find_jars jetty9-continuation jetty9-deploy jetty9-http jetty9-io jetty9-jaas jetty9-jmx jetty9-rewrite jetty9-security jetty9-server jetty9-servlet jetty9-servlets jetty9-util jetty9-util-ajax jetty9-webapp jetty9-xml
+find_jars json-path json-path-assert json-smart accessors-smart
 
 run_java -Xms128m -Xmx1024m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -Dsoapui.properties=soapui.properties -Dsoapui.home=/usr/share/soapui -splash:/usr/share/soapui/SoapUI-Spashscreen.png com.eviware.soapui.SoapUI "$@"
 

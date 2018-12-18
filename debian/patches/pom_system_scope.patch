@@ -1,6 +1,6 @@
 --- a/soapui/pom.xml
 +++ b/soapui/pom.xml
-@@ -370,6 +374,8 @@
+@@ -370,6 +370,8 @@
              <groupId>json</groupId>
              <artifactId>json-lib</artifactId>
              <version>2.2.2-jdk15</version>
@@ -9,7 +9,7 @@
          </dependency>
          <dependency>
              <groupId>ezmorph</groupId>
-@@ -391,6 +397,8 @@
+@@ -391,6 +393,8 @@
              <groupId>swingx</groupId>
              <artifactId>swingx</artifactId>
              <version>soapui</version>
@@ -18,7 +18,7 @@
          </dependency>
          <dependency>
              <groupId>commons-codec</groupId>
-@@ -512,6 +522,8 @@
+@@ -512,6 +516,8 @@
              <artifactId>fontchooser</artifactId>
              <version>1.0.0</version>
              <type>jar</type>

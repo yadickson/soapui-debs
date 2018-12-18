@@ -13,7 +13,7 @@
          </dependency>
          <dependency>
              <groupId>xmlbeans</groupId>
-@@ -498,6 +498,12 @@
+@@ -499,6 +505,12 @@
              <artifactId>jcifs</artifactId>
              <version>1.2.9</version>
              <type>jar</type>
@@ -26,3 +26,16 @@
          </dependency>
          <dependency>
              <groupId>l2fprod</groupId>
+@@ -554,6 +566,12 @@
+             <groupId>com.jayway.jsonpath</groupId>
+             <artifactId>json-path</artifactId>
+             <version>0.9.1</version>
++            <exclusions>
++                <exclusion>
++                    <groupId>net.minidev</groupId>
++                    <artifactId>json-smart</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+ 
+         <!--  old http client needed by some 3rd party components -->

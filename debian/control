@@ -47,6 +47,8 @@ Depends: ${misc:Depends}, ${maven:Depends},
  libjetty9-java,
  libjaxen-java,
  junit4,
+ libjsonpath-java (>= 2.0.0),
+ libjson-smart-java (>= 2.2),
  libl2fprod-common-java,
  java-wrappers, default-jre-headless
 Suggests: ${maven:OptionalDepends}
