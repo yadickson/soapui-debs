@@ -25,7 +25,7 @@
 - libhttpclient-java
 - libhttpcore-java
 - libhttpmime-java
-- libjenkins-htmlunit-java (>= 2.6-jenkins-6)
+- libhtmlunit-java
 - libjetty9-java
 - libjgoodies-forms-java
 - libjgoodies-looks-java
