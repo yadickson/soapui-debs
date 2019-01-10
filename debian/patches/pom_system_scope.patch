@@ -1,24 +1,6 @@
 --- a/soapui/pom.xml
 +++ b/soapui/pom.xml
-@@ -232,6 +232,8 @@
-             <groupId>com.jgoodies</groupId>
-             <artifactId>binding</artifactId>
-             <version>2.0.1</version>
-+            <scope>system</scope>
-+            <systemPath>/usr/share/java/jgoodies-binding.jar</systemPath>
-         </dependency>
-         <dependency>
-             <groupId>com.fifesoft</groupId>
-@@ -350,6 +352,8 @@
-             <groupId>wsdl4j</groupId>
-             <artifactId>wsdl4j</artifactId>
-             <version>1.6.2-fixed</version>
-+            <scope>system</scope>
-+            <systemPath>/usr/share/java/wsdl4j.jar</systemPath>
-         </dependency>
-         <dependency>
-             <groupId>commons-ssl</groupId>
-@@ -370,6 +374,8 @@
+@@ -370,6 +370,8 @@
              <groupId>json</groupId>
              <artifactId>json-lib</artifactId>
              <version>2.2.2-jdk15</version>
@@ -27,7 +9,7 @@
          </dependency>
          <dependency>
              <groupId>ezmorph</groupId>
-@@ -391,6 +397,8 @@
+@@ -391,6 +393,8 @@
              <groupId>swingx</groupId>
              <artifactId>swingx</artifactId>
              <version>soapui</version>
@@ -36,16 +18,7 @@
          </dependency>
          <dependency>
              <groupId>commons-codec</groupId>
-@@ -495,6 +503,8 @@
-             <artifactId>jcifs</artifactId>
-             <version>1.2.9</version>
-             <type>jar</type>
-+            <scope>system</scope>
-+            <systemPath>/usr/share/java/jcifs.jar</systemPath>
-         </dependency>
-         <dependency>
-             <groupId>l2fprod</groupId>
-@@ -512,6 +522,8 @@
+@@ -512,6 +516,8 @@
              <artifactId>fontchooser</artifactId>
              <version>1.0.0</version>
              <type>jar</type>

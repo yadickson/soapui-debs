@@ -25,8 +25,7 @@
 - libhttpclient-java
 - libhttpcore-java
 - libhttpmime-java
-- libjenkins-htmlunit-java (>= 2.6-jenkins-6)
-- libjetty-java
+- libhtmlunit-java
 - libjgoodies-forms-java
 - libjgoodies-looks-java
 - libjtidy-java
@@ -59,7 +58,8 @@
 - [libflex-java](https://github.com/yadickson/flex-debs)
 - [libl2fprod-common-java](https://github.com/yadickson/l2fprod-common-debs)
 - [libproxy-vole-java](https://github.com/yadickson/proxy-vole-debs)
-- [libjsonpath-java](https://github.com/yadickson/jsonpath-debs)
+- [libjetty8-java](https://github.com/yadickson/jetty8-debs)
+- libjsonpath-java
 
 **Download source code**
 
@@ -87,6 +87,7 @@ $ fakeroot debian/rules clean binary
 **Tested**
 
 - Debian jessie
+- Debian stretch
 
 **Repositories**
 

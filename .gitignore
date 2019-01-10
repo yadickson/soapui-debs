@@ -11,4 +11,4 @@ debian/files
 .travis.bintray.json
 target/
 build/
-
+*.rej
