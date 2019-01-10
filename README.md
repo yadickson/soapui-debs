@@ -26,7 +26,6 @@
 - libhttpcore-java
 - libhttpmime-java
 - libhtmlunit-java
-- libjetty9-java
 - libjgoodies-forms-java
 - libjgoodies-looks-java
 - libjtidy-java
