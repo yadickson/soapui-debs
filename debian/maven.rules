@@ -41,9 +41,9 @@ s/fife/com.fifesoft/ rsyntaxtextarea jar s/.*/debian/ * *
 s/javax.jms/org.apache.geronimo.specs/ s/jms/geronimo-jms_1.1_spec/ jar s/.*/debian/ * *
 javax.mail javax.mail-api jar s/.*/debian/ * *
 javax.mail s/mail/javax.mail-api/ jar s/.*/debian/ * *
-s/jetty/org.eclipse.jetty/ jetty-util jar s/.*/9.x/ * *
-s/jetty/org.eclipse.jetty/ s/jetty/jetty-http/ jar s/.*/9.x/ * *
-s/jetty/org.eclipse.jetty/ s/servlet-api/jetty-servlet/ jar s/.*/9.x/ * *
+s/jetty/org.eclipse.jetty/ jetty-util jar s/.*/debian/ * *
+s/jetty/org.eclipse.jetty/ s/jetty/jetty-http/ jar s/.*/debian/ * *
+s/jetty/org.eclipse.jetty/ s/servlet-api/jetty-servlet/ jar s/.*/debian/ * *
 joda-time joda-time jar s/.*/debian/ * *
 s/jtidy/net.sf.jtidy/ jtidy jar s/.*/debian/ * *
 junit junit jar s/4\..*/4.x/ * *
@@ -74,10 +74,10 @@ org.apache.ws.security wss4j jar s/.*/debian/ * *
 org.apache.xmlbeans xmlbeans-qname jar s/.*/debian/ * *
 org.apache.xmlbeans xmlbeans-xpath jar s/.*/debian/ * *
 org.apache.xmlbeans xmlbeans jar s/.*/debian/ * *
-org.eclipse.jetty jetty-http jar s/.*/9.x/ * *
-org.eclipse.jetty jetty-io jar s/.*/9.x/ * *
-org.eclipse.jetty jetty-servlet jar s/.*/9.x/ * *
-org.eclipse.jetty jetty-util jar s/.*/9.x/ * *
+org.eclipse.jetty jetty-http jar s/.*/debian/ * *
+org.eclipse.jetty jetty-io jar s/.*/debian/ * *
+org.eclipse.jetty jetty-servlet jar s/.*/debian/ * *
+org.eclipse.jetty jetty-util jar s/.*/debian/ * *
 org.opensaml opensaml jar s/.*/2.6.2/ * *
 s/thoughtworks/com.thoughtworks.xstream/ xstream jar s/.*/debian/ * *
 xerces xercesImpl jar s/.*/debian/ * *
