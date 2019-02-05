@@ -88,6 +88,7 @@ $ fakeroot debian/rules clean binary
 
 - Debian jessie
 - Debian stretch
+- Debian buster
 
 **Repositories**
 
@@ -111,7 +112,7 @@ GPL-3.0 © [Yadickson Soto](https://github.com/yadickson)
 
 EUPL-1.1 © [SmartBear](https://github.com/SmartBear/soapui)
 
-[travis-image]: https://api.travis-ci.org/yadickson/soapui-debs.svg?branch=stretch
+[travis-image]: https://api.travis-ci.org/yadickson/soapui-debs.svg?branch=buster
 [travis-url]: https://travis-ci.org/yadickson/soapui-debs
 
 

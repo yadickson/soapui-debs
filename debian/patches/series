@@ -34,3 +34,5 @@ fix_set_context_null.patch
 
 update_json_path.patch
 
+xsd.patch
+xmlbeans.patch

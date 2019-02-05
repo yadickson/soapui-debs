@@ -71,7 +71,6 @@ org.apache.santuario xmlsec bundle s/.*/debian/ * *
 org.apache.ws.commons ws-commons-util jar s/.*/debian/ * *
 org.apache.ws.security wss4j bundle s/.*/debian/ * *
 org.apache.ws.security wss4j jar s/.*/debian/ * *
-org.apache.xmlbeans xmlbeans-qname jar s/.*/debian/ * *
 org.apache.xmlbeans xmlbeans-xpath jar s/.*/debian/ * *
 org.apache.xmlbeans xmlbeans jar s/.*/debian/ * *
 org.eclipse.jetty jetty-http jar s/.*/debian/ * *
@@ -83,7 +82,6 @@ s/thoughtworks/com.thoughtworks.xstream/ xstream jar s/.*/debian/ * *
 xerces xercesImpl jar s/.*/debian/ * *
 s/xmlbeans/org.apache.xmlbeans/ s/xbean/xmlbeans/ jar s/.*/debian/ * *
 s/xmlbeans/org.apache.xmlbeans/ s/xbean_xpath/xmlbeans-xpath/ jar s/.*/debian/ * *
-s/xmlbeans/org.apache.xmlbeans/ s/xmlpublic/xmlbeans-qname/ jar s/.*/debian/ * *
 s/amf/org.apache.flex/ flex-messaging-common * s/.*/debian/ * *
 s/amf/org.apache.flex/ flex-messaging-core * s/.*/debian/ * *
 s/amf/org.apache.flex/ flex-messaging-opt * s/.*/debian/ * *
