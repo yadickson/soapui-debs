@@ -9,17 +9,6 @@
                      <verbose>false</verbose>
                      <schemaDirectory>src/main/xsd</schemaDirectory>
                  </configuration>
---- a/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringMap.java
-+++ b/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringMap.java
-@@ -94,7 +94,7 @@
- 
-     public static StringToStringMap fromXml(StringToStringMapConfig nsMapping) {
-         StringToStringMap result = new StringToStringMap();
--        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryList()) {
-+        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryArray()) {
-             result.put(entry.getKey(), entry.getValue());
-         }
-         return result;
 --- a/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockService.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockService.java
 @@ -31,6 +31,7 @@
@@ -48,6 +37,67 @@
      }
  
      @Override
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockAction.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockAction.java
+@@ -35,6 +35,8 @@
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.io.InputStreamReader;
++
++import java.util.Arrays;
+ import java.util.List;
+ 
+ public class RestMockAction extends AbstractMockOperation<RESTMockActionConfig, RestMockResponse> implements HasHelpUrl {
+@@ -45,7 +47,7 @@
+ 
+         mockService.getMockOperationByName(config.getName());
+ 
+-        List<RESTMockResponseConfig> responseConfigs = config.getResponseList();
++        List<RESTMockResponseConfig> responseConfigs = Arrays.asList(config.getResponseArray());
+         for (RESTMockResponseConfig responseConfig : responseConfigs) {
+             RestMockResponse restMockResponse = new RestMockResponse(this, responseConfig);
+             restMockResponse.addPropertyChangeListener(this);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractMockResponse.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractMockResponse.java
+@@ -135,7 +135,7 @@
+ 
+     public StringToStringsMap getResponseHeaders() {
+         StringToStringsMap result = new StringToStringsMap();
+-        List<HeaderConfig> headerList = getConfig().getHeaderList();
++        List<HeaderConfig> headerList = Arrays.asList(getConfig().getHeaderArray());
+         for (HeaderConfig header : headerList) {
+             result.add(header.getName(), header.getValue());
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/security/support/SecurityCheckedParameterHolder.java
++++ b/soapui/src/main/java/com/eviware/soapui/security/support/SecurityCheckedParameterHolder.java
+@@ -16,6 +16,7 @@
+ package com.eviware.soapui.security.support;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.List;
+@@ -68,7 +69,7 @@
+     public void updateConfig(CheckedParametersListConfig config) {
+         paramsConfig = config;
+ 
+-        List<CheckedParameterConfig> paramsList = config.getParametersList();
++        List<CheckedParameterConfig> paramsList = Arrays.asList(config.getParametersArray());
+         for (int c = 0; c < paramsList.size(); c++) {
+             if (params.get(c) instanceof SecurityCheckedParameterImpl) {
+                 ((SecurityCheckedParameterImpl) params.get(c)).setConfig(paramsList.get(c));
+--- a/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringMap.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringMap.java
+@@ -94,7 +94,7 @@
+ 
+     public static StringToStringMap fromXml(StringToStringMapConfig nsMapping) {
+         StringToStringMap result = new StringToStringMap();
+-        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryList()) {
++        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryArray()) {
+             result.put(entry.getKey(), entry.getValue());
+         }
+         return result;
 --- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractHttpRequest.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractHttpRequest.java
 @@ -58,6 +58,7 @@
@@ -72,7 +122,7 @@
          CredentialsConfig credentialsConfig = getConfig().getCredentials();
          if (credentialsConfig != null) {
 -            for (String type : credentialsConfig.getAddedBasicAuthenticationTypesList()) {
-+            for (String type : Arrays.asList(credentialsConfig.getAddedBasicAuthenticationTypesArray())) {
++            for (String type : Arrays.asList(credentialsConfig.getAddedBasicAuthenticationTypesList())) {
                  if (AuthType.PREEMPTIVE.toString().equals(type)
                          || AuthType.GLOBAL_HTTP_SETTINGS.toString().equals(type)) {
                      authTypes.add(BASIC_AUTH_PROFILE);
@@ -85,26 +135,6 @@
          if (!addedBasicAuthenticationTypesList.contains(authType)) {
              addedBasicAuthenticationTypesList.add(authType);
          }
---- a/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockAction.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockAction.java
-@@ -35,6 +35,8 @@
- import java.io.IOException;
- import java.io.InputStream;
- import java.io.InputStreamReader;
-+
-+import java.util.Arrays;
- import java.util.List;
- 
- public class RestMockAction extends AbstractMockOperation<RESTMockActionConfig, RestMockResponse> implements HasHelpUrl {
-@@ -45,7 +47,7 @@
- 
-         mockService.getMockOperationByName(config.getName());
- 
--        List<RESTMockResponseConfig> responseConfigs = config.getResponseList();
-+        List<RESTMockResponseConfig> responseConfigs = Arrays.asList(config.getResponseArray());
-         for (RESTMockResponseConfig responseConfig : responseConfigs) {
-             RestMockResponse restMockResponse = new RestMockResponse(this, responseConfig);
-             restMockResponse.addPropertyChangeListener(this);
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockService.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockService.java
 @@ -70,7 +70,7 @@
@@ -125,25 +155,6 @@
      }
  
      @Override
---- a/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringsMap.java
-+++ b/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringsMap.java
-@@ -17,6 +17,7 @@
- package com.eviware.soapui.support.types;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
-@@ -98,7 +99,7 @@
- 
-     public static StringToStringsMap fromXml(StringToStringMapConfig nsMapping) {
-         StringToStringsMap result = new StringToStringsMap();
--        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryList()) {
-+        for (StringToStringMapConfig.Entry entry : Arrays.asList(nsMapping.getEntryArray())) {
-             result.add(entry.getKey(), entry.getValue());
-         }
-         return result;
 --- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractInterface.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractInterface.java
 @@ -68,7 +68,7 @@
@@ -155,596 +166,3 @@
          Collections.sort(endpointArray);
          return endpointArray.toArray(new String[endpointArray.size()]);
      }
---- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractMockResponse.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractMockResponse.java
-@@ -135,7 +135,7 @@
- 
-     public StringToStringsMap getResponseHeaders() {
-         StringToStringsMap result = new StringToStringsMap();
--        List<HeaderConfig> headerList = getConfig().getHeaderList();
-+        List<HeaderConfig> headerList = Arrays.asList(getConfig().getHeaderArray());
-         for (HeaderConfig header : headerList) {
-             result.add(header.getName(), header.getValue());
-         }
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockOperation.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockOperation.java
-@@ -42,6 +42,7 @@
- import java.beans.PropertyChangeEvent;
- import java.io.File;
- import java.io.IOException;
-+import java.util.Arrays;
- import java.util.List;
- 
- /**
-@@ -74,7 +75,7 @@
-             operation = (WsdlOperation) iface.getOperationByName(config.getOperation());
-         }
- 
--        List<MockResponseConfig> responseConfigs = config.getResponseList();
-+        List<MockResponseConfig> responseConfigs = Arrays.asList(config.getResponseArray());
-         for (MockResponseConfig responseConfig : responseConfigs) {
-             WsdlMockResponse wsdlMockResponse = new WsdlMockResponse(this, responseConfig);
-             wsdlMockResponse.addPropertyChangeListener(this);
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockResponse.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockResponse.java
-@@ -100,7 +100,7 @@
-     public WsdlMockResponse(WsdlMockOperation operation, MockResponseConfig config) {
-         super(config, operation, ICON_NAME);
- 
--        for (AttachmentConfig ac : getConfig().getAttachmentList()) {
-+        for (AttachmentConfig ac : Arrays.asList(getConfig().getAttachmentArray())) {
-             attachments.add(new MockFileAttachment(ac, this));
-         }
- 
---- a/soapui/src/main/java/com/eviware/soapui/impl/rest/support/RestRequestParamsPropertyHolder.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/support/RestRequestParamsPropertyHolder.java
-@@ -65,7 +65,7 @@
-         List<String> propertyNames;
-         List<String> methodParamNames = new ArrayList<String>(Arrays.asList(methodParams.getPropertyNames()));
-         if (requestConfig.isSetParameterOrder()) {
--            propertyNames = new ArrayList<String>(requestConfig.getParameterOrder().getEntryList());
-+            propertyNames = new ArrayList<String>(requestConfig.getParameterOrder().getEntryArray());
-             propertyNames.retainAll(methodParamNames);
-             methodParamNames.removeAll(propertyNames);
-             propertyNames.addAll(methodParamNames);
-@@ -298,7 +298,7 @@
-         if (renamePerformed) {
-             RestRequestConfig requestConfig = restRequest.getConfig();
-             if (requestConfig.isSetParameterOrder()) {
--                List<String> entryList = requestConfig.getParameterOrder().getEntryList();
-+                List<String> entryList = Arrays.asList(requestConfig.getParameterOrder().getEntryArray());
-                 for (int i = 0; i < entryList.size(); i++) {
-                     if (entryList.get(i).equals(name)) {
-                         requestConfig.getParameterOrder().setEntryArray(i, newName);
---- a/soapui/src/main/java/com/eviware/soapui/impl/support/http/HttpRequest.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/support/http/HttpRequest.java
-@@ -45,6 +45,7 @@
- 
- import javax.xml.namespace.QName;
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.List;
- import java.util.Map;
- 
-@@ -253,7 +254,7 @@
-             params.resetPropertiesConfig(request.getParameters());
-         }
- 
--        List<AttachmentConfig> attachmentConfigs = getConfig().getAttachmentList();
-+        List<AttachmentConfig> attachmentConfigs = Arrays.asList(getConfig().getAttachmentArray());
-         for (int i = 0; i < attachmentConfigs.size(); i++) {
-             AttachmentConfig config = attachmentConfigs.get(i);
-             getAttachmentsList().get(i).updateConfig(config);
---- a/soapui/src/main/java/com/eviware/soapui/impl/rest/RestResource.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/RestResource.java
-@@ -79,15 +79,15 @@
-             params.getProperty(name).addPropertyChangeListener(new StyleChangeListener());
-         }
- 
--        for (RestMethodConfig config : resourceConfig.getMethodList()) {
-+        for (RestMethodConfig config : Arrays.asList(resourceConfig.getMethodArray())) {
-             methods.add(new RestMethod(this, config));
-         }
- 
--        for (RestResourceConfig config : resourceConfig.getResourceList()) {
-+        for (RestResourceConfig config : Arrays.asList(resourceConfig.getResourceArray())) {
-             resources.add(new RestResource(this, config));
-         }
- 
--        for (OldRestRequestConfig config : resourceConfig.getRequestList()) {
-+        for (OldRestRequestConfig config : Arrays.asList(resourceConfig.getRequestArray())) {
-             RestRequestConverter.convert(this, config);
-         }
-         resourceConfig.setRequestArray(new OldRestRequestConfig[]{});
---- a/soapui/src/main/java/com/eviware/soapui/impl/settings/XmlBeansSettingsImpl.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/settings/XmlBeansSettingsImpl.java
-@@ -23,6 +23,7 @@
- import com.eviware.soapui.model.settings.SettingsListener;
- import com.eviware.soapui.support.types.StringToStringMap;
- 
-+import java.util.Arrays;
- import java.util.Collections;
- import java.util.HashMap;
- import java.util.HashSet;
-@@ -50,7 +51,7 @@
-         this.config = config;
-         this.parent = parent;
- 
--        List<SettingConfig> settingList = config.getSettingList();
-+        List<SettingConfig> settingList = Arrays.asList(config.getSettingArray());
-         for (SettingConfig setting : settingList) {
-             values.put(setting.getId(), setting);
-         }
-@@ -173,7 +174,7 @@
- 
-     public void clearSetting(String id) {
-         if (values.containsKey(id)) {
--            int ix = config.getSettingList().indexOf(values.get(id));
-+            int ix = Arrays.asList(config.getSettingArray()).indexOf(values.get(id));
-             config.removeSetting(ix);
-             values.remove(id);
-             valueCache.remove(id);
-@@ -214,7 +215,7 @@
-     public void setConfig(SettingsConfig soapuiSettings) {
-         StringToStringMap changed = new StringToStringMap();
- 
--        for (SettingConfig config : soapuiSettings.getSettingList()) {
-+        for (SettingConfig config : Arrays.asList(soapuiSettings.getSettingArray())) {
-             if (!config.getStringValue().equals(getString(config.getId(), null))) {
-                 changed.put(config.getId(), getString(config.getId(), null));
-             }
-@@ -223,7 +224,7 @@
-         values.clear();
- 
-         config.set(soapuiSettings);
--        List<SettingConfig> settingList = config.getSettingList();
-+        List<SettingConfig> settingList = Arrays.asList(config.getSettingArray());
-         for (SettingConfig setting : settingList) {
-             values.put(setting.getId(), setting);
-         }
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/RestTestRequest.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/RestTestRequest.java
-@@ -41,6 +41,7 @@
- 
- import javax.swing.ImageIcon;
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.List;
- import java.util.Map;
- 
-@@ -99,7 +100,7 @@
-             }
- 
-             public List<TestAssertionConfig> getAssertionList() {
--                return getConfig().getAssertionList();
-+                return Arrays.asList(getConfig().getAssertionArray());
-             }
- 
-             public void removeAssertion(int ix) {
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequest.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequest.java
-@@ -17,6 +17,7 @@
- package com.eviware.soapui.impl.wsdl.teststeps;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.List;
- import java.util.Map;
- 
-@@ -124,7 +125,7 @@
-             }
- 
-             public List<TestAssertionConfig> getAssertionList() {
--                return getConfig().getAssertionList();
-+                return Arrays.asList(getConfig().getAssertionArray());
-             }
- 
-             public void removeAssertion(int ix) {
-@@ -322,7 +323,7 @@
- 
-         assertionsSupport.refresh();
- 
--        List<AttachmentConfig> attachmentConfigs = getConfig().getAttachmentList();
-+        List<AttachmentConfig> attachmentConfigs = Arrays.asList(getConfig().getAttachmentArray());
-         for (int i = 0; i < attachmentConfigs.size(); i++) {
-             AttachmentConfig config = attachmentConfigs.get(i);
-             getAttachmentsList().get(i).updateConfig(config);
---- a/soapui/src/main/java/com/eviware/soapui/security/scan/AbstractSecurityScan.java
-+++ b/soapui/src/main/java/com/eviware/soapui/security/scan/AbstractSecurityScan.java
-@@ -125,7 +125,7 @@
-         getConfig().setConfig(config.getConfig());
-         getConfig().setTestStep(config.getTestStep());
- 
--        TestAssertionConfig[] assertions = config.getAssertionList().toArray(new TestAssertionConfig[0]);
-+        TestAssertionConfig[] assertions = config.getAssertionArray();
-         getConfig().setAssertionArray(assertions);
-         initAssertions();
- 
-@@ -157,7 +157,7 @@
-             }
- 
-             public List<TestAssertionConfig> getAssertionList() {
--                return getConfig().getAssertionList();
-+                return Arrays.asList(getConfig().getAssertionArray());
-             }
- 
-             public void removeAssertion(int ix) {
---- a/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/Schema.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/Schema.java
-@@ -17,6 +17,7 @@
- package com.eviware.soapui.impl.wadl.inference.schema;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
-@@ -75,13 +76,13 @@
-         prefixes = new HashMap<String, String>();
-         particles = new ArrayList<Particle>();
-         types = new HashMap<String, ComplexType>();
--        for (MapEntryConfig entry : xml.getPrefixList()) {
-+        for (MapEntryConfig entry : Arrays.asList(xml.getPrefixArray())) {
-             prefixes.put(entry.getKey(), entry.getValue());
-         }
--        for (ParticleConfig item : xml.getParticleList()) {
-+        for (ParticleConfig item : Arrays.asList(xml.getParticleArray())) {
-             particles.add(Particle.Factory.parse(item, this));
-         }
--        for (ComplexTypeConfig item : xml.getComplexTypeList()) {
-+        for (ComplexTypeConfig item : Arrays.asList(xml.getComplexTypeArray())) {
-             types.put(item.getName(), new ComplexType(item, this));
-         }
-     }
---- a/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/SchemaSystem.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/SchemaSystem.java
-@@ -16,6 +16,7 @@
- 
- package com.eviware.soapui.impl.wadl.inference.schema;
- 
-+import java.util.Arrays;
- import java.util.LinkedHashMap;
- import java.util.Map;
- import java.util.Set;
-@@ -52,7 +53,7 @@
-      */
-     public SchemaSystem(SchemaSetConfig xml) {
-         schemas = new LinkedHashMap<String, Schema>();
--        for (SchemaConfig item : xml.getSchemaList()) {
-+        for (SchemaConfig item : Arrays.asList(xml.getSchemaArray())) {
-             schemas.put(item.getNamespace(), new Schema(item, this));
-         }
-     }
---- a/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/types/ComplexType.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/types/ComplexType.java
-@@ -17,6 +17,7 @@
- package com.eviware.soapui.impl.wadl.inference.schema.types;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
-@@ -72,7 +73,7 @@
-         mixed = xml.getMixed();
-         content = Content.Factory.parse(xml.getContent(), schema);
-         attributes = new HashMap<QName, Particle>();
--        for (ParticleConfig item : xml.getAttributeList()) {
-+        for (ParticleConfig item : Arrays.asList(xml.getAttributeArray())) {
-             Particle p = Particle.Factory.parse(item, schema);
-             attributes.put(new QName("", p.getName().getLocalPart()), p);
-         }
---- a/soapui/src/main/java/com/eviware/soapui/security/support/SecurityCheckedParameterHolder.java
-+++ b/soapui/src/main/java/com/eviware/soapui/security/support/SecurityCheckedParameterHolder.java
-@@ -16,6 +16,7 @@
- package com.eviware.soapui.security.support;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.HashSet;
- import java.util.List;
-@@ -68,7 +69,7 @@
-     public void updateConfig(CheckedParametersListConfig config) {
-         paramsConfig = config;
- 
--        List<CheckedParameterConfig> paramsList = config.getParametersList();
-+        List<CheckedParameterConfig> paramsList = Arrays.asList(config.getParametersArray());
-         for (int c = 0; c < paramsList.size(); c++) {
-             if (params.get(c) instanceof SecurityCheckedParameterImpl) {
-                 ((SecurityCheckedParameterImpl) params.get(c)).setConfig(paramsList.get(c));
---- a/soapui/src/main/java/com/eviware/soapui/support/action/SoapUIActionRegistry.java
-+++ b/soapui/src/main/java/com/eviware/soapui/support/action/SoapUIActionRegistry.java
-@@ -33,6 +33,8 @@
- import java.io.InputStream;
- import java.lang.reflect.Constructor;
- import java.lang.reflect.InvocationTargetException;
-+
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
-@@ -142,7 +144,7 @@
-             SoapuiActionsDocumentConfig configDocument = SoapuiActionsDocumentConfig.Factory.parse(config);
-             SoapUIActionsConfig soapuiActions = configDocument.getSoapuiActions();
- 
--            for (SoapUIActionConfig action : soapuiActions.getActionList()) {
-+            for (SoapUIActionConfig action : Arrays.asList(soapuiActions.getActionArray())) {
-                 try {
-                     String id = action.getId();
-                     Class<?> actionClass = Class.forName(action.getActionClass(), true, classLoader);
-@@ -154,7 +156,7 @@
-                 }
-             }
- 
--            for (SoapUIActionGroupConfig group : soapuiActions.getActionGroupList()) {
-+            for (SoapUIActionGroupConfig group : Arrays.asList(soapuiActions.getActionGroupArray())) {
-                 SoapUIActionGroup actionGroup;
- 
-                 // modify existing?
-@@ -212,7 +214,7 @@
-     }
- 
-     private void addMappings(SoapUIActionGroup actionGroup, SoapUIActionGroupConfig groupConfig) {
--        for (SoapUIActionMappingConfig mapping : groupConfig.getActionMappingList()) {
-+        for (SoapUIActionMappingConfig mapping : Arrays.asList(groupConfig.getActionMappingArray())) {
-             try {
-                 int insertIndex = -1;
-                 if (mapping.isSetPosition() && mapping.isSetPositionRef()) {
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlInterface.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlInterface.java
-@@ -19,6 +19,7 @@
- import java.io.File;
- import java.net.MalformedURLException;
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.Iterator;
- import java.util.List;
-@@ -105,7 +106,7 @@
- 
-         this.project = project;
- 
--        List<OperationConfig> operationConfigs = interfaceConfig.getOperationList();
-+        List<OperationConfig> operationConfigs = Arrays.asList(interfaceConfig.getOperationArray());
-         for (int i = 0; i < operationConfigs.size(); i++) {
-             operations.add(new WsdlOperation(this, operationConfigs.get(i)));
-         }
-@@ -858,8 +859,8 @@
-         policyFlag = true;
- 
-         if (policy != null) {
--            List<Addressing> addressingList = policy.getAddressingList();
--            List<?> usingAddressingList = policy.getUsingAddressingList();
-+            List<Addressing> addressingList = Arrays.asList(policy.getAddressingArray());
-+            List<?> usingAddressingList = Arrays.asList(policy.getUsingAddressingArray());
-             for (Addressing addressing : addressingList) {
-                 policyFlag = true;
-                 String optional = addressing.getOptional().toString();
-@@ -869,8 +870,8 @@
-                 }
-                 Policy innerPolicy = addressing.getPolicy();
-                 if (innerPolicy != null) {
--                    List<AnonymousResponses> anonymousList = innerPolicy.getAnonymousResponsesList();
--                    List<NonAnonymousResponses> nonAnonymousList = innerPolicy.getNonAnonymousResponsesList();
-+                    List<AnonymousResponses> anonymousList = Arrays.asList(innerPolicy.getAnonymousResponsesArray());
-+                    List<NonAnonymousResponses> nonAnonymousList = Arrays.asList(innerPolicy.getNonAnonymousResponsesArray());
-                     if (anonymousList.size() > 0 && nonAnonymousList.size() > 0) {
-                         throw new Exception(
-                                 "Wrong addressing policy, anonymousResponses and nonAnonymousResponses can not be specified together");
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlOperation.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlOperation.java
-@@ -17,6 +17,7 @@
- package com.eviware.soapui.impl.wsdl;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
-@@ -90,7 +91,7 @@
-             operationConfig.setIsOneWay(false);
-         }
- 
--        List<WsdlRequestConfig> requestConfigs = getConfig().getCallList();
-+        List<WsdlRequestConfig> requestConfigs = Arrays.asList(getConfig().getCallArray());
-         for (WsdlRequestConfig config : requestConfigs) {
-             requests.add(new WsdlRequest(this, config));
-         }
-@@ -414,7 +415,7 @@
-                     for (MIMEContent content : contentParts) {
-                         Part part = partMap.get(content.getPart());
-                         if (part != null) {
--                            if (!part.getContentTypeList().contains(content.getType())) {
-+                            if (!Arrays.asList(part.getContentTypeArray()).contains(content.getType())) {
-                                 part.addContentType(content.getType());
-                             }
-                         } else {
-@@ -449,7 +450,7 @@
-                     for (MIMEContent content : contentParts) {
-                         Part part = partMap.get(content.getPart());
-                         if (part != null) {
--                            if (!part.getContentTypeList().contains(content.getType())) {
-+                            if (!Arrays.asList(part.getContentTypeArray()).contains(content.getType())) {
-                                 part.addContentType(content.getType());
-                             }
-                         } else {
---- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/testcase/WsdlTestCase.java
-+++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/testcase/WsdlTestCase.java
-@@ -58,6 +58,7 @@
- import java.io.File;
- import java.io.IOException;
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.HashMap;
- import java.util.HashSet;
- import java.util.Iterator;
-@@ -113,7 +114,7 @@
- 
-         setPropertiesConfig(getConfig().getProperties());
- 
--        List<TestStepConfig> testStepConfigs = config.getTestStepList();
-+        List<TestStepConfig> testStepConfigs = Arrays.asList(config.getTestStepArray());
-         List<TestStepConfig> removed = new ArrayList<TestStepConfig>();
-         for (TestStepConfig tsc : testStepConfigs) {
-             WsdlTestStep testStep = createTestStepFromConfig(tsc);
-@@ -130,14 +131,14 @@
-         }
- 
-         if (!forLoadTest) {
--            List<LoadTestConfig> loadTestConfigs = config.getLoadTestList();
-+            List<LoadTestConfig> loadTestConfigs = Arrays.asList(config.getLoadTestArray());
-             for (LoadTestConfig tsc : loadTestConfigs) {
-                 WsdlLoadTest loadTest = buildLoadTest(tsc);
-                 loadTests.add(loadTest);
-             }
-         }
- 
--        List<SecurityTestConfig> securityTestConfigs = config.getSecurityTestList();
-+        List<SecurityTestConfig> securityTestConfigs = Arrays.asList(config.getSecurityTestArray());
-         for (SecurityTestConfig tsc : securityTestConfigs) {
-             SecurityTest securityTest = buildSecurityTest(tsc);
-             securityTests.add(securityTest);
-@@ -484,7 +485,7 @@
- 
-         if (!ensureUniqueName(testStep)) {
-             testStep.release();
--            getConfig().getTestStepList().remove(newStepConfig);
-+            getConfig().getTestStepArray().remove(newStepConfig);
-             return null;
-         }
- 
-@@ -828,7 +829,7 @@
-         setConfig(testCaseConfig);
-         int mod = 0;
- 
--        List<TestStepConfig> configs = getConfig().getTestStepList();
-+        List<TestStepConfig> configs = Arrays.asList(getConfig().getTestStepArray());
-         for (int c = 0; c < configs.size(); c++) {
-             if (WsdlTestStepRegistry.getInstance().hasFactory(configs.get(c))) {
-                 (testSteps.get(c - mod)).resetConfigOnMove(configs.get(c));
-@@ -837,12 +838,12 @@
-             }
-         }
- 
--        List<LoadTestConfig> loadTestConfigs = getConfig().getLoadTestList();
-+        List<LoadTestConfig> loadTestConfigs = Arrays.asList(getConfig().getLoadTestArray());
-         for (int c = 0; c < loadTestConfigs.size(); c++) {
-             loadTests.get(c).resetConfigOnMove(loadTestConfigs.get(c));
-         }
- 
--        List<SecurityTestConfig> securityTestConfigs = getConfig().getSecurityTestList();
-+        List<SecurityTestConfig> securityTestConfigs = Arrays.asList(getConfig().getSecurityTestArray());
-         for (int c = 0; c < securityTestConfigs.size(); c++) {
-             securityTests.get(c).resetConfigOnMove(securityTestConfigs.get(c));
-         }
---- a/soapui/src/main/java/com/eviware/soapui/security/SecurityTest.java
-+++ b/soapui/src/main/java/com/eviware/soapui/security/SecurityTest.java
-@@ -17,6 +17,7 @@
- package com.eviware.soapui.security;
- 
- import java.util.ArrayList;
-+import java.util.Arrays;
- import java.util.Collections;
- import java.util.HashMap;
- import java.util.HashSet;
-@@ -130,7 +131,7 @@
-         SecurityScan newSecScan = null;
- 
-         boolean hasScans = false;
--        List<TestStepSecurityTestConfig> testStepSecurityTestList = getConfig().getTestStepSecurityTestList();
-+        List<TestStepSecurityTestConfig> testStepSecurityTestList = Arrays.asList(getConfig().getTestStepSecurityTestArray());
-         if (!testStepSecurityTestList.isEmpty()) {
-             for (int i = 0; i < testStepSecurityTestList.size(); i++) {
-                 TestStepSecurityTestConfig testStepSecurityTest = testStepSecurityTestList.get(i);
-@@ -168,7 +169,7 @@
-         newSecurityScan.setType(newSecScanConfig.getType());
-         newSecurityScan.setName(newSecScanConfig.getName());
-         newSecurityScan.setConfig(newSecScanConfig.getConfig());
--        newSecurityScan.setAssertionArray(newSecScanConfig.getAssertionList().toArray(new TestAssertionConfig[0]));
-+        newSecurityScan.setAssertionArray(newSecScanConfig.getAssertionArray());
-         newSecurityScan.setTestStep(newSecScanConfig.getTestStep());
-         newSecurityScan.setCheckedParameters(newSecScanConfig.getCheckedParameters());
-         newSecurityScan.setExecutionStrategy(newSecScanConfig.getExecutionStrategy());
-@@ -212,12 +213,12 @@
-             return;
-         }
- 
--        List<TestStepSecurityTestConfig> testStepSecurityTestList = getConfig().getTestStepSecurityTestList();
-+        List<TestStepSecurityTestConfig> testStepSecurityTestList = Arrays.asList(getConfig().getTestStepSecurityTestArray());
-         if (!testStepSecurityTestList.isEmpty()) {
-             for (int i = 0; i < testStepSecurityTestList.size(); i++) {
-                 TestStepSecurityTestConfig testStepSecurityTest = testStepSecurityTestList.get(i);
-                 if (testStepSecurityTest.getTestStepId().equals(testStep.getId())) {
--                    List<SecurityScanConfig> securityScanList = testStepSecurityTest.getTestStepSecurityScanList();
-+                    List<SecurityScanConfig> securityScanList = Arrays.asList(testStepSecurityTest.getTestStepSecurityScanArray());
-                     Iterator<SecurityScanConfig> secListIterator = securityScanList.iterator();
-                     while (secListIterator.hasNext()) {
-                         SecurityScanConfig current = secListIterator.next();
-@@ -236,12 +237,12 @@
-     }
- 
-     public void removeSecurityScanWhenRemoveTestStep(TestStep testStep, SecurityScan securityScan) {
--        List<TestStepSecurityTestConfig> testStepSecurityTestList = getConfig().getTestStepSecurityTestList();
-+        List<TestStepSecurityTestConfig> testStepSecurityTestList = Arrays.asList(getConfig().getTestStepSecurityTestArray());
-         if (!testStepSecurityTestList.isEmpty()) {
-             for (int i = 0; i < testStepSecurityTestList.size(); i++) {
-                 TestStepSecurityTestConfig testStepSecurityTest = testStepSecurityTestList.get(i);
-                 if (testStepSecurityTest.getTestStepId().equals(testStep.getId())) {
--                    List<SecurityScanConfig> securityScanList = testStepSecurityTest.getTestStepSecurityScanList();
-+                    List<SecurityScanConfig> securityScanList = Arrays.asList(testStepSecurityTest.getTestStepSecurityScanArray());
-                     Iterator<SecurityScanConfig> secListIterator = securityScanList.iterator();
-                     while (secListIterator.hasNext()) {
-                         SecurityScanConfig current = secListIterator.next();
-@@ -309,13 +310,13 @@
- 
-     private HashMap<String, List<SecurityScan>> createSecurityScansMap() {
-         if (getConfig() != null) {
--            if (!getConfig().getTestStepSecurityTestList().isEmpty()) {
--                for (TestStepSecurityTestConfig testStepSecurityTestListConfig : getConfig().getTestStepSecurityTestList()) {
-+            if (!Arrays.asList(getConfig().getTestStepSecurityTestArray()).isEmpty()) {
-+                for (TestStepSecurityTestConfig testStepSecurityTestListConfig : Arrays.asList(getConfig().getTestStepSecurityTestArray())) {
-                     List<SecurityScan> scanList = new ArrayList<SecurityScan>();
-                     if (testStepSecurityTestListConfig != null) {
--                        if (!testStepSecurityTestListConfig.getTestStepSecurityScanList().isEmpty()) {
--                            for (SecurityScanConfig secScanConfig : testStepSecurityTestListConfig
--                                    .getTestStepSecurityScanList()) {
-+                        if (!Arrays.asList(testStepSecurityTestListConfig.getTestStepSecurityScanArray()).isEmpty()) {
-+                            for (SecurityScanConfig secScanConfig : Arrays.asList(testStepSecurityTestListConfig
-+                                    .getTestStepSecurityScanArray())) {
-                                 TestStep testStep = null;
-                                 for (TestStep ts : testCase.getTestSteps().values()) {
-                                     if (testStepSecurityTestListConfig.getTestStepId().equals(ts.getId())) {
-@@ -538,11 +539,11 @@
-      * @return new AbstractSecurityScan
-      */
-     public SecurityScan moveTestStepSecurityScan(TestStep testStep, SecurityScan securityScan, int index, int offset) {
--        List<TestStepSecurityTestConfig> testStepSecurityTestList = getConfig().getTestStepSecurityTestList();
-+        List<TestStepSecurityTestConfig> testStepSecurityTestList = Arrays.asList(getConfig().getTestStepSecurityTestArray());
-         if (!testStepSecurityTestList.isEmpty()) {
-             for (TestStepSecurityTestConfig testStepSecurityTest : testStepSecurityTestList) {
-                 if (testStepSecurityTest.getTestStepId().equals(testStep.getId())) {
--                    List<SecurityScanConfig> securityScanList = testStepSecurityTest.getTestStepSecurityScanList();
-+                    List<SecurityScanConfig> securityScanList = Arrays.asList(testStepSecurityTest.getTestStepSecurityScanArray());
-                     SecurityScanFactory factory = SoapUI.getSoapUICore().getSecurityScanRegistry()
-                             .getFactory(securityScan.getType());
-                     SecurityScanConfig newSecScanConfig = (SecurityScanConfig) securityScan.getConfig().copy();
-@@ -682,14 +683,14 @@
-         setConfig(securityTestConfig);
- 
-         if (securityTestConfig != null) {
--            if (!securityTestConfig.getTestStepSecurityTestList().isEmpty()) {
--                for (TestStepSecurityTestConfig testStepSecurityTestListConfig : securityTestConfig
--                        .getTestStepSecurityTestList()) {
-+            if (!Arrays.asList(securityTestConfig.getTestStepSecurityTestArray()).isEmpty()) {
-+                for (TestStepSecurityTestConfig testStepSecurityTestListConfig : Arrays.asList(securityTestConfig
-+                        .getTestStepSecurityTestArray())) {
-                     List<SecurityScan> scanList = getSecurityScansMap().get(testStepSecurityTestListConfig.getTestStepId());
- 
-                     for (int i = 0; i < scanList.size(); i++) {
-                         scanList.get(i).updateSecurityConfig(
--                                testStepSecurityTestListConfig.getTestStepSecurityScanList().get(i));
-+                                Arrays.asList(testStepSecurityTestListConfig.getTestStepSecurityScanArray()).get(i));
-                     }
-                 }
-             }

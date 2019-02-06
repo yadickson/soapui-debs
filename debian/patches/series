@@ -33,4 +33,6 @@ pom_classpath.patch
 fix_set_context_null.patch
 
 update_json_path.patch
+
+update_soapui_config.patch
 update_xmlbeans.patch

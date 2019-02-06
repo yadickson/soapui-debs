@@ -1,0 +1,11 @@
+@@ -1,10 +0,0 @@ 
+--- a/soapui/src/main/xsd/soapui/soapui.xsd
++++ b/soapui/src/main/xsd/soapui/soapui.xsd
+@@ -878,7 +878,6 @@
+                                  maxOccurs="1" minOccurs="0">
+                     </xsd:element>
+                 </xsd:sequence>
+-                <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+                 <xsd:attribute name="port" type="xsd:int"></xsd:attribute>
+                 <xsd:attribute name="host" type="xsd:string"></xsd:attribute>
+                 <xsd:attribute name="bindToHostOnly" type="xsd:boolean">
