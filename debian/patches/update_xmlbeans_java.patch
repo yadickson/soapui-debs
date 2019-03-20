@@ -783,3 +783,78 @@
              }
          }
  
+--- a/soapui/src/main/java/com/eviware/soapui/security/ui/MaliciousAttachmentMutationsPanel.java
++++ b/soapui/src/main/java/com/eviware/soapui/security/ui/MaliciousAttachmentMutationsPanel.java
+@@ -69,6 +69,9 @@
+ import java.awt.event.ActionEvent;
+ import java.io.File;
+ 
++import java.util.Arrays;
++import java.util.List;
++
+ public class MaliciousAttachmentMutationsPanel {
+     private JFormDialog dialog;
+     private MaliciousAttachmentSecurityScanConfig config;
+@@ -125,7 +128,7 @@
+                     ListModel listModel = holder.getFilesList().getList().getModel();
+                     String key = ((AttachmentElement) listModel.getElementAt(idx)).getId();
+ 
+-                    for (MaliciousAttachmentElementConfig element : config.getElementList()) {
++                    for (MaliciousAttachmentElementConfig element : Arrays.asList(config.getElementArray())) {
+                         if (key.equals(element.getKey())) {
+                             element.setRemove(Boolean.parseBoolean(newValue));
+                             break;
+@@ -308,7 +311,7 @@
+                     ListModel listModel = holder.getFilesList().getList().getModel();
+                     String key = ((AttachmentElement) listModel.getElementAt(idx)).getId();
+ 
+-                    for (MaliciousAttachmentElementConfig element : config.getElementList()) {
++                    for (MaliciousAttachmentElementConfig element : Arrays.asList(config.getElementArray())) {
+                         if (key.equals(element.getKey())) {
+                             MaliciousAttachmentConfig att = element.addNewReplaceAttachment();
+                             att.setFilename(filename);
+@@ -373,7 +376,7 @@
+                         ListModel listModel = holder.getFilesList().getList().getModel();
+                         String key = ((AttachmentElement) listModel.getElementAt(idx)).getId();
+ 
+-                        for (MaliciousAttachmentElementConfig element : config.getElementList()) {
++                        for (MaliciousAttachmentElementConfig element : Arrays.asList(config.getElementArray())) {
+                             if (key.equals(element.getKey())) {
+                                 MaliciousAttachmentConfig att = element.addNewGenerateAttachment();
+                                 att.setFilename(filename);
+@@ -421,11 +424,14 @@
+                     ListModel listModel = holder.getFilesList().getList().getModel();
+                     String key = ((AttachmentElement) listModel.getElementAt(idx)).getId();
+ 
+-                    for (int i = 0; i < config.getElementList().size(); i++) {
+-                        MaliciousAttachmentElementConfig element = config.getElementList().get(i);
++                    for (int i = 0; i < config.getElementArray().length; i++) {
++                        MaliciousAttachmentElementConfig element = config.getElementArray()[i];
+ 
+                         if (key.equals(element.getKey())) {
+-                            element.getReplaceAttachmentList().remove(row);
++                            List<MaliciousAttachmentConfig> list = Arrays.asList(element.getReplaceAttachmentArray());
++                            list.remove(row);
++                            MaliciousAttachmentConfig[] arrays = new MaliciousAttachmentConfig[list.size()];
++                            element.setReplaceAttachmentArray(list.toArray(arrays));
+                         }
+                     }
+                 }
+@@ -456,11 +462,14 @@
+                     ListModel listModel = holder.getFilesList().getList().getModel();
+                     String key = ((AttachmentElement) listModel.getElementAt(idx)).getId();
+ 
+-                    for (int i = 0; i < config.getElementList().size(); i++) {
+-                        MaliciousAttachmentElementConfig element = config.getElementList().get(i);
++                    for (int i = 0; i < config.getElementArray().length; i++) {
++                        MaliciousAttachmentElementConfig element = config.getElementArray()[i];
+ 
+                         if (key.equals(element.getKey())) {
+-                            element.getGenerateAttachmentList().remove(row);
++                            List<MaliciousAttachmentConfig> list = Arrays.asList(element.getGenerateAttachmentArray());
++                            list.remove(row);
++                            MaliciousAttachmentConfig[] arrays = new MaliciousAttachmentConfig[list.size()];
++                            element.setGenerateAttachmentArray(list.toArray(arrays));
+                         }
+                     }
+                 }
