@@ -610,21 +610,21 @@
      }
 --- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
 +++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
-@@ -1688,17 +1688,17 @@
+@@ -1688,17 +1688,16 @@
  			 * 
  			 * Here needs to be done for all test cases separatly.
  			 */
 -            for (int cnt2 = 0; cnt2 < config.getTestCaseList().size(); cnt2++) {
 -                TestCaseConfig newTestCase = config.getTestCaseList().get(cnt2);
-+            for (int cnt2 = 0; cnt2 < Arrays.asList(config.getTestCaseArray()).size(); cnt2++) {
-+                TestCaseConfig newTestCase = Arrays.asList(config.getTestCaseArray()).get(cnt2);
++            for (int cnt2 = 0; cnt2 < config.getTestCaseArray().length; cnt2++) {
++                TestCaseConfig newTestCase = config.getTestCaseArray()[cnt2];
                  TestCaseConfig importTestCaseConfig = newTestSuiteConfig.getTestSuite().getTestCaseList().get(cnt2);
                  LinkedHashMap<String, String> oldNewIds = new LinkedHashMap<String, String>();
 -                for (int cnt = 0; cnt < importTestCaseConfig.getTestStepList().size(); cnt++) {
 -                    oldNewIds.put(importTestCaseConfig.getTestStepList().get(cnt).getId(), newTestCase.getTestStepList()
-+                for (int cnt = 0; cnt < Arrays.asList(importTestCaseConfig.getTestStepArray()).size(); cnt++) {
-+                    oldNewIds.put(Arrays.asList(importTestCaseConfig.getTestStepArray()).get(cnt).getId(), Arrays.asList(newTestCase.getTestStepArray())
-                             .get(cnt).getId());
+-                            .get(cnt).getId());
++                for (int cnt = 0; cnt < importTestCaseConfig.getTestStepArray().length; cnt++) {
++                    oldNewIds.put(importTestCaseConfig.getTestStepArray()[cnt].getId(), newTestCase.getTestStepArray()[cnt].getId());
                  }
  
 -                for (SecurityTestConfig scan : newTestCase.getSecurityTestList()) {
@@ -740,3 +740,46 @@
                  queries.add(new Query(query));
              }
          } catch (XmlException e) {
+--- a/soapui/src/main/java/com/eviware/soapui/security/ui/InvalidTypesTable.java
++++ b/soapui/src/main/java/com/eviware/soapui/security/ui/InvalidTypesTable.java
+@@ -167,7 +167,7 @@
+                 selectedRows[i] = table.convertRowIndexToModel(selectedRows[i]);
+             }
+             for (int index : selectedRows) {
+-                toRemove.add(data.getTypesListList().get(index));
++                toRemove.add(data.getTypesListArray()[index]);
+             }
+             data.getTypesListList().removeAll(toRemove);
+             fireTableDataChanged();
+@@ -188,7 +188,7 @@
+ 
+         @Override
+         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+-            SchemaTypeForSecurityScanConfig paramType = data.getTypesListList().get(rowIndex);
++            SchemaTypeForSecurityScanConfig paramType =data.getTypesListArray()[rowIndex];
+ 
+             paramType.setValue((String) aValue);
+ 
+@@ -207,18 +207,18 @@
+ 
+         @Override
+         public int getRowCount() {
+-            if (data.getTypesListList() == null) {
++            if (data.getTypesListArray() == null) {
+                 return 0;
+             }
+-            return data.getTypesListList().size();
++            return data.getTypesListArray().length;
+         }
+ 
+         @Override
+         public Object getValueAt(int rowIndex, int columnIndex) {
+             if (columnIndex == 0) {
+-                return getTypeName(data.getTypesListList().get(rowIndex).getType());
++                return getTypeName(data.getTypesListArray()[rowIndex].getType());
+             } else {
+-                return data.getTypesListList().get(rowIndex).getValue();
++                return data.getTypesListArray()[rowIndex].getValue();
+             }
+         }
+ 
