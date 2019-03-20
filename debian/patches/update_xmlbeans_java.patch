@@ -1,0 +1,437 @@
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockService.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockService.java
+@@ -31,6 +31,7 @@
+ import com.eviware.soapui.model.project.Project;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ 
+ import static com.eviware.soapui.impl.rest.RestRequestInterface.HttpMethod;
+@@ -47,7 +48,7 @@
+     public RestMockService(Project project, RESTMockServiceConfig config) {
+         super(config, project, ICON_NAME);
+ 
+-        List<RESTMockActionConfig> restActionConfigList = config.getRestMockActionList();
++        List<RESTMockActionConfig> restActionConfigList = Arrays.asList(config.getRestMockActionArray());
+         for (RESTMockActionConfig restActionConfig : restActionConfigList) {
+             RestMockAction restMockAction = new RestMockAction(this, restActionConfig);
+             addMockOperation(restMockAction);
+@@ -159,7 +160,7 @@
+     }
+ 
+     public boolean canIAddAMockOperation(RestMockAction mockOperation) {
+-        return this.getConfig().getRestMockActionList().contains(mockOperation.getConfig());
++        return Arrays.asList(this.getConfig().getRestMockActionArray()).contains(mockOperation.getConfig());
+     }
+ 
+     @Override
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockAction.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/mock/RestMockAction.java
+@@ -35,6 +35,8 @@
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.io.InputStreamReader;
++
++import java.util.Arrays;
+ import java.util.List;
+ 
+ public class RestMockAction extends AbstractMockOperation<RESTMockActionConfig, RestMockResponse> implements HasHelpUrl {
+@@ -45,7 +47,7 @@
+ 
+         mockService.getMockOperationByName(config.getName());
+ 
+-        List<RESTMockResponseConfig> responseConfigs = config.getResponseList();
++        List<RESTMockResponseConfig> responseConfigs = Arrays.asList(config.getResponseArray());
+         for (RESTMockResponseConfig responseConfig : responseConfigs) {
+             RestMockResponse restMockResponse = new RestMockResponse(this, responseConfig);
+             restMockResponse.addPropertyChangeListener(this);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractMockResponse.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractMockResponse.java
+@@ -135,7 +135,7 @@
+ 
+     public StringToStringsMap getResponseHeaders() {
+         StringToStringsMap result = new StringToStringsMap();
+-        List<HeaderConfig> headerList = getConfig().getHeaderList();
++        List<HeaderConfig> headerList = Arrays.asList(getConfig().getHeaderArray());
+         for (HeaderConfig header : headerList) {
+             result.add(header.getName(), header.getValue());
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/security/support/SecurityCheckedParameterHolder.java
++++ b/soapui/src/main/java/com/eviware/soapui/security/support/SecurityCheckedParameterHolder.java
+@@ -16,6 +16,7 @@
+ package com.eviware.soapui.security.support;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.List;
+@@ -50,7 +51,7 @@
+         this.securityCheck = securityCheck;
+         this.paramsConfig = checkedPameters;
+ 
+-        for (CheckedParameterConfig param : paramsConfig.getParametersList()) {
++        for (CheckedParameterConfig param : Arrays.asList(paramsConfig.getParametersArray())) {
+             addParameter(param);
+         }
+ 
+@@ -68,7 +69,7 @@
+     public void updateConfig(CheckedParametersListConfig config) {
+         paramsConfig = config;
+ 
+-        List<CheckedParameterConfig> paramsList = config.getParametersList();
++        List<CheckedParameterConfig> paramsList = Arrays.asList(config.getParametersArray());
+         for (int c = 0; c < paramsList.size(); c++) {
+             if (params.get(c) instanceof SecurityCheckedParameterImpl) {
+                 ((SecurityCheckedParameterImpl) params.get(c)).setConfig(paramsList.get(c));
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/http/HttpRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/http/HttpRequest.java
+@@ -45,6 +45,7 @@
+ 
+ import javax.xml.namespace.QName;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ import java.util.Map;
+ 
+@@ -253,7 +254,7 @@
+             params.resetPropertiesConfig(request.getParameters());
+         }
+ 
+-        List<AttachmentConfig> attachmentConfigs = getConfig().getAttachmentList();
++        List<AttachmentConfig> attachmentConfigs = Arrays.asList(getConfig().getAttachmentArray());
+         for (int i = 0; i < attachmentConfigs.size(); i++) {
+             AttachmentConfig config = attachmentConfigs.get(i);
+             getAttachmentsList().get(i).updateConfig(config);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/HttpTestRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/HttpTestRequest.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.impl.wsdl.teststeps;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ import java.util.Map;
+ 
+@@ -84,7 +85,7 @@
+             }
+ 
+             public List<TestAssertionConfig> getAssertionList() {
+-                return getConfig().getAssertionList();
++                return Arrays.asList(getConfig().getAssertionArray());
+             }
+ 
+             public void removeAssertion(int ix) {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlTestRequest.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.impl.wsdl.teststeps;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ import java.util.Map;
+ 
+@@ -124,7 +125,7 @@
+             }
+ 
+             public List<TestAssertionConfig> getAssertionList() {
+-                return getConfig().getAssertionList();
++                return Arrays.asList(getConfig().getAssertionArray());
+             }
+ 
+             public void removeAssertion(int ix) {
+@@ -322,7 +323,7 @@
+ 
+         assertionsSupport.refresh();
+ 
+-        List<AttachmentConfig> attachmentConfigs = getConfig().getAttachmentList();
++        List<AttachmentConfig> attachmentConfigs = Arrays.asList(getConfig().getAttachmentArray());
+         for (int i = 0; i < attachmentConfigs.size(); i++) {
+             AttachmentConfig config = attachmentConfigs.get(i);
+             getAttachmentsList().get(i).updateConfig(config);
+--- a/soapui/src/main/java/com/eviware/soapui/security/scan/AbstractSecurityScan.java
++++ b/soapui/src/main/java/com/eviware/soapui/security/scan/AbstractSecurityScan.java
+@@ -125,7 +125,7 @@
+         getConfig().setConfig(config.getConfig());
+         getConfig().setTestStep(config.getTestStep());
+ 
+-        TestAssertionConfig[] assertions = config.getAssertionList().toArray(new TestAssertionConfig[0]);
++        TestAssertionConfig[] assertions = config.getAssertionArray();
+         getConfig().setAssertionArray(assertions);
+         initAssertions();
+ 
+@@ -157,7 +157,7 @@
+             }
+ 
+             public List<TestAssertionConfig> getAssertionList() {
+-                return getConfig().getAssertionList();
++                return Arrays.asList(getConfig().getAssertionArray());
+             }
+ 
+             public void removeAssertion(int ix) {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/support/XmlBeansRestParamsTestPropertyHolder.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/support/XmlBeansRestParamsTestPropertyHolder.java
+@@ -74,7 +74,7 @@
+         this.config = config;
+         this.defaultParamLocation = defaultParamLocation;
+ 
+-        for (RestParameterConfig propertyConfig : config.getParameterList()) {
++        for (RestParameterConfig propertyConfig : Arrays.asList(config.getParameterArray())) {
+             addProperty(propertyConfig, false);
+         }
+ 
+@@ -420,7 +420,7 @@
+         }
+ 
+         public String[] getOptions() {
+-            return propertyConfig.getOptionList().toArray(new String[propertyConfig.sizeOfOptionArray()]);
++            return propertyConfig.getOptionArray();
+         }
+ 
+         public boolean getRequired() {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/support/RestRequestParamsPropertyHolder.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/support/RestRequestParamsPropertyHolder.java
+@@ -63,9 +63,9 @@
+     private void buildPropertyNameList() {
+         RestRequestConfig requestConfig = restRequest.getConfig();
+         List<String> propertyNames;
+-        List<String> methodParamNames = new ArrayList<String>(Arrays.asList(methodParams.getPropertyNames()));
++        List<String> methodParamNames = Arrays.asList(methodParams.getPropertyNames());
+         if (requestConfig.isSetParameterOrder()) {
+-            propertyNames = new ArrayList<String>(requestConfig.getParameterOrder().getEntryList());
++            propertyNames = Arrays.asList(requestConfig.getParameterOrder().getEntryArray());
+             propertyNames.retainAll(methodParamNames);
+             methodParamNames.removeAll(propertyNames);
+             propertyNames.addAll(methodParamNames);
+@@ -298,7 +298,7 @@
+         if (renamePerformed) {
+             RestRequestConfig requestConfig = restRequest.getConfig();
+             if (requestConfig.isSetParameterOrder()) {
+-                List<String> entryList = requestConfig.getParameterOrder().getEntryList();
++                List<String> entryList = Arrays.asList(requestConfig.getParameterOrder().getEntryArray());
+                 for (int i = 0; i < entryList.size(); i++) {
+                     if (entryList.get(i).equals(name)) {
+                         requestConfig.getParameterOrder().setEntryArray(i, newName);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlMessageAssertion.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlMessageAssertion.java
+@@ -41,6 +41,7 @@
+ import org.apache.xmlbeans.XmlObject;
+ 
+ import javax.swing.ImageIcon;
++import java.util.Arrays;
+ import java.util.List;
+ 
+ /**
+@@ -413,8 +414,8 @@
+     @Override
+     public int getIndexOfAssertion(TestAssertion assertion) {
+         if (getConfig() instanceof GroupAssertionListConfig) {
+-            List<AssertionEntryConfig> assertionEntryConfigList = ((GroupAssertionListConfig) getConfig())
+-                    .getAssertionsList();
++            List<AssertionEntryConfig> assertionEntryConfigList = Arrays.asList(((GroupAssertionListConfig) getConfig())
++                    .getAssertionsArray());
+             return assertionEntryConfigList.indexOf(((WsdlMessageAssertion) assertion).getConfig());
+         } else {
+             return -1;
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/RestTestRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/RestTestRequest.java
+@@ -41,6 +41,7 @@
+ 
+ import javax.swing.ImageIcon;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ import java.util.Map;
+ 
+@@ -99,7 +100,7 @@
+             }
+ 
+             public List<TestAssertionConfig> getAssertionList() {
+-                return getConfig().getAssertionList();
++                return Arrays.asList(getConfig().getAssertionArray());
+             }
+ 
+             public void removeAssertion(int ix) {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/RestRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/RestRequest.java
+@@ -56,6 +56,7 @@
+ import java.net.MalformedURLException;
+ import java.net.URL;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ import java.util.Map;
+ 
+@@ -444,7 +445,7 @@
+ 
+         updateParams();
+ 
+-        List<AttachmentConfig> attachmentConfigs = getConfig().getAttachmentList();
++        List<AttachmentConfig> attachmentConfigs = Arrays.asList(getConfig().getAttachmentArray());
+         for (int i = 0; i < attachmentConfigs.size(); i++) {
+             AttachmentConfig config = attachmentConfigs.get(i);
+             getAttachmentsList().get(i).updateConfig(config);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/RestService.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/RestService.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.impl.rest;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -45,7 +46,7 @@
+     public RestService(WsdlProject project, RestServiceConfig serviceConfig) {
+         super(serviceConfig, project, "/rest_service.png");
+ 
+-        for (RestResourceConfig resourceConfig : serviceConfig.getResourceList()) {
++        for (RestResourceConfig resourceConfig : Arrays.asList(serviceConfig.getResourceArray())) {
+             resources.add(new RestResource(this, resourceConfig));
+         }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/RestMethod.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/RestMethod.java
+@@ -70,13 +70,13 @@
+ 
+         params = new XmlBeansRestParamsTestPropertyHolder(this, methodConfig.getParameters());
+ 
+-        for (RestResourceRepresentationConfig config : methodConfig.getRepresentationList()) {
++        for (RestResourceRepresentationConfig config : Arrays.asList(methodConfig.getRepresentationArray())) {
+             RestRepresentation representation = new RestRepresentation(this, config);
+             representations.add(representation);
+             notifyPropertyChanged("representations", null, representation);
+         }
+ 
+-        for (RestRequestConfig config : methodConfig.getRequestList()) {
++        for (RestRequestConfig config : Arrays.asList(methodConfig.getRequestArray())) {
+             RestRequest request = new RestRequest(this, config, false);
+             requests.add(request);
+             notifyPropertyChanged("childRequests", null, request);
+--- a/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringMap.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringMap.java
+@@ -16,6 +16,7 @@
+ 
+ package com.eviware.soapui.support.types;
+ 
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+@@ -94,7 +95,7 @@
+ 
+     public static StringToStringMap fromXml(StringToStringMapConfig nsMapping) {
+         StringToStringMap result = new StringToStringMap();
+-        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryList()) {
++        for (StringToStringMapConfig.Entry entry : Arrays.asList(nsMapping.getEntryArray())) {
+             result.put(entry.getKey(), entry.getValue());
+         }
+         return result;
+--- a/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractHttpRequest.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/support/AbstractHttpRequest.java
+@@ -58,6 +58,7 @@
+ import java.io.IOException;
+ import java.io.OutputStream;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashSet;
+ import java.util.List;
+ import java.util.Set;
+@@ -92,7 +93,7 @@
+     }
+ 
+     private void initAttachments() {
+-        for (AttachmentConfig ac : getConfig().getAttachmentList()) {
++        for (AttachmentConfig ac : Arrays.asList(getConfig().getAttachmentArray())) {
+             RequestFileAttachment attachment = new RequestFileAttachment(ac, this);
+             attachments.add(attachment);
+         }
+@@ -521,7 +522,7 @@
+         Set<String> authTypes = new HashSet<String>();
+         CredentialsConfig credentialsConfig = getConfig().getCredentials();
+         if (credentialsConfig != null) {
+-            for (String type : credentialsConfig.getAddedBasicAuthenticationTypesList()) {
++            for (String type : Arrays.asList(credentialsConfig.getAddedBasicAuthenticationTypesArray())) {
+                 if (AuthType.PREEMPTIVE.toString().equals(type)
+                         || AuthType.GLOBAL_HTTP_SETTINGS.toString().equals(type)) {
+                     authTypes.add(BASIC_AUTH_PROFILE);
+@@ -557,7 +558,7 @@
+     }
+ 
+     public void addBasicAuthenticationProfile(String authType) {
+-        List<String> addedBasicAuthenticationTypesList = getCredentialsConfig().getAddedBasicAuthenticationTypesList();
++        List<String> addedBasicAuthenticationTypesList = Arrays.asList(getCredentialsConfig().getAddedBasicAuthenticationTypesArray());
+         if (!addedBasicAuthenticationTypesList.contains(authType)) {
+             addedBasicAuthenticationTypesList.add(authType);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockService.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockService.java
+@@ -70,7 +70,7 @@
+     public WsdlMockService(Project project, MockServiceConfig config) {
+         super(config, project, ICON_NAME);
+ 
+-        List<MockOperationConfig> testStepConfigs = config.getMockOperationList();
++        List<MockOperationConfig> testStepConfigs = Arrays.asList(config.getMockOperationArray());
+         for (MockOperationConfig tsc : testStepConfigs) {
+             WsdlMockOperation testStep = new WsdlMockOperation(this, tsc);
+             addMockOperation(testStep);
+@@ -353,7 +353,7 @@
+     }
+ 
+     public boolean canIAddAMockOperation(WsdlMockOperation mockOperation) {
+-        return this.getConfig().getMockOperationList().contains(mockOperation.getConfig());
++        return Arrays.asList(this.getConfig().getMockOperationArray()).contains(mockOperation.getConfig());
+     }
+ 
+     @Override
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockOperation.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockOperation.java
+@@ -42,6 +42,7 @@
+ import java.beans.PropertyChangeEvent;
+ import java.io.File;
+ import java.io.IOException;
++import java.util.Arrays;
+ import java.util.List;
+ 
+ /**
+@@ -74,7 +75,7 @@
+             operation = (WsdlOperation) iface.getOperationByName(config.getOperation());
+         }
+ 
+-        List<MockResponseConfig> responseConfigs = config.getResponseList();
++        List<MockResponseConfig> responseConfigs = Arrays.asList(config.getResponseArray());
+         for (MockResponseConfig responseConfig : responseConfigs) {
+             WsdlMockResponse wsdlMockResponse = new WsdlMockResponse(this, responseConfig);
+             wsdlMockResponse.addPropertyChangeListener(this);
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockResponse.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/WsdlMockResponse.java
+@@ -100,7 +100,7 @@
+     public WsdlMockResponse(WsdlMockOperation operation, MockResponseConfig config) {
+         super(config, operation, ICON_NAME);
+ 
+-        for (AttachmentConfig ac : getConfig().getAttachmentList()) {
++        for (AttachmentConfig ac : Arrays.asList(getConfig().getAttachmentArray())) {
+             attachments.add(new MockFileAttachment(ac, this));
+         }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringsMap.java
++++ b/soapui/src/main/java/com/eviware/soapui/support/types/StringToStringsMap.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.support.types;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -98,7 +99,7 @@
+ 
+     public static StringToStringsMap fromXml(StringToStringMapConfig nsMapping) {
+         StringToStringsMap result = new StringToStringsMap();
+-        for (StringToStringMapConfig.Entry entry : nsMapping.getEntryList()) {
++        for (StringToStringMapConfig.Entry entry : Arrays.asList(nsMapping.getEntryArray())) {
+             result.add(entry.getKey(), entry.getValue());
+         }
+         return result;
