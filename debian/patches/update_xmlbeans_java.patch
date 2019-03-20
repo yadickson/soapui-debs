@@ -435,3 +435,308 @@
              result.add(entry.getKey(), entry.getValue());
          }
          return result;
+--- a/soapui/src/main/java/com/eviware/soapui/impl/rest/RestResource.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/rest/RestResource.java
+@@ -79,15 +79,15 @@
+             params.getProperty(name).addPropertyChangeListener(new StyleChangeListener());
+         }
+ 
+-        for (RestMethodConfig config : resourceConfig.getMethodList()) {
++        for (RestMethodConfig config : Arrays.asList(resourceConfig.getMethodArray())) {
+             methods.add(new RestMethod(this, config));
+         }
+ 
+-        for (RestResourceConfig config : resourceConfig.getResourceList()) {
++        for (RestResourceConfig config : Arrays.asList(resourceConfig.getResourceArray())) {
+             resources.add(new RestResource(this, config));
+         }
+ 
+-        for (OldRestRequestConfig config : resourceConfig.getRequestList()) {
++        for (OldRestRequestConfig config : Arrays.asList(resourceConfig.getRequestArray())) {
+             RestRequestConverter.convert(this, config);
+         }
+         resourceConfig.setRequestArray(new OldRestRequestConfig[]{});
+--- a/soapui/src/main/java/com/eviware/soapui/impl/settings/XmlBeansSettingsImpl.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/settings/XmlBeansSettingsImpl.java
+@@ -24,6 +24,7 @@
+ import com.eviware.soapui.support.types.StringToStringMap;
+ 
+ import java.util.Collections;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.List;
+@@ -50,7 +51,7 @@
+         this.config = config;
+         this.parent = parent;
+ 
+-        List<SettingConfig> settingList = config.getSettingList();
++        List<SettingConfig> settingList = Arrays.asList(config.getSettingArray());
+         for (SettingConfig setting : settingList) {
+             values.put(setting.getId(), setting);
+         }
+@@ -173,7 +174,7 @@
+ 
+     public void clearSetting(String id) {
+         if (values.containsKey(id)) {
+-            int ix = config.getSettingList().indexOf(values.get(id));
++            int ix = Arrays.asList(config.getSettingArray()).indexOf(values.get(id));
+             config.removeSetting(ix);
+             values.remove(id);
+             valueCache.remove(id);
+@@ -214,7 +215,7 @@
+     public void setConfig(SettingsConfig soapuiSettings) {
+         StringToStringMap changed = new StringToStringMap();
+ 
+-        for (SettingConfig config : soapuiSettings.getSettingList()) {
++        for (SettingConfig config : Arrays.asList(soapuiSettings.getSettingArray())) {
+             if (!config.getStringValue().equals(getString(config.getId(), null))) {
+                 changed.put(config.getId(), getString(config.getId(), null));
+             }
+@@ -223,7 +224,7 @@
+         values.clear();
+ 
+         config.set(soapuiSettings);
+-        List<SettingConfig> settingList = config.getSettingList();
++        List<SettingConfig> settingList = Arrays.asList(config.getSettingArray());
+         for (SettingConfig setting : settingList) {
+             values.put(setting.getId(), setting);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/OutgoingWss.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/OutgoingWss.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.impl.wsdl.support.wss;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ 
+ import org.apache.ws.security.WSSecurityException;
+@@ -51,7 +52,7 @@
+         this.config = config;
+         this.container = container;
+ 
+-        for (WSSEntryConfig entryConfig : config.getEntryList()) {
++        for (WSSEntryConfig entryConfig : Arrays.asList(config.getEntryArray())) {
+ 
+             WssEntry entry = WssEntryRegistry.get().build(entryConfig, this);
+             if (entry != null) {
+@@ -130,15 +131,15 @@
+             entries.set(indexBeforeMove + offset, entry);
+             entries.set(indexBeforeMove, adjacentEntry);
+ 
+-            WSSEntryConfig entryConfig = (WSSEntryConfig) config.getEntryList().get(indexBeforeMove).copy();
+-            WSSEntryConfig adjacentEntryConfig = (WSSEntryConfig) config.getEntryList().get(indexBeforeMove + offset)
++            WSSEntryConfig entryConfig = (WSSEntryConfig) Arrays.asList(config.getEntryArray()).get(indexBeforeMove).copy();
++            WSSEntryConfig adjacentEntryConfig = (WSSEntryConfig) Arrays.asList(config.getEntryArray()).get(indexBeforeMove + offset)
+                     .copy();
+ 
+-            config.getEntryList().set(indexBeforeMove + offset, entryConfig);
+-            config.getEntryList().set(indexBeforeMove, adjacentEntryConfig);
++            Arrays.asList(config.getEntryArray()).set(indexBeforeMove + offset, entryConfig);
++            Arrays.asList(config.getEntryArray()).set(indexBeforeMove, adjacentEntryConfig);
+ 
+-            entry.updateEntryConfig(config.getEntryList().get(indexBeforeMove + offset));
+-            adjacentEntry.updateEntryConfig(config.getEntryList().get(indexBeforeMove));
++            entry.updateEntryConfig(Arrays.asList(config.getEntryArray()).get(indexBeforeMove + offset));
++            adjacentEntry.updateEntryConfig(Arrays.asList(config.getEntryArray()).get(indexBeforeMove));
+ 
+             container.fireWssEntryMoved(entry, offset);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/Schema.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/Schema.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.impl.wadl.inference.schema;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -75,13 +76,13 @@
+         prefixes = new HashMap<String, String>();
+         particles = new ArrayList<Particle>();
+         types = new HashMap<String, ComplexType>();
+-        for (MapEntryConfig entry : xml.getPrefixList()) {
++        for (MapEntryConfig entry : Arrays.asList(xml.getPrefixArray())) {
+             prefixes.put(entry.getKey(), entry.getValue());
+         }
+-        for (ParticleConfig item : xml.getParticleList()) {
++        for (ParticleConfig item : Arrays.asList(xml.getParticleArray())) {
+             particles.add(Particle.Factory.parse(item, this));
+         }
+-        for (ComplexTypeConfig item : xml.getComplexTypeList()) {
++        for (ComplexTypeConfig item : Arrays.asList(xml.getComplexTypeArray())) {
+             types.put(item.getName(), new ComplexType(item, this));
+         }
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/types/ComplexType.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/types/ComplexType.java
+@@ -17,6 +17,7 @@
+ package com.eviware.soapui.impl.wadl.inference.schema.types;
+ 
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -72,7 +73,7 @@
+         mixed = xml.getMixed();
+         content = Content.Factory.parse(xml.getContent(), schema);
+         attributes = new HashMap<QName, Particle>();
+-        for (ParticleConfig item : xml.getAttributeList()) {
++        for (ParticleConfig item : Arrays.asList(xml.getAttributeArray())) {
+             Particle p = Particle.Factory.parse(item, schema);
+             attributes.put(new QName("", p.getName().getLocalPart()), p);
+         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/SchemaSystem.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wadl/inference/schema/SchemaSystem.java
+@@ -16,6 +16,7 @@
+ 
+ package com.eviware.soapui.impl.wadl.inference.schema;
+ 
++import java.util.Arrays;
+ import java.util.LinkedHashMap;
+ import java.util.Map;
+ import java.util.Set;
+@@ -52,7 +53,7 @@
+      */
+     public SchemaSystem(SchemaSetConfig xml) {
+         schemas = new LinkedHashMap<String, Schema>();
+-        for (SchemaConfig item : xml.getSchemaList()) {
++        for (SchemaConfig item : Arrays.asList(xml.getSchemaArray())) {
+             schemas.put(item.getNamespace(), new Schema(item, this));
+         }
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/WsdlProject.java
+@@ -1688,17 +1688,17 @@
+ 			 * 
+ 			 * Here needs to be done for all test cases separatly.
+ 			 */
+-            for (int cnt2 = 0; cnt2 < config.getTestCaseList().size(); cnt2++) {
+-                TestCaseConfig newTestCase = config.getTestCaseList().get(cnt2);
++            for (int cnt2 = 0; cnt2 < Arrays.asList(config.getTestCaseArray()).size(); cnt2++) {
++                TestCaseConfig newTestCase = Arrays.asList(config.getTestCaseArray()).get(cnt2);
+                 TestCaseConfig importTestCaseConfig = newTestSuiteConfig.getTestSuite().getTestCaseList().get(cnt2);
+                 LinkedHashMap<String, String> oldNewIds = new LinkedHashMap<String, String>();
+-                for (int cnt = 0; cnt < importTestCaseConfig.getTestStepList().size(); cnt++) {
+-                    oldNewIds.put(importTestCaseConfig.getTestStepList().get(cnt).getId(), newTestCase.getTestStepList()
++                for (int cnt = 0; cnt < Arrays.asList(importTestCaseConfig.getTestStepArray()).size(); cnt++) {
++                    oldNewIds.put(Arrays.asList(importTestCaseConfig.getTestStepArray()).get(cnt).getId(), Arrays.asList(newTestCase.getTestStepArray())
+                             .get(cnt).getId());
+                 }
+ 
+-                for (SecurityTestConfig scan : newTestCase.getSecurityTestList()) {
+-                    for (TestStepSecurityTestConfig secStepConfig : scan.getTestStepSecurityTestList()) {
++                for (SecurityTestConfig scan : Arrays.asList(newTestCase.getSecurityTestArray())) {
++                    for (TestStepSecurityTestConfig secStepConfig : Arrays.asList(scan.getTestStepSecurityTestArray())) {
+                         if (oldNewIds.containsKey(secStepConfig.getTestStepId())) {
+                             secStepConfig.setTestStepId(oldNewIds.get(secStepConfig.getTestStepId()));
+                         }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/endpoint/DefaultEndpointStrategy.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/endpoint/DefaultEndpointStrategy.java
+@@ -23,6 +23,7 @@
+ import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.HashSet;
++import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
+ 
+@@ -96,7 +97,7 @@
+         config = (DefaultEndpointStrategyConfig) projectConfig.getEndpointStrategy().changeType(
+                 DefaultEndpointStrategyConfig.type);
+ 
+-        for (EndpointConfig endpointConfig : config.getEndpointList()) {
++        for (EndpointConfig endpointConfig : Arrays.asList(config.getEndpointArray())) {
+             if (!endpointConfig.isSetMode()) {
+                 endpointConfig.setMode(EndpointConfig.Mode.COMPLEMENT);
+             }
+@@ -125,10 +126,15 @@
+                 }
+             }
+ 
++            List<EndpointConfig> list = Arrays.asList(config.getEndpointArray());
++
+             for (String key : keys) {
+                 EndpointDefaults def = defaults.remove(key);
+-                config.getEndpointList().remove(def);
++                list.remove(def);
+             }
++
++            EndpointConfig[] arrays = new EndpointConfig[list.size()];
++            config.setEndpointArray(list.toArray(arrays));
+         }
+     }
+ 
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlRunTestCaseTestStep.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlRunTestCaseTestStep.java
+@@ -132,7 +132,7 @@
+     }
+ 
+     public StringList getReturnProperties() {
+-        return new StringList(stepConfig.getReturnProperties().getEntryList());
++        return new StringList(stepConfig.getReturnProperties().getEntryArray());
+     }
+ 
+     public void setReturnProperties(StringList returnProperties) {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlMockResponseTestStep.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/teststeps/WsdlMockResponseTestStep.java
+@@ -213,7 +213,7 @@
+             }
+ 
+             public List<TestAssertionConfig> getAssertionList() {
+-                return mockResponseStepConfig.getAssertionList();
++                return Arrays.asLIst(mockResponseStepConfig.getAssertionArray());
+             }
+ 
+             public void removeAssertion(int ix) {
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/DefaultWssContainer.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/support/wss/DefaultWssContainer.java
+@@ -18,6 +18,7 @@
+ 
+ import java.security.Security;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashSet;
+ import java.util.List;
+ import java.util.Set;
+@@ -53,15 +54,15 @@
+         this.modelItem = modelItem;
+         this.config = config;
+ 
+-        for (KeyMaterialCryptoConfig cryptoConfig : config.getCryptoList()) {
++        for (KeyMaterialCryptoConfig cryptoConfig : Arrays.asList(config.getCryptoArray())) {
+             cryptos.add(new KeyMaterialWssCrypto(cryptoConfig, this));
+         }
+ 
+-        for (IncomingWssConfig wssConfig : config.getIncomingList()) {
++        for (IncomingWssConfig wssConfig : Arrays.asList(config.getIncomingArray())) {
+             incomingWssConfigs.add(new IncomingWss(wssConfig, this));
+         }
+ 
+-        for (OutgoingWssConfig wssConfig : config.getOutgoingList()) {
++        for (OutgoingWssConfig wssConfig : Arrays.asList(config.getOutgoingArray())) {
+             outgoingWssConfigs.add(new OutgoingWss(wssConfig, this));
+         }
+     }
+--- a/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/dispatch/QueryMatchMockOperationDispatcher.java
++++ b/soapui/src/main/java/com/eviware/soapui/impl/wsdl/mock/dispatch/QueryMatchMockOperationDispatcher.java
+@@ -49,6 +49,7 @@
+ import java.beans.PropertyChangeEvent;
+ import java.beans.PropertyChangeListener;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -74,7 +75,7 @@
+         try {
+             conf = MockOperationQueryMatchDispatchConfig.Factory.parse(((WsdlMockOperation) mockOperation).getConfig().getDispatchConfig().xmlText());
+ 
+-            for (MockOperationQueryMatchDispatchConfig.Query query : conf.getQueryList()) {
++            for (MockOperationQueryMatchDispatchConfig.Query query : Arrays.asList(conf.getQueryArray())) {
+                 queries.add(new Query(query));
+             }
+         } catch (XmlException e) {
